@@ -1,0 +1,7 @@
+# Kopie zapasowe postępu eksportowane z kursu
+postep-kursu-cyber_*.json
+
+# Pliki systemowe
+.DS_Store
+Thumbs.db
+desktop.ini
