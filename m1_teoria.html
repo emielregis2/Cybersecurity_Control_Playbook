@@ -1,0 +1,345 @@
+<p class="lead-para">Kontrola bezpieczeństwa to nie zestaw narzędzi IT — to 
+<strong>decyzja biznesowa</strong>. Edwards otwiera swoją książkę prowokującym 
+twierdzeniem: większość organizacji wdraża kontrole dlatego, że ktoś im kazał — 
+nie dlatego, że rozumieją, przed czym je chronią. Ta różnica między compliance a 
+prawdziwym bezpieczeństwem będzie powracać przez cały kurs.</p>
+
+<h2>Definicja operacyjna — czym kontrola jest, a czym nie jest</h2>
+
+<p>Kontrola bezpieczeństwa to każde zabezpieczenie lub środek zaradczy wdrożony 
+w celu ochrony poufności, integralności i dostępności zasobów informacyjnych 
+oraz redukcji ryzyka do poziomu akceptowalnego dla organizacji. Ta definicja 
+zawiera trzy elementy, które Edwards podkreśla jako fundamentalne:</p>
+
+<p><strong>„Akceptowalny poziom ryzyka" — nie zerowy.</strong> Żadna organizacja 
+nie może wyeliminować ryzyka całkowicie. Kontrola kosztująca 500 000 zł rocznie 
+w celu ochrony zasobu wartego 50 000 zł jest ekonomicznie absurdalna — nawet 
+jeśli technicznie działa doskonale. Celem jest świadome zarządzanie ryzykiem 
+uzasadnione biznesowo, nie perfekcja techniczna.</p>
+
+<p><strong>„Zasoby informacyjne" — szersze niż dane.</strong> Kontrole chronią 
+dane, systemy, procesy, reputację, ciągłość działania i relacje z klientami. 
+Myślenie wyłącznie w kategoriach danych prowadzi do ślepych punktów: organizacja 
+może mieć doskonałe szyfrowanie danych i jednocześnie nie mieć żadnej kontroli 
+nad dostępem fizycznym do serwerowni.</p>
+
+<p><strong>„Wdrożone" — nie „udokumentowane".</strong> Kontrola istniejąca tylko 
+na papierze nie jest kontrolą. Edwards nazywa to zjawisko <em>ghost controls
+</em> — organizacje dokumentują kontrole, które nigdy nie zostały realnie 
+wdrożone lub nie działają zgodnie z intencją projektantów. Ghost controls to 
+szczególnie poważny problem podczas audytów, gdy organizacja „zdaje" inspekcję 
+posiadając jedynie dokumentację bez implementacji.</p>
+
+<h2>Wymiar 1: Czas interwencji — Timing-Based Controls</h2>
+
+<p>Pierwsza oś klasyfikacji opisuje <em>kiedy</em> kontrola interweniuje w cyklu 
+życia incydentu. Jest kluczowa przy projektowaniu obrony warstwowej (defense in 
+depth). Edwards: „Organizacje, które inwestują wyłącznie w prewencję, wierząc że 
+wystarczająco mocne mury powstrzymają wszystkich atakujących, są w najgorszej 
+możliwej pozycji gdy ktoś w końcu się przez nie przedrze — bo nie mają żadnych 
+mechanizmów by to wykryć lub zareagować."</p>
+
+<p><strong>Kontrole prewencyjne (Preventive)</strong> — działają <em>przed</em> 
+incydentem, eliminując lub ograniczając możliwość jego zaistnienia. Zmniejszają 
+prawdopodobieństwo wystąpienia incydentu, ale nigdy nie eliminują go całkowicie. 
+Przykłady: firewall blokujący nieautoryzowany ruch sieciowy, wymóg silnych 
+haseł, szyfrowanie danych w spoczynku i w transmisji, segmentacja sieci, listy 
+kontroli dostępu (ACL), Multi-Factor Authentication (MFA). Kluczowe 
+ograniczenie: żadna kontrola prewencyjna nie jest nieprzenikialna. Atak 
+wystarczająco wyrafinowany lub odpowiednio zmotywowany atakujący w końcu ją 
+obejdzie. To nie wada projektowa — to fakt, który powinien kształtować strategie 
+bezpieczeństwa.</p>
+
+<p><strong>Kontrole detekcyjne (Detective)</strong> — identyfikują incydenty w 
+trakcie ich trwania lub po fakcie. Nie zapobiegają szkodom — skracają czas od 
+włamania do wykrycia, tzw. <em>dwell time</em>. Przykłady: systemy IDS/IPS, 
+platformy SIEM, monitoring logów w czasie rzeczywistym, audyty bezpieczeństwa, 
+systemy analizy zachowań użytkowników (UEBA), honeypoty. Według raportów 
+branżowych, w wielu głośnych incydentach (m.in. SolarWinds, Equifax) atakujący 
+mieli dostęp przez wiele miesięcy przed wykryciem. Skrócenie dwell time z 200 do 
+10 dni może oznaczać różnicę między ograniczonym incydentem a katastrofalnym 
+naruszeniem. Każda godzina skrócona to realna redukcja szkód finansowych i 
+reputacyjnych.</p>
+
+<p><strong>Kontrole korekcyjne (Corrective)</strong> — przywracają stan normalny 
+po incydencie i minimalizują jego skutki. Przykłady: procedury reagowania na 
+incydenty (IR), systemy backupów i przywracania danych, patch management, plany 
+ciągłości działania (BCP) i odtwarzania po katastrofie (DRP), kwarantanna 
+skompromitowanych systemów. Kluczowe miary efektywności: RTO (Recovery Time 
+Objective — ile czasu potrzeba na przywrócenie operacji) i RPO (Recovery Point 
+Objective — jaka maksymalna utrata danych jest akceptowalna). Organizacja 
+deklarująca RPO = 4 godziny, która nie testuje regularnie backupów, ma te 
+kontrole wyłącznie na papierze.</p>
+
+<h2>Wymiar 2: Natura kontroli — Nature-Based Controls</h2>
+
+<p>Drugi wymiar opisuje <em>jak</em> kontrola jest realizowana — przez jaki 
+mechanizm działa.</p>
+
+<p><strong>Kontrole administracyjne</strong> obejmują polityki, procedury, 
+szkolenia i procesy zarządcze. Fundament, na którym opierają się wszystkie inne 
+kontrole. Przykłady: polityka bezpieczeństwa informacji, procedury zarządzania 
+dostępem, programy szkoleń z cyberbezpieczeństwa, procesy onboardingu i 
+offboardingu pracowników, segregacja obowiązków (SoD). Edwards: najtańsze w 
+implementacji, najczęściej zaniedbywane — bo efekt nie jest natychmiast widoczny 
+i mierzalny. Organizacja bez solidnych kontroli administracyjnych nie może 
+skutecznie egzekwować żadnych kontroli technicznych — bo technika bez procesów 
+to chaos zarządzany przez przypadek.</p>
+
+<p><strong>Kontrole techniczne</strong> to rozwiązania technologiczne 
+egzekwujące polityki bezpieczeństwa. Przykłady: szyfrowanie (AES-256, TLS 1.3), 
+firewalle nowej generacji (NGFW), MFA, systemy EDR/XDR, DLP (Data Loss 
+Prevention), IAM/PAM (zarządzanie tożsamością i dostępem uprzywilejowanym), WAF 
+(Web Application Firewall). Ważna uwaga: technologia bez odpowiednich procesów 
+jest nieskuteczna lub wręcz szkodliwa. MFA wdrożone bez polityki zarządzania 
+wyjątkami i procedury odzyskiwania dostępu generuje nowe ryzyka operacyjne i 
+presję na tworzenie luk bezpieczeństwa.</p>
+
+<p><strong>Kontrole fizyczne</strong> zabezpieczają infrastrukturę fizyczną. 
+Przykłady: systemy kontroli dostępu (karty, biometria), monitoring CCTV, śluzy 
+powietrzne (mantraps), szafy serwerowe z zamkami, polityki czystego biurka. W 
+erze cloud computing organizacje często zapominają o fizycznym wymiarze 
+bezpieczeństwa. Tymczasem dostęp fizyczny do urządzenia końcowego, 
+infrastruktury sieciowej lub nośnika danych może obejść wszystkie zabezpieczenia 
+cyfrowe — stąd rosnąca popularność ataków na pracowników zdalnych i urządzenia 
+BYOD.</p>
+
+<h2>Matryca 3×3: Pełny obraz programu bezpieczeństwa</h2>
+
+<p>Połączenie obu wymiarów daje matrycę, która pozwala mapować każdą kontrolę i 
+identyfikować luki. Dojrzały program bezpieczeństwa posiada kontrole we 
+wszystkich lub większości komórek tej matrycy — z priorytetem wynikającym z 
+oceny ryzyka.</p>
+
+<table style="width:100%;border-collapse:collapse;
+margin:20px 0;font-size:13px;">
+<tr style="background:#0a1f2e;color:#fff;">
+  <th style="padding:10px 14px;text-align:left;font-weight:600;"></th>
+  <th style="padding:10px 14px;font-weight:600;">Administracyjna</th>
+  <th style="padding:10px 14px;font-weight:600;">Techniczna</th>
+  <th style="padding:10px 14px;font-weight:600;">Fizyczna</th>
+</tr>
+<tr style="border-bottom:1px solid #d8d0c0;background:#f4f1ea;">
+  <td style="padding:10px 14px;font-weight:700;color:#0a1f2e;">Prewencyjna</td>
+  <td style="padding:10px 14px;">Polityki haseł, SoD, procedury onboardingu, 
+szkolenia awareness, polityka clean desk</td>
+  <td style="padding:10px 14px;">Firewall, szyfrowanie, MFA, ACL, patch 
+management, hardening konfiguracji</td>
+  <td style="padding:10px 14px;">Kontrola dostępu fizycznego, mantraps, zamki, 
+polityki biurowe</td>
+</tr>
+<tr style="border-bottom:1px solid #d8d0c0;">
+  <td style="padding:10px 14px;font-weight:700;color:#0a1f2e;">Detekcyjna</td>
+  <td style="padding:10px 14px;">Audyty bezpieczeństwa, przeglądy logów, 
+polityka raportowania incydentów, tabletop exercises</td>
+  <td style="padding:10px 14px;">IDS/IPS, SIEM, UEBA, EDR, honeypoty, monitoring 
+sieci, DLP detekcja</td>
+  <td style="padding:10px 14px;">Kamery CCTV, czujniki ruchu, systemy alarmowe, 
+rejestry wejść/wyjść</td>
+</tr>
+<tr style="background:#f4f1ea;">
+  <td style="padding:10px 14px;font-weight:700;color:#0a1f2e;">Korekcyjna</td>
+  <td style="padding:10px 14px;">Plany IR, BCP/DRP, procedury eskalacji, 
+post-mortem reviews, komunikacja kryzysowa</td>
+  <td style="padding:10px 14px;">Systemy backup/DR, automatyczny rollback, 
+kwarantanna, patch automatyzacja</td>
+  <td style="padding:10px 14px;">Generatory awaryjne, UPS, redundantne 
+zasilanie, zapasowe łącza</td>
+</tr>
+</table>
+
+<p><strong>Ćwiczenie eksperckie — analiza ataku ransomware przez matrycę:
+</strong> Weź głośny atak ransomware i zidentyfikuj, która komórka zawodzi. 
+Prewencyjna-techniczna: brak segmentacji sieci, nieaktualne patche, brak MFA na 
+RDP? Prewencyjna-administracyjna: brak szkoleń z phishingu, brak polityki 
+backupów offline? Detekcyjna-techniczna: EDR nie wykrył lateralnego poruszania 
+się atakującego przez tygodnie? Korekcyjna-techniczna: backup był online i też 
+zaszyfrowany? Ransomware jest skuteczny właśnie dlatego, że atakuje słabości w 
+wielu komórkach jednocześnie. Organizacja, która „zdaje" audyt wyłącznie 
+prewencyjnych kontroli technicznych, jest dramatycznie nieprzygotowana.</p>
+
+<h2>Zaawansowana taksonomia: kontrole pierwotne, kompensujące i dziedziczone
+</h2>
+
+<p><strong>Kontrole pierwotne (Primary)</strong> to główna linia obrony przed 
+konkretnym ryzykiem. Firewall jest kontrolą pierwotną dla ryzyka 
+nieautoryzowanego dostępu sieciowego. Ich awaria bezpośrednio i znacząco 
+zwiększa prawdopodobieństwo materializacji ryzyka.</p>
+
+<p><strong>Kontrole wtórne (Secondary)</strong> wspierają kontrole pierwotne, 
+dodając warstwy. IDS monitorujący ruch po przejściu przez firewall jest kontrolą 
+wtórną. Razem tworzą defense in depth — strategię, w której kompromitacja jednej 
+warstwy nie prowadzi automatycznie do kompromitacji całego środowiska.</p>
+
+<p><strong>Kontrole kompensujące (Compensating)</strong> zastępują kontrole 
+pierwotne gdy ich wdrożenie jest niemożliwe lub niepraktyczne. Klasyczny 
+przykład z PCI DSS: organizacja nie może wdrożyć MFA na starszym systemie 
+legacy. Zamiast tego stosuje intensywniejsze monitorowanie sesji, dodatkowe 
+logowanie i krótsze okna sesji jako kontrole kompensujące. Kluczowe zasady: (1) 
+muszą być dokumentowane z uzasadnieniem, (2) regularnie oceniane pod kątem 
+adekwatności, (3) nie mogą być permanentnym rozwiązaniem — wymagają planu 
+przejścia do kontroli docelowej.</p>
+
+<p><strong>Kontrole dziedziczone (Inherited)</strong> są przejęte od 
+zewnętrznych dostawców lub platform. Korzystając z AWS, organizacja dziedziczy 
+fizyczne kontrole bezpieczeństwa datacenter AWS. Kluczowe pytania: czy 
+dziedziczone kontrole rzeczywiście pokrywają nasze ryzyka? Certyfikat ISO 27001 
+lub SOC 2 dostawcy nie zwalnia organizacji z odpowiedzialności za weryfikację 
+zakresu i skuteczności tych kontroli w kontekście własnego profilu ryzyka. 
+Shared responsibility model w cloud (AWS, Azure, GCP) jest klasycznym 
+przykładem: provider odpowiada za bezpieczeństwo chmury, klient — za 
+bezpieczeństwo w chmurze.</p>
+
+<p><strong>Kontrole nakładkowe (Overlay)</strong> to wymagania branżowe lub 
+regulacyjne nakładane na frameworki bazowe. HIPAA overlay na NIST CSF, PCI DSS 
+overlay na ISO 27001. Jedna architektura bezpieczeństwa może obsługiwać wiele 
+regulacji przez dodawanie warstw wymagań branżowych zamiast budowania 
+oddzielnych programów dla każdej regulacji.</p>
+
+<h2>Alegoria HOA i koszenie trawnika — głębsza analiza</h2>
+
+<p>Edwards używa tej analogii by pokazać, że zarządzanie ryzykiem jest codzienną 
+praktyką, nie jednorazowym projektem. Stowarzyszenie właścicieli domów (HOA) 
+wymaga utrzymania trawnika pod groźbą grzywny.</p>
+
+<ul style="line-height:2;">
+<li><strong>Ryzyko:</strong> grzywna za zaniedbanie trawnika.</li>
+<li><strong>Kontrola pierwotna (prewencyjna-techniczna):</strong> sprawna 
+kosiarka + regularne koszenie.</li>
+<li><strong>Kontrola prewencyjna-administracyjna:</strong> harmonogram koszenia, 
+zapas paliwa.</li>
+<li><strong>Kontrola detekcyjna:</strong> monitoring wzrostu trawy, obserwacja 
+stanu kosiarki.</li>
+<li><strong>Kontrola korekcyjna:</strong> naprawa kosiarki lub wynajęcie firmy 
+ogrodniczej.</li>
+<li><strong>Kontrola kompensująca:</strong> wynajęcie firmy gdy kosiarka jest 
+zepsuta — tymczasowo zastępuje kontrolę pierwotną, ale nie jest permanentnym 
+rozwiązaniem.</li>
+<li><strong>Kontrola dziedziczona:</strong> jeśli HOA zatrudnia ogrodnika dla 
+całej dzielnicy — właściciel dziedziczy tę kontrolę, ale musi weryfikować czy 
+standard jest zachowany.</li>
+</ul>
+
+<p>Głębszy sens: organizacje koncentrują się na narzędziach (kosiarkach) i 
+zapominają o planowaniu awarii każdej kontroli. Dojrzały program bezpieczeństwa 
+odpowiada na pytanie: <em>„Co robimy, gdy ta kontrola zawiedzie?"</em> — dla 
+każdej kluczowej kontroli z osobna.</p>
+
+<h2>Cykl życia kontroli — model operacyjny Edwardsa</h2>
+
+<p>Edwards traktuje kontrole jak żywe organizmy wymagające opieki na każdym 
+etapie. Ten 5-fazowy model jest fundamentem dojrzałego programu bezpieczeństwa.
+</p>
+
+<p><strong>Faza 1 — Identyfikacja i selekcja.</strong> Punkt wyjścia to risk 
+assessment, nie lista wymagań compliance. Pytanie brzmi: <em>„jakie zagrożenia 
+są dla nas realne i które kontrole je adresują?"</em> — nie: <em>„czego wymaga 
+audytor?"</em>. Narzędzia: threat modeling (STRIDE, PASTA, VAST), vulnerability 
+scanning, penetration testing, threat intelligence feeds. Wyjście: katalog 
+wymaganych kontroli priorytetyzowany przez ryzyko, z biznesowym uzasadnieniem 
+każdej pozycji.</p>
+
+<p><strong>Faza 2 — Projektowanie.</strong> Kontrola musi pasować do kontekstu 
+organizacyjnego: kultury, infrastruktury, zasobów ludzkich, procesów 
+biznesowych. Kontrola technicznie doskonała, której użytkowanie jest zbyt 
+skomplikowane lub spowalnia pracę, będzie konsekwentnie obchodzona przez 
+pracowników. Edwards: <em>„Bezpieczeństwo, które utrudnia pracę, nie będzie 
+stosowane."</em> Typowy przykład: polityka haseł wymagająca 20-znakowych 
+losowych kombinatur bez managera haseł prowadzi do karteczek samoprzylepnych pod 
+klawiaturami.</p>
+
+<p><strong>Faza 3 — Wdrożenie.</strong> Wymaga koordynacji między IT, zarządem i 
+użytkownikami końcowymi. Komunikacja i szkolenia przed wdrożeniem, nie po. 
+Typowy błąd: wdrożenie MFA bez informowania pracowników prowadzi do lawiny 
+zgłoszeń helpdesk, presji na wyjątki i ostatecznie do podważenia sensu kontroli 
+przez zarząd pod presją kosztów operacyjnych.</p>
+
+<p><strong>Faza 4 — Utrzymanie i doskonalenie.</strong> Najczęściej zaniedbywana 
+faza. Kontrola wdrożona dwa lata temu i nieaktualizowana jest prawdopodobnie 
+nieefektywna lub wręcz generuje fałszywe poczucie bezpieczeństwa. Wymagane: 
+regularne testy efektywności, red team exercises, aktualizacje reguł SIEM, KPIs 
+mierzące skuteczność (np. liczba incydentów wykrytych vs. przeoczonych, średni 
+czas detekcji).</p>
+
+<p><strong>Faza 5 — Wycofanie i zastąpienie.</strong> Kontrola musi być 
+formalnie wycofana z pełną dokumentacją uzasadnienia i planem przejścia do nowej 
+kontroli. Pozostawianie starych, nieefektywnych kontroli generuje koszty 
+operacyjne, dezorientuje audytorów, maskuje rzeczywiste luki i tworzy fałszywe 
+poczucie bezpieczeństwa u decydentów.</p>
+
+<div style="background:#e0f0ef;border-left:4px solid #0d6b6b;
+padding:16px 20px;margin:24px 0;border-radius:0 8px 8px 0;">
+<p style="margin:0 0 8px 0;font-weight:700;color:#0d6b6b;font-size:15px;">⚠️ 
+Pułapka compliance checkbox — kluczowy koncept Edwardsa</p>
+<p style="margin:0;line-height:1.7;">Najgroźniejsza patologia w programach 
+bezpieczeństwa to wdrażanie kontroli wyłącznie dla spełnienia wymogów audytu — 
+bez realnej redukcji ryzyka. Kontrola skonfigurowana tak, by zdać audyt, a nie 
+by działać, daje organizacji fałszywe poczucie bezpieczeństwa, a audytorowi 
+zielone światło. Edwards dokumentuje przypadki, gdzie organizacje posiadające 
+pełen zestaw certyfikatów (ISO 27001, SOC 2, PCI DSS) doświadczyły 
+katastrofalnych naruszeń — właśnie dlatego, że traktowały bezpieczeństwo jako 
+projekt compliance, nie jako operacyjną praktykę. <strong>Bezpieczeństwo to nie 
+certyfikat. To żywy proces operacyjny wymagający ciągłej uwagi i adaptacji.
+</strong></p>
+</div>
+
+<h2>Rola przywództwa — CISO, zarząd i kultura bezpieczeństwa</h2>
+
+<p>Edwards poświęca osobną sekcję roli przywództwa, bo najlepsze kontrole 
+techniczne zawiodą bez odpowiedniego sponsoringu organizacyjnego i kultury 
+bezpieczeństwa.</p>
+
+<p><strong>Komunikacja w języku biznesowym.</strong> CISO muszą tłumaczyć ryzyka 
+techniczne na konsekwencje biznesowe: ciągłość operacyjna, koszty naruszenia 
+(średni koszt naruszenia danych w 2024 roku: 4,88 mln USD wg IBM), ryzyko 
+reputacyjne, kary regulacyjne (GDPR: do 4% globalnego obrotu). Zarząd podejmuje 
+decyzje w kategoriach finansowych i strategicznych. CISO, który mówi wyłącznie o 
+CVE i CVSS scores, nie uzyska adekwatnego finansowania programu bezpieczeństwa.
+</p>
+
+<p><strong>Kultura bezpieczeństwa ponad kulturą compliance.</strong> 
+Cyberbezpieczeństwo nie jest domeną wyłącznie IT. Każdy pracownik jest 
+potencjalnym wektorem ataku (phishing) lub aktywną linią obrony (zgłoszenie 
+podejrzanej aktywności). Organizacje, w których bezpieczeństwo jest postrzegane 
+jako „problem IT do rozwiązania", tworzą kulturę, w której pracownicy nie biorą 
+za nie odpowiedzialności — i konsekwentnie ignorują polityki, które im 
+przeszkadzają w pracy.</p>
+
+<p><strong>Ciągłe doskonalenie jako imperatyw operacyjny.</strong> Threat 
+landscape zmienia się szybciej niż większość organizacji aktualizuje swoje 
+programy bezpieczeństwa. Nowe techniki ataków (supply chain attacks, AI-powered 
+phishing, zero-day exploits), nowe regulacje, nowe architektury IT 
+(cloud-native, edge computing, OT/IoT) — każda z tych zmian może uczynić 
+istniejące kontrole nieadekwatnymi. Organizacje traktujące program 
+bezpieczeństwa jako projekt z datą zakończenia regularnie są zaskakiwane przez 
+nowe wektory ataków.</p>
+
+<h2>Praktyczne rekomendacje Edwardsa — priorytetyzacja działań</h2>
+
+<ul style="line-height:1.9;">
+<li>Zbuduj kompletny <strong>inwentarz kontroli</strong> kategoryzowany według 
+matrycy 3×3 (timing × nature). Zidentyfikuj luki i nadmiarowości — kontrole bez 
+mapowania do ryzyk są kandydatami do wycofania lub zastąpienia.</li>
+<li>Wdróż <strong>crossfunkcjonalne szkolenia</strong> — HR, Finanse, Operations 
+i zarząd muszą rozumieć kontrole tak samo jak IT. Bezpieczeństwo bez wspólnego 
+języka organizacyjnego jest skazane na silosy.</li>
+<li>Ustal <strong>KPIs dla każdej kluczowej kontroli</strong>: średni czas 
+detekcji, procent alertów false positive, czas przywracania po incydencie, 
+pokrycie backupami systemów krytycznych. Kontrola bez mierzalnych wskaźników to 
+finansowa fikcja.</li>
+<li>Planuj <strong>regularne cykle przeglądów</strong> — minimum raz w roku, po 
+każdym incydencie i po każdej znaczącej zmianie infrastruktury lub modelu 
+biznesowego.</li>
+<li>Mapuj każdą kontrolę do <strong>konkretnego ryzyka biznesowego</strong> w 
+rejestrze ryzyk. Kontrola bez uzasadnienia w tym rejestrze jest kandydatem do 
+wycofania — utrzymywanie jej kosztuje zasoby i dezorientuje audytorów.</li>
+<li>Zapewnij <strong>executive sponsoring</strong> — bez zaangażowania zarządu i 
+C-suite program bezpieczeństwa będzie chronicznie niedofinansowany i 
+depriorytetyzowany przy pierwszym konflikcie z celami biznesowymi.</li>
+<li>Dla każdej kluczowej kontroli odpowiedz na pytanie: <strong>„Co robimy, gdy 
+ta kontrola zawiedzie?"</strong> Brak odpowiedzi to luka w programie 
+korekcyjnym.</li>
+<li>Dokumentuj wszystkie <strong>kontrole kompensujące</strong> z uzasadnieniem 
+i harmonogramem przejścia do rozwiązań docelowych. Kompensujące bez planu 
+zastąpienia stają się permanentnymi — i stopniowo tracą skuteczność.</li>
+</ul>
