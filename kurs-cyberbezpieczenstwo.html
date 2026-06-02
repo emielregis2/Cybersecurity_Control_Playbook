@@ -850,16 +850,25 @@ const TOTAL = MODULES.length;
 const LS_KEY = 'ccp_progress_v2';
 
 /* ── STATE ───────────────────────────────────────────────── */
-let done     = new Set();
-let quizDone = {};
-let current  = -1;
-let activeTab = 'teoria';
+let done        = new Set();
+let quizDone    = {};
+let completedAt = {};
+let timeSpent   = {};
+let quizCorrect = {};
+let current     = -1;
+let activeTab   = 'teoria';
+let _tabStart   = null;
 
 /* ── PERSISTENCE ─────────────────────────────────────────── */
 function saveProgress() {
   try {
     localStorage.setItem(LS_KEY, JSON.stringify({
-      done: [...done], quizDone, savedAt: new Date().toISOString()
+      done: [...done],
+      quizDone,
+      completedAt,
+      timeSpent,
+      quizCorrect,
+      savedAt: new Date().toISOString()
     }));
   } catch(e) {}
 }
@@ -869,14 +878,22 @@ function loadProgress() {
     const raw = localStorage.getItem(LS_KEY);
     if (!raw) return;
     const d = JSON.parse(raw);
-    if (d.done) d.done.forEach(id => done.add(id));
-    if (d.quizDone) Object.assign(quizDone, d.quizDone);
+    if (d.done)        d.done.forEach(id => done.add(id));
+    if (d.quizDone)    Object.assign(quizDone,    d.quizDone);
+    if (d.completedAt) Ocject.assign(completedAt, d.completedAt);
+    if (d.timeSpent)   Object.assign(timeSpent,   d.timeSpent);
+    if (d.quizCorrect) Object.assign(quizCorrect, d.quizCorrect);
   } catch(e) {}
 }
 
 function exportXML() {
   const now = new Date().toISOString();
-  const doneXML = [...done].map(id => `    <module id="${id}" status="completed"/>`).join('\n');
+  const doneXML = [...done].map(id => {
+    const dt  = completedAt[id] ? ` completedAt="${completedAt[id]}"` : '';
+    const ts  = timeSpent[id]   ? ` timeSpent="${timeSpent[id]}"` : '';
+    const qr  = quizCorrect.hasOwnProperty(id) ? ` quizCorrect="${quizCorrect[id]}"` : '';
+    return `    <module id="${id}" status="completed"${dt}${ts}${qr}/>`;
+  }).join('\n');
   const quizXML = Object.entries(quizDone).map(([id,idx]) =>
     `    <quiz moduleId="${id}" selectedAnswer="${idx}"/>`).join('\n');
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<ccp-progress version="2.0" exportedAt="${now}">\n  <completedModules count="${done.size}">\n${doneXML}\n  </completedModules>\n  <quizAnswers count="${Object.keys(quizDone).length}">\n${quizXML}\n  </quizAnswers>\n</ccp-progress>`;
@@ -901,7 +918,15 @@ function importXML() {
         if (doc.querySelector('parsererror')) { alert('Nieprawidłowy plik XML.'); return; }
         doc.querySelectorAll("module[status='completed']").forEach(el => {
           const id = parseInt(el.getAttribute('id'));
-          if (!isNaN(id)) done.add(id);
+          if (!isNaN(id)) {
+            done.add(id);
+            const ca = el.getAttribute('completedAt');
+            const ts = el.getAttribute('timeSpent');
+            const qr = el.getAttribute('quizCorrect');
+            if (ca) completedAt[id] = ca;
+            if (ts) timeSpent[id]   = parseInt(ts);
+            if (qr !== null) quizCorrect[id] = (qr === 'true');
+          }
         });
         doc.querySelectorAll('quiz[moduleId]').forEach(el => {
           const id = parseInt(el.getAttribute('moduleId'));
@@ -924,12 +949,16 @@ function renderSidebar() {
     const isDone   = done.has(m.id);
     const isActive = i === current;
     const diff = m.diff === 'Podstawowy' ? '●' : m.diff === 'Średni' ? '●●' : '●●●';
+    const dateStr  = completedAt[m.id] ? _fmtDate(completedAt[m.id]) : '';
+    const timeStr  = timeSpent[m.id]   ? _fmtSec(timeSpent[m.id]) : '';
+    const scoreStr = quizCorrect.hasOwnProperty(m.id) ? (quizCorrect[m.id] ? '✓ OK' : '✗') : '';
+    const metaExtra = isDone ? `${"{dateStr}"}${"{timeStr ? ' · '+timeStr : ''}"}` : `${"{m.src}"} · ${"{m.dur}"}`;
     return `<button class="nav-item${isActive?' active':''}${isDone?' done':''}"
       onclick="goTo(${i})" title="${m.diff}">
       <span class="nav-num">${isDone ? '✓' : m.id}</span>
       <span class="nav-txt">
         <span class="nav-title">${m.icon} ${m.title}</span>
-        <span class="nav-meta">${m.src} · ${m.dur}</span>
+        <span class="nav-meta">${metaExtra}</span>
       </span>
       ${isDone ? '<span class="nav-check">✓</span>' : ''}
     </button>`;
@@ -945,8 +974,10 @@ function updateProgress() {
 /* ── NAVIGATION ──────────────────────────────────────────── */
 function goTo(i) {
   if (i < 0 || i >= TOTAL) return;
+  _saveTimeSpent();
   current = i;
   activeTab = 'teoria';
+  _tabStart = Date.now();
   renderSidebar();
   document.getElementById('heroPanel').style.display = 'none';
   document.getElementById('contentPanel').style.display = 'block';
@@ -987,7 +1018,9 @@ function updateTopbar() {
 }
 
 function switchTab(tab) {
+  _saveTimeSpent();
   activeTab = tab;
+  _tabStart = Date.now();
   ['teoria','case','quiz'].forEach(t => {
     document.getElementById('tab-'+t).className = 'tab-btn' + (t===tab?' active':'');
   });
@@ -1050,6 +1083,7 @@ async function renderQuiz() {
     const letters = ['A','B','C','D','E'];
     const answered = quizDone.hasOwnProperty(m.id);
     const selected = quizDone[m.id];
+    if (answered) _recordQuizResult(m.id, selected, quiz.correct);
 
     const optsHTML = quiz.options.map((opt, i) => {
       let cls = 'quiz-opt';
@@ -1093,13 +1127,26 @@ function answerQuiz(idx) {
   if (quizDone.hasOwnProperty(m.id)) return;
   quizDone[m.id] = idx;
   saveProgress();
-  renderQuiz();
+  renderQuiz();   // quiz wywola _recordQuizResult   // quiz sam wywola _recordQuizResult
 }
 
 /* ── COMPLETE ─────────────────────────────────────────────── */
+function switchTab(tab) {
+  _saveTimeSpent();
+  activeTab = tab;
+  _tabStart = Date.now();
+  ['teoria','case','quiz'].forEach(t => {
+    document.getElementById('tab-'+t).className = 'tab-btn' + (t===tab?' active':'');
+  });
+  loadTab(tab);
+  window.scrollTo(0,0);
+}
+
 function completeModule() {
   const m = MODULES[current];
+  _saveTimeSpent();
   done.add(m.id);
+  completedAt[m.id] = new Date().toISOString();
   saveProgress();
   renderSidebar();
   updateProgress();
@@ -1145,12 +1192,12 @@ function renderHero(completed = false) {
         <div class="stat-label">Postęp kursu</div>
       </div>
       <div class="stat-card">
-        <div class="stat-num">${Object.keys(quizDone).length}</div>
-        <div class="stat-label">Quizy zaliczone</div>
+        <div class="stat-num">${_quizScore()}%</div>
+        <div class="stat-label">Wynik quizów</div>
       </div>
       <div class="stat-card">
-        <div class="stat-num">${(TOTAL-done.size)*33}</div>
-        <div class="stat-label">Minut do końca</div>
+        <div class="stat-num">${_totalTimeStr()}</div>
+        <div class="stat-label">Czas nauki</div>
       </div>
     </div>
     <button class="btn-primary" onclick="goTo(${done.size < TOTAL ? done.size : 0})" style="font-size:15px;padding:14px 28px;">
@@ -1171,7 +1218,40 @@ function closeMenu() {
 
 document.getElementById('scrim').addEventListener('click', closeMenu);
 
-/* ── INIT ─────────────────────────────────────────────────── */
+/* ── HELPERS ────────────────────────────────────── */
+function _saveTimeSpent() {
+  if (_tabStart === null || current < 0) return;
+  const secs = Math.round((Date.now() - _tabStart) / 1000);
+  const id = MODULES[current].id;
+  timeSpent[id] = (timeSpent[id] || 0) + secs;
+  _tabStart = Date.now();
+}
+function _fmtSec(secs) {
+  if (!secs) return '';
+  if (secs < 60)   return secs + 's';
+  if (secs < 3600) return Math.round(secs/60) + ' min';
+  return Math.floor(secs/3600) + 'h ' + Math.round((secs%3600)/60) + 'min';
+}
+function _totalTimeStr() {
+  const total = Object.values(timeSpent).reduce((a,b)=>a+b, 0);
+  return _fmtSec(total) || '0min';
+}
+function _fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('pl-PL', {day:'2-digit',month:'2-digit',year:'numeric'});
+}
+function _quizScore() {
+  const total = Object.keys(quizCorrect).length;
+  if (!total) return '—';
+  const correct = Object.values(quizCorrect).filter(Boolean).length;
+  return Math.round((correct/total)*100);
+}
+function _recordQuizResult(moduleId, selectedIdx, correctIdx) {
+  quizCorrect[moduleId] = (selectedIdx === correctIdx);
+  saveProgress();
+}
+/* ── INIT ───────────────────────────────────────────── */
 loadProgress();
 renderSidebar();
 updateProgress();
