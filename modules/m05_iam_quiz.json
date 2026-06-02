@@ -1,0 +1,126 @@
+{
+  "module": 5,
+  "title": "Zarządzanie tożsamością i dostępem (IAM)",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Verizon DBIR 2024 podaje że 86% naruszeń danych dotyczy skradzionych lub słabych poświadczeń. Jakie jest najskuteczniejsze pojedyncze działanie które może zredukować to ryzyko?",
+      "options": [
+        "Wymóg zmiany haseł co 30 dni",
+        "Wdrożenie MFA (wieloskładnikowego uwierzytelniania) dla wszystkich kont",
+        "Szkolenie pracowników z bezpieczeństwa haseł",
+        "Instalacja antywirusa na wszystkich urządzeniach"
+      ],
+      "correct": 1,
+      "explanation": "MFA blokuje 99,9% automatycznych ataków na konta (dane Microsoft). Nawet gdy hasło zostanie skradzione — bez drugiego czynnika atakujący nie może się zalogować. Zmiana haseł co 30 dni jest nieefektywna (NIST to odradza). Szkolenia pomagają, ale nie eliminują ryzyka phishingu. Antywirus chroni urządzenie, nie konto."
+    },
+    {
+      "id": 2,
+      "question": "Firma stosuje politykę haseł: minimum 8 znaków, wielka litera, cyfra, znak specjalny, zmiana co 90 dni. Jaki jest główny problem tej polityki?",
+      "options": [
+        "8 znaków to za mało — powinno być minimum 12",
+        "Rotacja haseł i wymagania złożoności prowadzą do przewidywalnych wzorców (Haslo1! → Haslo2!) — NIST rekomenduje długość bez rotacji, z zakazem znanych haseł",
+        "Znaki specjalne są trudne do zapamiętania",
+        "Polityka jest za restrykcyjna — pracownicy będą niezadowoleni"
+      ],
+      "correct": 1,
+      "explanation": "NIST SP 800-63B (2017, potwierdzone 2024) rekomenduje: brak wymagań złożoności (wielkie/cyfry/znaki), brak obowiązkowej rotacji (chyba że dowód kompromitacji), nacisk na długość (15+ znaków), sprawdzanie pod kątem znanych wycieków. Rotacja + wymagania złożoności prowadzą do wzorców które są słabsze niż proste passphrase."
+    },
+    {
+      "id": 3,
+      "question": "Czym różni się RBAC od ABAC?",
+      "options": [
+        "RBAC jest dla małych firm, ABAC dla dużych",
+        "RBAC przyznaje dostęp na podstawie roli użytkownika; ABAC uwzględnia dodatkowo atrybuty (dział, poziom, czas, lokalizacja, typ urządzenia)",
+        "RBAC działa w chmurze, ABAC on-premise",
+        "ABAC jest mniej bezpieczny niż RBAC"
+      ],
+      "correct": 1,
+      "explanation": "RBAC (Role-Based): dostęp wynika z przypisanej roli (np. 'Księgowość'). Proste w zarządzaniu, ale mało granularne. ABAC (Attribute-Based): decyzja o dostępie uwzględnia wiele atrybutów — użytkownik z działu HR, na poziomie senior, logujący się z urządzenia firmowego, w godzinach pracy, może przeglądać pliki kadrowe. Bardziej precyzyjny, ale złożony w implementacji."
+    },
+    {
+      "id": 4,
+      "question": "Pracownica odeszła z firmy w piątek. Kiedy powinno zostać dezaktywowane jej konto?",
+      "options": [
+        "W poniedziałek — po weekendzie IT ma czas to zrobić",
+        "Po tygodniu — żeby mieć czas na przekazanie obowiązków",
+        "Tego samego dnia co odejście, najlepiej automatycznie przez integrację HRIS↔AD",
+        "Gdy nowy pracownik przejmie jej obowiązki"
+      ],
+      "correct": 2,
+      "explanation": "Aktywne konto byłego pracownika to otwarte drzwi. IBM podaje że średni czas między odejściem a dezaktywacją konta to 5,3 dnia — podczas których były pracownik lub osoba znająca jego hasło ma pełny dostęp. Dezaktywacja powinna być automatyczna (integracja HRIS↔AD) i następować w dniu zakończenia umowy lub wcześniej."
+    },
+    {
+      "id": 5,
+      "question": "Administrator sieci używa jednego konta (jan.kowalski@firma.pl) do wszystkiego — sprawdza pocztę, przegląda internet i zarządza serwerami. Jaki jest główny problem bezpieczeństwa?",
+      "options": [
+        "Administrator powinien mieć oddzielny laptop do pracy administracyjnej",
+        "Jedno konto z prawami administratora używane do codziennej pracy — zainfekowanie przez phishing lub złośliwą stronę daje atakującemu natychmiastowe prawa administratora",
+        "Administrator powinien mieć silniejsze hasło",
+        "Problem jest tylko jeśli administrator pracuje zdalnie"
+      ],
+      "correct": 1,
+      "explanation": "Zasada separacji kont: konto codzienne (poczta, Teams, internet) z minimalnymi prawami + oddzielne konto uprzywilejowane (adm-jan.kowalski) używane wyłącznie do zadań administracyjnych. Jeśli konto codzienne zostanie skompromitowane przez phishing — atakujący dostaje uprawnienia pracownika, nie administratora. Konto uprzywilejowane powinno mieć dostęp JIT (Just-In-Time)."
+    },
+    {
+      "id": 6,
+      "question": "Co to jest 'credential stuffing' i jak MFA przed tym chroni?",
+      "options": [
+        "Atak fizyczny na serwer z bazą haseł — MFA nie chroni",
+        "Automatyczne testowanie par login+hasło z wycieków z innych serwisów na nowym serwisie — MFA blokuje bo atakujący nie ma drugiego czynnika",
+        "Atak DDoS na serwer logowania — MFA nie ma związku",
+        "Phishing — MFA całkowicie eliminuje zagrożenie"
+      ],
+      "correct": 1,
+      "explanation": "Credential stuffing: atakujący bierze wyciek haseł (np. LinkedIn 2016: 164 mln haseł) i automatycznie próbuje tych par na innych serwisach (banki, e-commerce, poczta). Działa gdy użytkownik reużywa haseł. MFA blokuje: nawet jeśli hasło pasuje, atakujący nie ma smartfona użytkownika z kodem TOTP. Uwaga: phishing AiTM może obejść TOTP — FIDO2 nie."
+    },
+    {
+      "id": 7,
+      "question": "Firma wdraża SSO (Single Sign-On). Jaką kluczową korzyść bezpieczeństwa to przynosi poza wygodą użytkowników?",
+      "options": [
+        "SSO eliminuje potrzebę MFA — jeden login wystarczy",
+        "MFA wdrożone raz na IdP działa dla wszystkich aplikacji; offboarding przez dezaktywację jednego konta = brak dostępu do wszystkich systemów",
+        "SSO szyfruje wszystkie dane przesyłane w sieci",
+        "SSO zastępuje firewalla jako kontrola dostępu do sieci"
+      ],
+      "correct": 1,
+      "explanation": "SSO ma kilka korzyści bezpieczeństwa: (1) MFA wdrożone na Identity Provider działa dla wszystkich aplikacji bez osobnej konfiguracji; (2) Offboarding: jedno konto do dezaktywacji = utrata dostępu do wszystkich systemów; (3) Centralny monitoring logowań ze wszystkich aplikacji; (4) Mniej haseł = mniejsze ryzyko reużywania. SSO nie zastępuje MFA — wręcz ułatwia MFA wdrożenie."
+    },
+    {
+      "id": 8,
+      "question": "Deweloper zapisał hasło do bazy danych w kodzie źródłowym na GitHubie: `db_password = 'SuperSecret123!'`. Jakie jest właściwe rozwiązanie?",
+      "options": [
+        "Przynajmniej zaszyfrować hasło w kodzie algorytmem Base64",
+        "Użyć zmiennych środowiskowych zamiast hardcoded hasła",
+        "Wdrożyć Secrets Manager (HashiCorp Vault, AWS Secrets Manager) — aplikacja dynamicznie pobiera hasło przy uruchomieniu, nie przechowuje go w kodzie",
+        "Hasło w kodzie jest bezpieczne jeśli repozytorium jest prywatne"
+      ],
+      "correct": 2,
+      "explanation": "Hardcoded credentials (hasła w kodzie) to jeden z najczęstszych błędów bezpieczeństwa. Zmienne środowiskowe to krok naprzód, ale nadal mogą wyciec przez logi. Najlepsze rozwiązanie: Secrets Manager (HashiCorp Vault, AWS Secrets Manager) — aplikacja dynamicznie pobiera sekret przy uruchomieniu, Vault rotuje hasła automatycznie, każdy dostęp jest auditowany. Base64 to nie szyfrowanie — to encodowanie, trivialnie odwracalne."
+    },
+    {
+      "id": 9,
+      "question": "Który typ MFA jest odporny na phishing AiTM (Adversary-in-the-Middle), gdzie atakujący przechwytuje kod w czasie rzeczywistym?",
+      "options": [
+        "Kod SMS (OTP przez SMS)",
+        "TOTP (Google Authenticator, Microsoft Authenticator)",
+        "FIDO2/Passkeys (klucze sprzętowe, Windows Hello for Business)",
+        "Push notification (Duo, Microsoft Authenticator push)"
+      ],
+      "correct": 2,
+      "explanation": "FIDO2/WebAuthn jest odporny na phishing AiTM bo klucz kryptograficznie wiąże się z konkretną domeną. Fałszywa strona phishingowa na innej domenie nie może uzyskać ważnego tokena — challenge/response jest domenowo-specyficzny. SMS OTP, TOTP i push notifications mogą być przechwycone w czasie rzeczywistym przez atakującego działającego jako proxy. FIDO2 to jedyna powszechnie dostępna forma MFA odporna na phishing."
+    },
+    {
+      "id": 10,
+      "question": "Co oznacza 'Least Privilege' i dlaczego jest trudne do utrzymania w praktyce?",
+      "options": [
+        "Najmniejsza możliwa moc obliczeniowa serwera — trudne bo jest drogie",
+        "Minimalny dostęp potrzebny do wykonania zadania — trudne bo dostępy narastają (nowe role, projekty), rzadko są odbierane, IT daje szerszy dostęp 'żeby nie było ticketów'",
+        "Wyłączenie niepotrzebnych portów sieciowych — trudne bo trzeba znać wszystkie usługi",
+        "Minimalna liczba uprzywilejowanych kont — trudne bo wszyscy chcą być adminami"
+      ],
+      "correct": 1,
+      "explanation": "Least Privilege to zasada minimalnych uprawnień: każdy dostaje tylko to co niezbędne. Trudności praktyczne: (1) Permission drift — uprawnienia rosną przy zmianie roli, nie są odbierane przy końcu projektu; (2) IT daje szerszy dostęp upfront żeby unikać ticketów; (3) 'Jak poprzednik' — nowi pracownicy dostają uprawnienia poprzednika bez analizy; (4) Brak regularnych access reviews. Edwards podaje że 40% kont ma więcej uprawnień niż potrzeba."
+    }
+  ]
+}

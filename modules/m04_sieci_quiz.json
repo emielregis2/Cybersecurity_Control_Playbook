@@ -1,0 +1,126 @@
+{
+  "module": 4,
+  "title": "Bezpieczeństwo sieci i infrastruktury",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Firma wdraża DMZ dla serwerów webowych. Jaki jest główny cel tej architektury?",
+      "options": [
+        "Zwiększenie prędkości dostępu do serwerów webowych",
+        "Izolacja serwerów webowych tak, żeby ich kompromitacja nie dawała bezpośredniego dostępu do sieci wewnętrznej",
+        "Umożliwienie pracownikom dostępu do internetu bez VPN",
+        "Zastąpienie firewalla tańszym rozwiązaniem"
+      ],
+      "correct": 1,
+      "explanation": "DMZ (Demilitarized Zone) to strefa pośrednia między Internetem a siecią wewnętrzną. Serwery webowe w DMZ mogą być dostępne z Internetu, ale ich kompromitacja nie daje bezpośredniego dostępu do sieci wewnętrznej — firewall wewnętrzny blokuje dalszy ruch. To kluczowa zasada segmentacji sieciowej."
+    },
+    {
+      "id": 2,
+      "question": "Administrator odkrywa, że drukarka w biurze ma otwarty port 23 (Telnet) i jest podłączona do tej samej sieci co serwer ERP. Jakie powinno być pierwsze działanie?",
+      "options": [
+        "Zablokować port 23 na samej drukarce i przenieść ją do osobnego VLAN-u IoT",
+        "Zainstalować na drukarce antywirusa",
+        "Zmienić hasło do drukarki na silniejsze",
+        "Wyłączyć drukarkę do czasu pojawienia się aktualizacji firmware"
+      ],
+      "correct": 0,
+      "explanation": "Dwa problemy wymagają natychmiastowej reakcji: Telnet na porcie 23 przesyła dane w plaintext (w tym hasła) i powinien być wyłączony — zamiast niego SSH. Drukarki IoT powinny być w izolowanym VLAN-ie IoT, bez dostępu do sieci z serwerami produkcyjnymi. Razem te dwa działania eliminują bezpośrednie ryzyko."
+    },
+    {
+      "id": 3,
+      "question": "Czym różni się IDS od IPS?",
+      "options": [
+        "IDS jest droższy, IPS tańszy",
+        "IDS tylko wykrywa i alarmuje (pasywny), IPS może aktywnie blokować ruch (inline)",
+        "IDS chroni serwery, IPS chroni sieć",
+        "IDS działa w chmurze, IPS on-premise"
+      ],
+      "correct": 1,
+      "explanation": "IDS (Intrusion Detection System) monitoruje ruch i generuje alerty — jest pasywny, nie blokuje ruchu. IPS (Intrusion Prevention System) działa inline (ruch przechodzi przez IPS), więc może odrzucać pakiety i blokować połączenia. IPS wiąże się z ryzykiem false positive — błędne blokowanie legalnego ruchu."
+    },
+    {
+      "id": 4,
+      "question": "Firma stosuje WPA2-Personal (PSK) dla sieci Wi-Fi pracowników. Jakie jest główne zagrożenie tej konfiguracji?",
+      "options": [
+        "WPA2 jest podatne na ataki fizyczne na access point",
+        "Jedno hasło dla wszystkich pracowników — jeśli wycieknie, wszyscy muszą zmieniać hasło, a były pracownik może się nadal łączyć",
+        "WPA2-Personal nie obsługuje urządzeń mobilnych",
+        "WPA2 wymaga certyfikatów co jest zbyt kosztowne"
+      ],
+      "correct": 1,
+      "explanation": "WPA2-Personal używa jednego pre-shared key dla wszystkich użytkowników. Gdy pracownik odchodzi z firmy, zna to hasło. Gdy hasło wycieknie, trzeba je zmienić dla wszystkich. WPA2-Enterprise z 802.1X eliminuje ten problem — każdy użytkownik ma własne poświadczenia, które można indywidualnie dezaktywować."
+    },
+    {
+      "id": 5,
+      "question": "Co to jest 'Default Deny' w kontekście firewalla?",
+      "options": [
+        "Domyślna blokada całego ruchu wychodzącego",
+        "Zasada, że ruch jest blokowany jeśli nie istnieje jawna reguła zezwalająca — odwrotność domyślnego zezwolenia",
+        "Automatyczne blokowanie IP atakujących przez IPS",
+        "Blokada dostępu do panelu zarządzającego firewalla"
+      ],
+      "correct": 1,
+      "explanation": "Default Deny (domyślne odrzucenie) oznacza, że firewall blokuje wszystko co nie jest jawnie dozwolone. To przeciwieństwo default permit (domyślne zezwolenie), gdzie blokujesz tylko to co jest jawnie zakazane. Default Deny jest bezpieczniejszą zasadą — administrator świadomie decyduje co jest dozwolone, zamiast reaktywnie blokować zagrożenia."
+    },
+    {
+      "id": 6,
+      "question": "Firma używa NetFlow do monitorowania sieci. Co może wykryć ta technologia, czego nie widzi tradycyjny firewall?",
+      "options": [
+        "Wirusy w plikach przesyłanych przez sieć",
+        "Anomalie w ilości danych przesyłanych między hostami — np. serwer nagle wysyła 50 GB danych do nieznanego zewnętrznego IP",
+        "Hasła przesyłane w plaintext",
+        "Złośliwy kod JavaScript na stronach WWW"
+      ],
+      "correct": 1,
+      "explanation": "NetFlow zbiera metadane o połączeniach: kto rozmawiał z kim, ile danych, przez jaki czas. Nie widzi zawartości ruchu, ale pozwala wykryć anomalie przepływów — np. server nagle wysyłający duże ilości danych do zewnętrznego IP (eksfiltracja). Tradycyjny firewall bazuje na regułach permit/deny i nie analizuje wzorców zachowania."
+    },
+    {
+      "id": 7,
+      "question": "Jaka jest kluczowa różnica między tradycyjnym modelem bezpieczeństwa 'castle and moat' a Zero Trust?",
+      "options": [
+        "Zero Trust jest droższy i wymaga więcej sprzętu",
+        "W modelu castle and moat wszystko w sieci wewnętrznej jest domyślnie zaufane; Zero Trust wymaga ciągłej weryfikacji każdego użytkownika i urządzenia niezależnie od lokalizacji",
+        "Zero Trust nie wymaga firewalla",
+        "Castle and moat działa tylko on-premise, Zero Trust tylko w chmurze"
+      ],
+      "correct": 1,
+      "explanation": "Model castle and moat zakładał: 'jesteś w sieci wewnętrznej = jesteś zaufany'. To model przestarzały gdy pracownicy pracują zdalnie, aplikacje są w chmurze, a zagrożenia mogą pochodzić z wewnątrz. Zero Trust: 'Nigdy nie ufaj, zawsze weryfikuj' — każde żądanie dostępu wymaga uwierzytelnienia i autoryzacji, niezależnie od lokalizacji."
+    },
+    {
+      "id": 8,
+      "question": "Administrator chce sprawdzić które porty są otwarte na serwerach w sieci firmowej. Które narzędzie jest do tego przeznaczone?",
+      "options": [
+        "Wireshark",
+        "Nmap",
+        "Snort",
+        "Splunk"
+      ],
+      "correct": 1,
+      "explanation": "Nmap (Network Mapper) to skaner portów i usług — standardowe narzędzie administratora do inwentaryzacji otwartych portów, wykrywania usług i ich wersji. Wireshark to analizator pakietów (przechwytuje i analizuje ruch). Snort to IDS. Splunk to SIEM. Nmap jest używany zarówno przez administratorów (inwentaryzacja) jak i pentesterów (rekonesans)."
+    },
+    {
+      "id": 9,
+      "question": "Firma chce chronić swoją aplikację webową przed atakami SQL injection i XSS. Które urządzenie/technologia jest najodpowiedniejsza?",
+      "options": [
+        "Stateful Inspection Firewall (firewall klasyczny)",
+        "VPN",
+        "WAF (Web Application Firewall)",
+        "IDS sieciowy (NIDS)"
+      ],
+      "correct": 2,
+      "explanation": "WAF (Web Application Firewall) specjalizuje się w ochronie aplikacji webowych przed atakami warstwy 7: SQL injection, XSS, CSRF, directory traversal. Rozumie protokół HTTP szczegółowo i może filtrować złośliwe żądania. Klasyczny firewall stateful nie rozumie zawartości HTTP. NIDS wykrywa ale nie blokuje. VPN szyfruje połączenia, ale nie chroni przed atakami aplikacyjnymi."
+    },
+    {
+      "id": 10,
+      "question": "SIEM wykrył następującą sekwencję zdarzeń: użytkownik zalogował się o 3:00 w nocy z IP z Azji, następnie nastąpiło 500 nieudanych prób logowania na różne konta, a potem 3 udane logowania na konta administratorów. Jak SIEM pomógł w tej sytuacji?",
+      "options": [
+        "SIEM zablokował atak automatycznie przez swój wbudowany firewall",
+        "SIEM nie mógł wykryć tego ataku — to zadanie antywirusa",
+        "SIEM skorelował zdarzenia z różnych systemów, które osobno wyglądały podejrzanie, a razem pokazały wyraźny wzorzec ataku brute force z przejęciem kont",
+        "SIEM wysłał e-mail do atakującego z ostrzeżeniem"
+      ],
+      "correct": 2,
+      "explanation": "Kluczowa wartość SIEM to korelacja zdarzeń. Każde zdarzenie osobno (logowanie nocne, nieudane próby, logowania admin) może być w logach poszczególnych systemów. SIEM zbiera logi ze wszystkich źródeł i wykrywa że te trzy zdarzenia to jedna sekwencja ataku. To co wymaga godzin ręcznej analizy logów — SIEM robi w sekundy i generuje alert."
+    }
+  ]
+}
