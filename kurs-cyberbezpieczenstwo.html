@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
@@ -1008,7 +1008,7 @@ async function loadTab(tab) {
   panel.innerHTML = '<div class="loading"><div class="spinner"></div> Ładowanie treści…</div>';
 
   const suffix = tab === 'case' ? '_case' : '';
-  const path   = `modules/${m.slug}${suffix}.md`;
+  const path   = `http://localhost:8080/modules/${m.slug}${suffix}.md`;
 
   try {
     const resp = await fetch(path);
@@ -1043,7 +1043,7 @@ async function renderQuiz() {
   panel.innerHTML = '<div class="loading"><div class="spinner"></div> Ładowanie quizu…</div>';
 
   try {
-    const resp = await fetch(`modules/${m.slug}_quiz.json`);
+    const resp = await fetch(`http://localhost:8080/modules/${m.slug}_quiz.json`);
     if (!resp.ok) throw new Error('brak pliku');
     const quiz = await resp.json();
 
