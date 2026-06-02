@@ -1,6 +1,9 @@
 @echo off
 echo Uruchamianie kursu Cybersecurity Control Playbook...
 
+:: Przejdz do folderu projektu
+cd /d "C:\Users\dariu\Documents\Cybersecurity_Control_Playbook"
+
 :: Zabij stary serwer jesli dziala
 for /f "tokens=5" %%a in ('netstat -aon ^| findstr ":8080 "') do taskkill /F /PID %%a >nul 2>&1
 
