@@ -1,0 +1,11 @@
+{
+  "question": "Firma posiada backup na serwerze NAS podpiętym do sieci korporacyjnej, politykę haseł, firewall i antywirus. Dochodzi do ataku ransomware — wszystkie dane zostają zaszyfrowane, łącznie z backupem. Która komórka matrycy 3×3 zawiodła jako pierwsza i spowodowała kaskadę pozostałych błędów?",
+  "options": [
+    "Prewencyjna-Techniczna — firewall i antywirus były niewystarczające jako pierwsza linia obrony",
+    "Detekcyjna-Techniczna — brak EDR/UEBA nie wykrył lateralnego przemieszczania atakującego przez tygodnie",
+    "Korekcyjna-Techniczna — backup online dostępny z sieci umożliwił jego zaszyfrowanie, eliminując możliwość szybkiego odtworzenia",
+    "Prewencyjna-Administracyjna — brak szkoleń i MFA umożliwił initial access przez phishing, który był punktem wejścia całego ataku"
+  ],
+  "correct": 3,
+  "explanation": "Choć wszystkie cztery komórki zawiodły, fundamentalną przyczyną było Prewencyjna-Administracyjna: brak MFA i szkoleń umożliwił phishing jako punkt wejścia (initial access). Bez tego pierwszego kroku żaden z pozostałych błędów nie miałby znaczenia. Edwards podkreśla, że w łańcuchu ataku najważniejsze jest zatrzymanie initial access — bo lateral movement, eskalacja uprawnień i deployment ransomware to konsekwencje, nie przyczyny. Opcja C (backup online) jest poważnym błędem, ale on nie umożliwił ataku — on tylko uniemożliwił szybkie odtworzenie. Opcja B (brak EDR) to drugi kluczowy błąd — dobre EDR wykryłoby anomalie przez atak. Ale bez D (phishing jako wejście) nic z tego by się nie wydarzyło."
+}
