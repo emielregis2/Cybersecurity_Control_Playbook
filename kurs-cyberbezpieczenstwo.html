@@ -1086,7 +1086,7 @@ function renderSidebar() {
     const dateStr  = completedAt[m.id] ? _fmtDate(completedAt[m.id]) : '';
     const timeStr  = timeSpent[m.id]   ? _fmtSec(timeSpent[m.id]) : '';
     const scoreStr = quizCorrect.hasOwnProperty(m.id) ? (quizCorrect[m.id] ? '✓ OK' : '✗') : '';
-    const metaExtra = isDone ? `${"{dateStr}"}${"{timeStr ? ' · '+timeStr : ''}"}` : `${"{m.src}"} · ${"{m.dur}"}`;
+    const metaExtra = isDone ? `${"{dateStr}"}${"{timeStr ? ' · '+timeStr : ''}"}` : `${m.src} · ${m.dur}`;
     return `<button class="nav-item${isActive?' active':''}${isDone?' done':''}"
       onclick="goTo(${i})" title="${m.diff}">
       <span class="nav-num">${isDone ? '✓' : m.id}</span>
@@ -1457,5 +1457,6 @@ renderHero();
 </script>
 </body>
 </html>
+
 
 
