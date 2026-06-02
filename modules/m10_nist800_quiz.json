@@ -1,0 +1,126 @@
+{
+  "module": 10,
+  "title": "NIST SP 800-53 w praktyce",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Jaka jest kluczowa różnica między NIST CSF a NIST SP 800-53?",
+      "options": [
+        "CSF jest dla dużych firm, 800-53 dla małych",
+        "CSF opisuje CO osiągnąć (outcomes, funkcje: Govern, Identify, Protect, Detect, Respond, Recover), 800-53 opisuje JAK — konkretne kontrole techniczne i procesowe implementujące te outcomes",
+        "800-53 jest nowszy i zastępuje CSF",
+        "CSF jest płatny, 800-53 bezpłatny"
+      ],
+      "correct": 1,
+      "explanation": "CSF i 800-53 działają na różnych poziomach abstrakcji i są komplementarne. CSF (strategiczny): 'Funkcja PROTECT wymaga zarządzania tożsamością i dostępem'. 800-53 (taktyczny/operacyjny): 'AC-2 Account Management: zdefiniuj typy kont, wyznacz administratorów kont, wymagaj MFA (AC-2(1)), dezaktywuj konta nieaktywne po [X dniach]'. CSF to mapa, 800-53 to szczegółowa instrukcja."
+    },
+    {
+      "id": 2,
+      "question": "System przetwarza tajne informacje wywiadowcze. Który poziom bazowy 800-53 należy zastosować?",
+      "options": [
+        "LOW — bo to wewnętrzny system rządowy",
+        "MODERATE — standardowy wybór dla większości systemów",
+        "HIGH — systemy gdzie naruszenie miałoby katastrofalny wpływ na bezpieczeństwo narodowe",
+        "CRITICAL — specjalny poziom dla systemów wywiadowczych"
+      ],
+      "correct": 2,
+      "explanation": "800-53 definiuje trzy baselines: LOW (ograniczony wpływ naruszenia), MODERATE (poważny wpływ — większość systemów rządowych), HIGH (katastrofalny wpływ — infrastruktura krytyczna, systemy obronne, dane wywiadowcze). System z tajnymi informacjami wywiadowczymi = HIGH. W praktyce takie systemy często podlegają dodatkowym wymaganiom (Intelligence Community directives, CNSS standards) ponad 800-53."
+    },
+    {
+      "id": 3,
+      "question": "Co to jest 'tailoring' w kontekście 800-53 i dlaczego jest konieczny?",
+      "options": [
+        "Projektowanie interfejsu użytkownika systemu",
+        "Dostosowanie baseline (scoping, parametryzacja, compensating controls) do specyfiki systemu i organizacji — bo żaden baseline nie pasuje idealnie do każdego systemu",
+        "Zatrudnianie specjalistów bezpieczeństwa",
+        "Aktualizacja systemu do najnowszej wersji oprogramowania"
+      ],
+      "correct": 1,
+      "explanation": "Tailoring to obowiązkowy krok po wyborze baseline. Obejmuje: (1) Scoping — eliminacja kontroli które nie dotyczą systemu (np. PE dla systemu w chmurze dostawcy); (2) Parametryzacja — uzupełnienie [Assignment: org-defined X] konkretnymi wartościami; (3) Wzmocnienie — dodanie ulepszeń powyżej baseline gdy ryzyko tego wymaga; (4) Compensating controls — alternatywy gdy kontrola nie może być wdrożona. Każde tailoring decyzja musi być udokumentowana z uzasadnieniem."
+    },
+    {
+      "id": 4,
+      "question": "Audytor sprawdza kontrolę AU-3 (Content of Audit Records). Czego szuka?",
+      "options": [
+        "Czy firma ma politykę bezpieczeństwa w formie pisemnej",
+        "Czy każdy rekord logu zawiera: timestamp (UTC), identyfikator użytkownika/systemu, typ zdarzenia, obiekt akcji, wynik (sukces/porażka), źródłowy IP — pełne dane umożliwiające rekonstrukcję zdarzenia",
+        "Czy logi są przechowywane przez minimum 7 lat",
+        "Czy system ma zainstalowany SIEM"
+      ],
+      "correct": 1,
+      "explanation": "AU-3 definiuje minimalną zawartość rekordu logu: (1) data/czas zdarzenia (UTC, zsynchronizowany z NTP); (2) gdzie się stało (komponent systemu); (3) źródło (użytkownik, proces, system); (4) typ zdarzenia; (5) wynik (sukces/porażka); (6) tożsamości powiązane ze zdarzeniem. Bez kompletnych danych log jest bezużyteczny dla forensics — nie możesz zrekonstruować incydentu ani ustalić kto co zrobił."
+    },
+    {
+      "id": 5,
+      "question": "System GovTechPL jest hostowany w AWS. Jak 800-53 traktuje kontrole fizycznej ochrony (PE — Physical and Environmental Protection)?",
+      "options": [
+        "Wszystkie PE muszą być wdrożone przez GovTechPL — chmura nie zmienia wymagań",
+        "Kontrole PE mogą być wyłączone (scoping) gdy fizyczna ochrona jest zapewniona przez dostawcę chmury (AWS) w ramach shared responsibility — wyłączenie wymaga dokumentacji i dowodów (AWS compliance reports: SOC 2, FedRAMP)",
+        "PE jest opcjonalna dla wszystkich systemów chmurowych",
+        "AWS automatycznie certyfikuje systemy na 800-53 — PE jest nieistotna"
+      ],
+      "correct": 1,
+      "explanation": "Shared Responsibility Model: AWS odpowiada za fizyczne bezpieczeństwo data center (ochrona przed nieautoryzowanym dostępem, kontrola klimatu, zasilanie). Klient (GovTechPL) jest z tego zwolniony. Ale nie automatycznie — musi udokumentować to w tailoring decyzji i dostarczyć dowody że AWS zapewnia adekwatną ochronę (AWS SOC 2 Type II, FedRAMP authorization, AWS Artifact raporty). Audytor weryfikuje dokumentację uzasadnienia."
+    },
+    {
+      "id": 6,
+      "question": "Co to jest System Security Plan (SSP) i kto go używa?",
+      "options": [
+        "Plan tworzenia kopii zapasowych systemu",
+        "Centralny dokument opisujący system i sposób implementacji każdej wymaganej kontroli 800-53 — używany przez: organizację (zarządzanie kontrolami), audytorów (weryfikacja), autoryzujących (ATO decision)",
+        "Umowa SLA z dostawcą usług chmurowych",
+        "Plan wdrożenia systemu IT (harmonogram, zasoby, budżet)"
+      ],
+      "correct": 1,
+      "explanation": "SSP to fundament programu 800-53. Zawiera: opis systemu (granice, komponenty, typ danych), kategoryzację bezpieczeństwa, dla każdej kontroli — status (wdrożona/częściowa/planowana/N/A) i opis implementacji. SSP jest 'żywym dokumentem' — aktualizowany przy każdej zmianie systemu. Audytor używa SSP jako checklisty: czy to co jest opisane faktycznie istnieje? GovTechPL miał 340 stron SSP dla 287 kontroli."
+    },
+    {
+      "id": 7,
+      "question": "Kontrola AC-5 wymaga Separation of Duties (separacji obowiązków). Jaki jest praktyczny przykład implementacji?",
+      "options": [
+        "Każdy pracownik ma osobne konto do pracy i osobne do prywatnego użytku",
+        "Osoba tworząca wniosek o płatność nie może być tą samą która go zatwierdza — żadna jedna osoba nie ma uprawnień do samodzielnego wykonania krytycznej operacji end-to-end",
+        "Administratorzy systemu mają oddzielne konta na każdy system",
+        "Developerzy nie mogą pracować w weekendy bez dodatkowego zatwierdzenia"
+      ],
+      "correct": 1,
+      "explanation": "Separation of Duties (SoD) zapobiega nadużyciom i błędom: żadna jedna osoba nie powinna mieć uprawnień do samodzielnego wykonania transakcji od początku do końca. Przykłady: tworzenie płatności vs zatwierdzanie płatności vs wypłata; tworzenie konta użytkownika vs zatwierdzanie dostępu; deployment kodu vs zatwierdzenie deploymentu. SoD jest szczególnie ważny w systemach finansowych i HR. Implementacja: RBAC z jawnie zdefiniowanym podziałem ról."
+    },
+    {
+      "id": 8,
+      "question": "Audyt znalazł niezgodność: SSP deklaruje retencję logów 90 dni, ale system faktycznie przechowuje 60 dni. Jak temu zapobiec?",
+      "options": [
+        "Zmieniać SSP na bieżąco żeby zawsze zgadzał się z implementacją — nawet jeśli implementacja jest gorsza",
+        "Regularne wewnętrzne audyty 'SSP vs rzeczywistość' + automatyczna weryfikacja parametrów konfiguracyjnych + security impact analysis przy każdej zmianie konfiguracji",
+        "Przechowywać logi przez 1 rok żeby mieć margines",
+        "Nie dokumentować szczegółów technicznych w SSP — tylko ogólne opisy"
+      ],
+      "correct": 1,
+      "explanation": "Rozbieżność SSP vs implementacja to jeden z najczęstszych findings audytowych. Zapobieganie: (1) Automatyczna weryfikacja — skrypty sprawdzające aktualne ustawienia vs wartości w SSP (np. sprawdzanie S3 lifecycle policy co tydzień); (2) Security Impact Analysis (SIA) — przed każdą zmianą konfiguracji, ocena czy zmiana wpływa na SSP; (3) Wewnętrzny audyt kwartalny — systematyczny przegląd 'co SSP mówi vs co system robi'; (4) SSP jako kod (OSCAL) integrujący się z infrastrukturą jako kodem."
+    },
+    {
+      "id": 9,
+      "question": "Co to jest FedRAMP i jak jest powiązany z 800-53?",
+      "options": [
+        "Federalny program zarządzania ryzykiem — zastępuje 800-53 dla agencji rządowych",
+        "Program autoryzacji usług chmurowych dla rządu USA oparty na 800-53 MODERATE lub HIGH baseline — dostawca z FedRAMP Authorization może sprzedawać do agencji federalnych bez oddzielnego audytu bezpieczeństwa przez każdą agencję",
+        "FedRAMP to europejski odpowiednik 800-53 dla rządów UE",
+        "Program szkoleniowy NIST dla pracowników agencji federalnych"
+      ],
+      "correct": 1,
+      "explanation": "FedRAMP (Federal Risk and Authorization Management Program): dostawca usług chmurowych przechodzi raz przez rygorystyczny audyt 800-53 (przez akredytowane 3PAO — Third Party Assessment Organization) i otrzymuje Authorization. Wszystkie agencje federalne USA mogą następnie używać tej usługi bez przeprowadzania własnego audytu. To 'authorize once, use many'. Dla dostawców SaaS chcących sprzedawać do US federal government — FedRAMP jest praktycznie obowiązkowy."
+    },
+    {
+      "id": 10,
+      "question": "Organizacja wdrożyła CIS Controls v8 IG2. Ile pracy zostało do 800-53 MODERATE baseline?",
+      "options": [
+        "Prawie nic — CIS Controls całkowicie pokrywa 800-53 MODERATE",
+        "CIS Controls IG2 pokrywa szacunkowo 40–60% kontroli 800-53 MODERATE, szczególnie w obszarach technicznych. Główne braki: formalna dokumentacja (SSP), program zarządzania ryzykiem (RA), zaawansowane kontrole audytu (AU), zarządzanie łańcuchem dostaw (SR)",
+        "Trzeba zaczynać od zera — CIS i 800-53 to zupełnie różne frameworki",
+        "CIS Controls IG2 i 800-53 HIGH to dokładnie to samo"
+      ],
+      "correct": 1,
+      "explanation": "CIS Controls i 800-53 mają znaczące pokrycie ale różny focus. CIS IG2 pokrywa dobrze: inwentaryzację aktywów (CM-8), zarządzanie konfiguracją (CM), zarządzanie podatnościami (RA-5), kontrolę dostępu (AC), logowanie (AU), ochronę przed malware (SI-3). Braki 800-53 vs CIS: formalna dokumentacja ISMS (SSP, Risk Assessment Policy), program zarządzania ryzykiem (RA-2, RA-3), zarządzanie łańcuchem dostaw (SR), kontrole prywatności (PT). Oficjalne mapowanie CIS→800-53 jest dostępne na cisecurity.org."
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "module": 9,
+  "title": "Przegląd frameworków cyberbezpieczeństwa",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Firma SaaS traci deale enterprise bo klienci pytają o certyfikat bezpieczeństwa. Który framework jest najodpowiedniejszy jako pierwszy krok?",
+      "options": [
+        "NIST CSF — bo jest najbardziej rozpoznawalny globalnie",
+        "SOC 2 Type II — dedykowany dla dostawców usług, wymagany przez klientów enterprise szczególnie w USA",
+        "CIS Controls IG1 — bo jest bezpłatny i praktyczny",
+        "ISO 27001 — bo jest certyfikowalny"
+      ],
+      "correct": 1,
+      "explanation": "SOC 2 jest standardem dla dostawców usług SaaS i chmurowych — szczególnie na rynku USA i enterprise. Klienci enterprise pytają o SOC 2 Type II Report, nie o ISO 27001 (choć ISO też jest akceptowane). SOC 2 Type II jest zazwyczaj szybszy i tańszy w uzyskaniu niż ISO 27001, i bezpośrednio odpowiada na pytanie 'czy wasze kontrole faktycznie działają przez czas'."
+    },
+    {
+      "id": 2,
+      "question": "Co to są Implementation Groups (IG) w CIS Controls v8 i dlaczego są ważne?",
+      "options": [
+        "Grupy wdrożeniowe — zewnętrzne firmy certyfikowane przez CIS do wdrożeń",
+        "Trzy poziomy priorytetyzacji (IG1/IG2/IG3) dopasowane do wielkości i dojrzałości organizacji — mała firma wdraża IG1, większa IG1+IG2, zaawansowana wszystkie",
+        "Grupy kontroli podzielone według technologii (sieć, endpoint, aplikacje)",
+        "Trzy poziomy certyfikacji CIS Controls"
+      ],
+      "correct": 1,
+      "explanation": "Implementation Groups to kluczowa innowacja CIS v8: zamiast jednej listy dla wszystkich, trzy poziomy: IG1 (56 safeguards — 'basic cyber hygiene' dla małych firm), IG2 (IG1 + 74 dodatkowe — dla średnich organizacji), IG3 (wszystkie 153 safeguards — dla dużych, wysokiego ryzyka). Mała firma z IG1 eliminuje 85%+ typowych ataków bez przytłaczającego zakresu."
+    },
+    {
+      "id": 3,
+      "question": "Jaka jest kluczowa różnica między SOC 2 Type I a SOC 2 Type II?",
+      "options": [
+        "Type I kosztuje więcej, Type II jest tańszy",
+        "Type I ocenia projekt kontroli na dany moment ('czy kontrole są właściwie zaprojektowane'), Type II ocenia skuteczność kontroli przez okres obserwacji 6–12 miesięcy ('czy faktycznie działały')",
+        "Type I jest dla małych firm, Type II dla dużych",
+        "Type I obejmuje tylko Security, Type II wszystkie 5 Trust Service Criteria"
+      ],
+      "correct": 1,
+      "explanation": "Kluczowa różnica: czas. Type I = snapshot (jak wyglądają kontrole dzisiaj). Type II = film (jak działały przez 6–12 miesięcy). Klienci enterprise prawie zawsze wymagają Type II — bo Type I można 'nagiąć' przed audytem, podczas gdy Type II wymaga udowodnienia konsekwentnego działania przez długi okres. Type II daje znacznie więcej pewności."
+    },
+    {
+      "id": 4,
+      "question": "NIST CSF 2.0 dodał nową funkcję 'GOVERN'. Czego dotyczy i dlaczego to ważna zmiana?",
+      "options": [
+        "GOVERN dotyczy zarządzania siecią — routing, firewall policy",
+        "GOVERN obejmuje kontekst organizacyjny, strategię zarządzania ryzykiem, role i odpowiedzialności — uznanie że bezpieczeństwo to kwestia zarządcza, nie tylko techniczna",
+        "GOVERN to nowa nazwa dla funkcji PROTECT",
+        "GOVERN dotyczy compliance z regulacjami prawnymi"
+      ],
+      "correct": 1,
+      "explanation": "GOVERN to największa zmiana w CSF 2.0 (2024). Przesłanie: cyberbezpieczeństwo nie może być tylko problemem IT — zarząd musi rozumieć kontekst organizacyjny, definiować strategię zarządzania ryzykiem i określać role. GOVERN 'nadaje ton' pozostałym pięciu funkcjom. To odpowiedź na obserwację że wiele programów bezpieczeństwa zawodzi nie z powodu braku technologii, ale braku zaangażowania i kierunkowskazów na poziomie zarządczym."
+    },
+    {
+      "id": 5,
+      "question": "Firma europejska chce uzyskać certyfikat który ułatwi sprzedaż do klientów korporacyjnych w Niemczech i Francji. Który framework wybrać?",
+      "options": [
+        "SOC 2 Type II — bo jest najszerzej uznawany",
+        "ISO 27001 — globalnie rozpoznawalny certyfikat, szczególnie silny na rynku europejskim i w sektorze enterprise",
+        "CIS Controls IG2 — bo jest szczegółowy i praktyczny",
+        "NIST CSF — bo jest elastyczny"
+      ],
+      "correct": 1,
+      "explanation": "ISO 27001 jest standardem globalnym, szczególnie silnym w Europie. Niemieccy i francuscy klienci enterprise rozpoznają ISO 27001 jako wiarygodny dowód dojrzałości bezpieczeństwa. SOC 2 jest dominujący na rynku USA/SaaS — w Europie jest mniej znany. ISO 27001 jest też powiązany z RODO i innymi europejskimi regulacjami, co czyni go naturalnym wyborem dla europejskiego rynku B2B."
+    },
+    {
+      "id": 6,
+      "question": "Co to jest Statement of Applicability (SoA) w ISO 27001?",
+      "options": [
+        "Oświadczenie zarządu że firma stosuje ISO 27001",
+        "Dokument który dla każdej z 93 kontroli Annex A określa czy jest wdrożona i dlaczego (lub dlaczego nie) — kluczowy artefakt audytu ISO 27001",
+        "Kontrakt z audytorem certyfikującym",
+        "Lista pracowników przeszkolonych z ISO 27001"
+      ],
+      "correct": 1,
+      "explanation": "SoA (Statement of Applicability) to jeden z kluczowych dokumentów ISO 27001. Dla każdej z 93 kontroli Annex A organizacja musi zadeklarować: (1) Czy jest wdrożona? (2) Jeśli tak — jak jest zaimplementowana? (3) Jeśli nie — uzasadnienie wykluczenia (np. 'nie dotyczy bo nie mamy pracowników terenowych'). SoA pokazuje audytorowi że organizacja świadomie wybrała kontrole na podstawie oceny ryzyka, a nie przypadkowo."
+    },
+    {
+      "id": 7,
+      "question": "Mała firma (30 pracowników, sklep e-commerce) pyta o framework bezpieczeństwa od czego zacząć. Jaka jest właściwa rekomendacja?",
+      "options": [
+        "ISO 27001 — bo jest certyfikowalny i najbardziej prestiżowy",
+        "CIS Controls IG1 — 56 praktycznych safeguards, bezpłatne, eliminuje 85%+ typowych ryzyk, realistyczne do wdrożenia bez dedykowanego CISO",
+        "NIST CSF Tier 4 — bo najwyższy poziom dojrzałości",
+        "SOC 2 Type II — bo klienci e-commerce tego wymagają"
+      ],
+      "correct": 1,
+      "explanation": "CIS Controls IG1 jest optymalny dla małych firm: (1) 56 safeguards zamiast 700+ technik ATT&CK czy 93 kontroli ISO — realistyczny zakres; (2) Bezpłatny — dostępny na cisecurity.org; (3) Praktyczny — konkretne działania, nie teoria; (4) Priorytetyzowany — adresuje najczęstsze wektory ataków. ISO 27001 jest zbyt kosztowny i rozległy dla 30-osobowej firmy bez CISO. SOC 2 jest dla dostawców usług, nie e-commerce."
+    },
+    {
+      "id": 8,
+      "question": "Organizacja używa NIST CSF jako główny framework i chce integrować go z ATT&CK. Jaka jest wartość tej kombinacji?",
+      "options": [
+        "ATT&CK zastępuje NIST CSF gdy firma osiągnie Tier 3",
+        "NIST CSF daje strukturę programu bezpieczeństwa (co robić), ATT&CK daje operacyjną szczegółowość (jak wykrywać konkretne techniki atakujących) — razem: strategia + taktyka",
+        "Kombinacja jest niemożliwa — frameworki mają różne podejścia",
+        "ATT&CK pokrywa tylko funkcję Detect w NIST CSF"
+      ],
+      "correct": 1,
+      "explanation": "NIST CSF i ATT&CK są komplementarne na różnych poziomach abstrakcji. NIST CSF: 'Mamy program Detect który obejmuje continuous monitoring' — framework strategiczny. ATT&CK: 'Monitorujemy konkretnie T1059.001 PowerShell przez regułę SIEM X i T1003.001 LSASS przez Sysmon Event ID 10' — operacyjna szczegółowość. CISA opublikowała oficjalne mapowania NIST CSF → ATT&CK dla każdej kategorii CSF."
+    },
+    {
+      "id": 9,
+      "question": "Dyrektywa NIS2 wymaga 'odpowiednich środków'. Jak organizacja może udowodnić regulatorowi że jej środki są odpowiednie?",
+      "options": [
+        "NIS2 wymaga konkretnie certyfikatu ISO 27001 — bez niego nie ma compliance",
+        "Organizacja może wykazać compliance przez udokumentowany program bezpieczeństwa oparty na uznanym frameworku (NIST CSF, ISO 27001) z gap analysis, risk assessment i planem adresowania luk",
+        "Wystarczy zainstalować firewall i antywirus — to spełnia wymagania NIS2",
+        "NIS2 dotyczy tylko firm powyżej 250 pracowników — mniejsze są zwolnione"
+      ],
+      "correct": 1,
+      "explanation": "NIS2 jest principles-based (nie prescriptive) — nie narzuca konkretnych technologii. Wymaga 'odpowiednich i proporcjonalnych środków'. Dowód: (1) udokumentowany risk assessment; (2) program bezpieczeństwa oparty na uznanym frameworku (NIST CSF, ISO 27001 są akceptowane); (3) gap analysis z planem adresowania luk; (4) regularne przeglądy. ISO 27001 nie jest wymagany ale bardzo ułatwia wykazanie compliance. NIS2 obejmuje podmioty kluczowe i ważne — progi zależą od sektora."
+    },
+    {
+      "id": 10,
+      "question": "Firma ma SOC 2 Type II i planuje ISO 27001. Ile pracy jest już zrobione?",
+      "options": [
+        "Prawie nic — SOC 2 i ISO 27001 mają zupełnie różne wymagania",
+        "Około 50–60% wymagań ISO 27001 jest zazwyczaj pokrytych przez dobrze wdrożony program SOC 2, szczególnie w obszarach: zarządzanie dostępem, monitoring, zarządzanie zmianami, incident response",
+        "100% — SOC 2 Type II automatycznie certyfikuje na ISO 27001",
+        "Około 10% — ISO 27001 jest znacznie bardziej rygorystyczny"
+      ],
+      "correct": 1,
+      "explanation": "SOC 2 i ISO 27001 mają znaczące pokrycie. SOC 2 (CC6 Logical Access) ↔ ISO 27001 Annex A Access Control. SOC 2 (CC7 System Operations) ↔ ISO 27001 Operations Security. SOC 2 (CC9 Risk Mitigation) ↔ ISO 27001 Risk Management. Główne braki po stronie ISO: formalny ISMS, Statement of Applicability, pełny Risk Treatment Plan, Management Review, Internal Audit — to głównie dokumentacja i governance, mniej technologia. Typowo 6–9 dodatkowych miesięcy do ISO 27001 po SOC 2."
+    }
+  ]
+}
