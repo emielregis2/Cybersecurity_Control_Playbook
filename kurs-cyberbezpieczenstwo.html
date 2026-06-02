@@ -40,14 +40,14 @@
   /* ── SIDEBAR ────────────────────────────────────────────── */
   #sidebar {
     width: var(--sidebar-w);
-    min-height: 100vh;
+    height: 100vh;
     background: var(--surface);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     position: fixed;
     top: 0; left: 0;
-    overflow-y: auto;
+    overflow-y: hidden;
     z-index: 100;
     transition: transform .3s ease;
   }
@@ -120,7 +120,7 @@
     text-transform: uppercase;
   }
 
-  #navList { padding: 0 8px; }
+  #navList { padding: 0 8px; flex: 1 1 0; overflow-y: auto; min-height: 0; }
 
   .nav-item {
     display: flex;
@@ -188,7 +188,7 @@
 
   /* Sidebar footer */
   .sidebar-footer {
-    margin-top: auto;
+    flex-shrink: 0;
     padding: 12px;
     border-top: 1px solid var(--border);
     display: flex;
