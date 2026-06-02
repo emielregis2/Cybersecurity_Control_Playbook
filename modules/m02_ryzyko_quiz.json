@@ -1,0 +1,11 @@
+{
+  "question": "Firma LogiPL przeprowadza risk assessment systemu WMS. Backup online jest w tej samej sieci co serwery produkcyjne. Rejestr ryzyk pokazuje: Ransomware (P=4, W=5, ocena=20). Jaka jest PIERWSZA i NAJWAŻNIEJSZA kontrola którą powinna wdrożyć LogiPL, biorąc pod uwagę wynik BIA (koszt przestoju: 78 000 PLN/dzień) i zasadę risk-based approach?",
+  "options": [
+    "Zakup dodatkowego antywirusa sygnaturowego z roczną subskrypcją, bo to najtańsze i najszybsze rozwiązanie dostępne od ręki",
+    "Wdrożenie immutable backup offline (air-gapped) — bo bez możliwości odtworzenia danych bez płacenia okupu, żadna inna kontrola nie chroni przed katastrofalnym wpływem ransomware na ciągłość biznesu",
+    "Przeprowadzenie szkolenia security awareness dla wszystkich pracowników, bo phishing jest wektorem nr 1 i eliminacja źródła eliminuje całe ryzyko",
+    "Zlecenie zewnętrznego audytu ISO 27001, bo certyfikacja wymusi wdrożenie wszystkich potrzebnych kontroli jednocześnie"
+  ],
+  "correct": 1,
+  "explanation": "Odpowiedź B jest poprawna z perspektywy risk-based approach. Ocena ryzyka 20/25 (krytyczne) i koszt przestoju 78 000 PLN/dzień wskazują, że WPŁYW (W=5) jest dominującym czynnikiem. Immutable backup offline bezpośrednio adresuje wpływ — nawet jeśli ransomware się powiedzie, organizacja odtwarza dane bez płacenia okupu (RTO < 1 dzień zamiast 9 dni). Odpowiedź A (antywirus sygnaturowy) nie chroni przed nowymi odmianami ransomware — Qakbot w case study był wykryty dopiero po 21 dniach. Odpowiedź C (szkolenia) redukuje prawdopodobieństwo (P), ale nie wpływ — jeśli jeden pracownik na 280 popełni błąd, ryzyko się zmaterializuje. Szkolenia to ważna kontrola, ale nie wystarczająca jako jedyna przy ocenie 20/25. Odpowiedź D (ISO 27001) to projekt długoterminowy (12-18 miesięcy) i compliance-driven, nie risk-driven — nie redukuje natychmiastowego ryzyka krytycznego. Risk-based approach nakazuje: adresuj najwyższy komponent ryzyka (W=5 → wpływ) najszybszą i najbardziej efektywną kosztowo kontrolą — a to właśnie backup offline."
+}
