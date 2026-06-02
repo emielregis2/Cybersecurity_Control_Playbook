@@ -1,0 +1,126 @@
+{
+  "module": 6,
+  "title": "MITRE ATT&CK — wprowadzenie",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Czym fundamentalnie różni się podejście MITRE ATT&CK od tradycyjnego podejścia opartego na sygnaturach (hash pliku, IP atakującego)?",
+      "options": [
+        "ATT&CK jest droższy i wymaga więcej narzędzi",
+        "ATT&CK opisuje zachowania atakującego (jak działa), a nie artefakty (co używa) — zachowania są stabilne, narzędzia/sygnatury zmieniają się w minuty",
+        "ATT&CK działa tylko dla ataków APT, sygnatury dla zwykłego malware",
+        "ATT&CK wymaga agenta na każdym urządzeniu, sygnatury nie"
+      ],
+      "correct": 1,
+      "explanation": "Kluczowa różnica: sygnatury (hash, IP, domena) są łatwe do zmiany — atakujący modyfikuje narzędzie, hash się zmienia, sygnatura przestaje działać. Zachowania (np. Process Injection, Pass-the-Hash) pozostają stabilne niezależnie od konkretnego narzędzia. ATT&CK skupia się na tym co trudne do zmiany, co daje trwalszą podstawę do detekcji."
+    },
+    {
+      "id": 2,
+      "question": "Jaka jest różnica między taktyką a techniką w ATT&CK?",
+      "options": [
+        "Taktyka to technika zaawansowana, technika to podstawowa",
+        "Taktyka opisuje CEL atakującego (np. Initial Access), technika opisuje METODĘ realizacji tego celu (np. T1566 Phishing)",
+        "Taktyki są dla Red Team, techniki dla Blue Team",
+        "Taktyka to atak APT, technika to atak skryptowy"
+      ],
+      "correct": 1,
+      "explanation": "Hierarchia ATT&CK: Taktyki (14) → Techniki (700+) → Podtechniki. Taktyka = DLACZEGO/CEL (np. TA0001 Initial Access — cel: wejść do środowiska). Technika = JAK/METODA (np. T1566 Phishing — metoda realizacji Initial Access). Podtechnika = DOKŁADNIE JAK (np. T1566.001 Spearphishing Attachment — konkretna implementacja)."
+    },
+    {
+      "id": 3,
+      "question": "Atakujący używa wbudowanego PowerShell do wykonania złośliwego skryptu zamiast własnego narzędzia. Jak nazywa się ta strategia?",
+      "options": [
+        "Zero-day exploitation",
+        "Living off the land (LotL) — używanie wbudowanych narzędzi systemu żeby uniknąć detekcji",
+        "Fileless malware",
+        "Privilege escalation"
+      ],
+      "correct": 1,
+      "explanation": "Living off the Land (LotL) — atakujący używa narzędzi wbudowanych w system (PowerShell, cmd, WMI, certutil, bitsadmin) zamiast własnego malware. Zalety dla atakującego: te narzędzia są legalną częścią systemu, antywirus nie alarmuje na sam PowerShell. Dlatego ATT&CK T1059.001 (PowerShell) jest jedną z najczęściej używanych technik — wymaga detekcji opartej na zachowaniu, nie sygnaturze."
+    },
+    {
+      "id": 4,
+      "question": "SOC analyst używa ATT&CK Navigator żeby pokolorować macierz. Czerwone komórki = brak detekcji, zielone = pełne pokrycie. Do czego służy ta analiza?",
+      "options": [
+        "Do generowania raportów compliance dla zarządu",
+        "Gap Analysis — wizualizacja luk w pokryciu kontroli bezpieczeństwa względem technik ATT&CK, podstawa do priorytetyzacji inwestycji",
+        "Do oceny pracowników SOC",
+        "Do certyfikacji ISO 27001"
+      ],
+      "correct": 1,
+      "explanation": "ATT&CK Navigator Gap Analysis: organizacja mapuje swoje kontrole (SIEM reguły, EDR coverage, firewall reguły) na macierz ATT&CK. Czerwone komórki = techniki bez żadnej detekcji ani blokowania = luki. Wynik to mapa priorytetów: gdzie inwestować w nowe reguły, narzędzia lub szkolenia. To obiektywna podstawa do decyzji budżetowych o bezpieczeństwie."
+    },
+    {
+      "id": 5,
+      "question": "Technika T1078 (Valid Accounts) pojawia się w taktykach: Initial Access, Persistence, Privilege Escalation i Defense Evasion. Co to oznacza praktycznie?",
+      "options": [
+        "T1078 jest błędem w bazie ATT&CK — technika nie może być w 4 taktykach",
+        "Skradzione konto może być używane na wielu etapach ataku i jest szczególnie niebezpieczne bo legalny użytkownik jest trudny do odróżnienia od atakującego",
+        "T1078 dotyczy tylko kont administratorów",
+        "Technika T1078 jest przestarzała i rzadko używana"
+      ],
+      "correct": 1,
+      "explanation": "T1078 (Valid Accounts) to jedna z najgroźniejszych technik właśnie dlatego że jest wielofunkcyjna. Skradzione konto daje: wejście do sieci (Initial Access), przetrwanie po restarcie (Persistence), dostęp do zasobów wyższego poziomu (Privilege Escalation) i ukrycie się wśród legalnego ruchu (Defense Evasion). Dlatego MFA jest tak krytyczne — bez drugiego czynnika skradzione hasło to kompleksowe narzędzie ataku."
+    },
+    {
+      "id": 6,
+      "question": "Firma chce priorytetyzować ochronę przed atakami APT targetującymi branżę e-commerce. Jaki jest właściwy punkt startowy?",
+      "options": [
+        "Wdrożyć wszystkie 700+ technik ATT&CK jednocześnie",
+        "Sprawdzić w ATT&CK jakie grupy APT targetują e-commerce, pobrać ich profile technik, skupić ochronę na tych konkretnych technikach",
+        "Kupić najdroższe dostępne narzędzia bezpieczeństwa",
+        "Zatrudnić więcej analityków SOC"
+      ],
+      "correct": 1,
+      "explanation": "ATT&CK umożliwia threat-informed defense: (1) Identyfikuj kto atakuje twoją branżę (grupy APT w bazie ATT&CK z profilem branż); (2) Pobierz TTP (Tactics, Techniques, Procedures) tej grupy z ATT&CK; (3) Zmapuj na swoje kontrole — co masz, czego brakuje; (4) Priorytetyzuj na technikach realnych przeciwników, nie na wszystkich 700+. To podejście opłacalne i praktyczne."
+    },
+    {
+      "id": 7,
+      "question": "Czym jest Threat Hunting w kontekście ATT&CK?",
+      "options": [
+        "Automatyczne skanowanie sieci w poszukiwaniu malware",
+        "Proaktywne, hipotezami-napędzane szukanie śladów ataku w danych zanim system wygeneruje alert — hipotezy oparte na technikach ATT&CK",
+        "Odpowiedź na incydent po wykryciu alertu przez SIEM",
+        "Testy penetracyjne zewnętrzne"
+      ],
+      "correct": 1,
+      "explanation": "Threat Hunting różni się od reaktywnego SOC (czekanie na alert): hunter formułuje hipotezę opartą na ATT&CK — 'zakładam że atakujący mógł użyć T1003.001 (LSASS Dump) — szukam w logach artefaktów: procesy z dostępem do lsass.exe, zdarzenia Event ID 10 z Sysmon'. Jeśli hipoteza się potwierdzi → incydent. Jeśli nie → udokumentowane potwierdzenie że technika nie była użyta. ATT&CK dostarcza gotowe hipotezy i wskazuje jakich artefaktów szukać."
+    },
+    {
+      "id": 8,
+      "question": "Jaką techniką ATT&CK jest ransomware (szyfrowanie plików ofiary)?",
+      "options": [
+        "T1486 — Data Encrypted for Impact (taktyka: Impact)",
+        "T1041 — Exfiltration Over C2 Channel",
+        "T1566 — Phishing",
+        "T1078 — Valid Accounts"
+      ],
+      "correct": 0,
+      "explanation": "T1486 Data Encrypted for Impact należy do taktyki TA0040 Impact — atakujący zaszyfrował dane żeby zakłócić działanie organizacji i wymusić okup. Ważne: ransomware rzadko jest jedyną techniką — zwykle poprzedzają go Initial Access (T1566 phishing), Execution, Lateral Movement (T1021) i Collection (T1005). T1486 to ostatni krok długiego łańcucha. Dlatego obrona przed ransomware wymaga kontroli na wszystkich wcześniejszych etapach."
+    },
+    {
+      "id": 9,
+      "question": "Analityk widzi alert: 'powershell.exe -EncodedCommand <długi string base64> -NonInteractive -WindowStyle Hidden'. Która technika ATT&CK to opisuje?",
+      "options": [
+        "T1566.001 Spearphishing Attachment",
+        "T1059.001 Command and Scripting Interpreter: PowerShell — z flagami typowymi dla ukrywania złośliwej aktywności",
+        "T1021.001 Remote Desktop Protocol",
+        "T1486 Data Encrypted for Impact"
+      ],
+      "correct": 1,
+      "explanation": "T1059.001 PowerShell. Flagi `-EncodedCommand` (ukrywa treść komendy w base64), `-NonInteractive` (bez interakcji z użytkownikiem), `-WindowStyle Hidden` (ukryte okno) to klasyczne wskaźniki złośliwego użycia PowerShell. To jeden z najczęstszych artefaktów w logach Windows wskazujących na aktywność malware lub atakującego. ATT&CK dla T1059.001 wymienia te dokładnie flagi jako detection guidance."
+    },
+    {
+      "id": 10,
+      "question": "Jaka jest kluczowa różnica między MITRE ATT&CK a Cyber Kill Chain (Lockheed Martin)?",
+      "options": [
+        "Kill Chain jest nowszy i lepszy niż ATT&CK",
+        "Kill Chain to 7 wysokopoziomowych faz (dobry do komunikacji z zarządem), ATT&CK to 14 taktyk z 700+ technikami (operacyjna szczegółowość dla SOC i inżynierów)",
+        "ATT&CK działa tylko dla ataków na Windows, Kill Chain dla wszystkich systemów",
+        "Kill Chain jest płatny, ATT&CK darmowy"
+      ],
+      "correct": 1,
+      "explanation": "Oba modele są komplementarne, nie konkurencyjne. Kill Chain (2011): 7 faz — dobry model mentalny, łatwy do wytłumaczenia zarządowi. ATT&CK: 14 taktyk, 700+ technik, grupy, oprogramowanie, data sources, mitigations — operacyjna szczegółowość do tworzenia reguł detekcji, threat hunting, gap analysis. Edwards rekomenduje: Kill Chain do komunikacji z biznesem, ATT&CK do pracy operacyjnej SOC i inżynierów."
+    }
+  ]
+}

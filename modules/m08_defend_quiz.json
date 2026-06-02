@@ -1,0 +1,126 @@
+{
+  "module": 8,
+  "title": "Wzmacnianie obrony z MITRE D3FEND",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Jaka jest kluczowa relacja między MITRE ATT&CK a MITRE D3FEND?",
+      "options": [
+        "D3FEND zastępuje ATT&CK — nowszy i lepszy framework",
+        "ATT&CK opisuje techniki ofensywne (atakujących), D3FEND opisuje techniki defensywne (obrońców) — każda technika D3FEND jest mapowana na techniki ATT&CK które neutralizuje",
+        "D3FEND jest dla dużych firm, ATT&CK dla małych",
+        "ATT&CK i D3FEND opisują to samo z różnych perspektyw ale nie są ze sobą powiązane"
+      ],
+      "correct": 1,
+      "explanation": "ATT&CK i D3FEND to dwie strony tej samej monety. ATT&CK: 'atakujący używa T1055 Process Injection'. D3FEND: 'technika D3-PA (Process Analysis) wykrywa T1055 przez monitoring handle access do procesów'. Każda technika D3FEND ma bezpośrednie mapowanie na techniki ATT&CK które neutralizuje. Razem dają kompletny framework: znasz atak (ATT&CK) i wiesz jak mu przeciwdziałać (D3FEND)."
+    },
+    {
+      "id": 2,
+      "question": "Jakie są pięć taktyk D3FEND i czym się różnią od taktyk ATT&CK?",
+      "options": [
+        "D3FEND ma te same taktyki co ATT&CK ale opisane z perspektywy defensywnej",
+        "Harden, Detect, Isolate, Deceive, Evict — każda opisuje inny cel defensywny: prewencja, wykrycie, ograniczenie zasięgu, zwodzenie atakującego, usunięcie intruza",
+        "D3FEND ma tylko dwie taktyki: Prevent i Detect",
+        "Taktyki D3FEND to: Firewall, Antivirus, EDR, SIEM, Backup"
+      ],
+      "correct": 1,
+      "explanation": "Pięć taktyk D3FEND: (1) Harden — zmniejszanie powierzchni ataku zanim atak nastąpi; (2) Detect — wykrywanie złośliwej aktywności; (3) Isolate — ograniczanie zasięgu ataku; (4) Deceive — aktywne zwodzenie atakującego przez pułapki; (5) Evict — usuwanie atakującego po wykryciu. To kompletna taxonomia defensywna obejmująca prewencję, detekcję, odpowiedź i odtworzenie."
+    },
+    {
+      "id": 3,
+      "question": "Firma chce chronić się przed T1003.001 (LSASS Memory Dump / Mimikatz). Jakie techniki D3FEND są najskuteczniejsze?",
+      "options": [
+        "Zainstalować antywirusa z aktualną bazą sygnatur Mimikatz",
+        "D3-CH: Windows Credential Guard (izoluje LSASS w wirtualnym kontenerze niedostępnym dla procesów) + D3-PA: monitoring procesów z dostępem do LSASS (Sysmon Event ID 10)",
+        "Wyłączyć PowerShell na wszystkich stacjach",
+        "Zainstalować firewall blokujący ruch wychodzący"
+      ],
+      "correct": 1,
+      "explanation": "Dwa poziomy obrony: (1) Harden - Credential Guard (Windows 10 Enterprise): izoluje LSASS w Hyper-V Virtual Secure Mode — Mimikatz fizycznie nie może odczytać pamięci LSASS. (2) Detect - Process Analysis przez Sysmon Event ID 10: alert gdy nieznany lub nieoczekiwany proces próbuje otworzyć handle do lsass.exe. Credential Guard blokuje, monitoring wykrywa próby obejścia. Antywirus sygnaturowy jest łatwy do obejścia przez nową wersję Mimikatz."
+    },
+    {
+      "id": 4,
+      "question": "Czym jest Canary Token i jak działa?",
+      "options": [
+        "Token uwierzytelniania dla API (OAuth Bearer Token)",
+        "Fałszywy zasób (plik, konto, URL) który 'dzwoni do domu' gdy ktoś go dotknie — alert gdy atakujący otwiera plik lub używa zasobu który normalnie nie powinien być używany",
+        "Certyfikat SSL dla bezpiecznych połączeń HTTPS",
+        "Token MFA generowany przez hardware key (YubiKey)"
+      ],
+      "correct": 1,
+      "explanation": "Canary Token to technika Deceive z D3FEND. Przykład: plik Word 'Wynagrodzenia_tajne.docx' zawiera ukryty token (URL pixel). Gdy ktoś otworzy plik → token wysyła żądanie HTTP do canarytokens.org → alert na e-mail administratora z IP i timestampem. Nikt legalny nie powinien otwierać tego pliku. Każde otwarcie = podejrzana aktywność. Bezpłatne (canarytokens.org), wdrożenie w minutach, skuteczne early warning."
+    },
+    {
+      "id": 5,
+      "question": "Firma wdrożyła honeypota w sieci wewnętrznej — fałszywy serwer plików z pozornie wartościowymi dokumentami. Jakiej taktyki D3FEND to jest przykład?",
+      "options": [
+        "Harden — utwardzanie przez dodanie nowego serwera",
+        "Detect — honeypot generuje alerty gdy atakujący go odwiedza",
+        "Deceive — aktywne zwodzenie atakującego przez fałszywy cel który wygląda wartościowo",
+        "Evict — usunięcie atakującego przez przekierowanie na inny serwer"
+      ],
+      "correct": 2,
+      "explanation": "Honeypot to technika Deceive (D3FEND taktyka 4). Deceive = aktywne tworzenie fałszywych celów i informacji aby zmylić atakującego. Honeypot łączy Deceive z Detect: (1) Deceive — atakujący myśli że atakuje prawdziwy cel; (2) Detect — każde połączenie do honeypota to alert (legalny użytkownik nie powinien tam trafić). Ale główna taktyka to Deceive — cel jest stworzony żeby zmylić, nie wykryć."
+    },
+    {
+      "id": 6,
+      "question": "Administrator chce kupić EDR i używa D3FEND do oceny produktów. Jak D3FEND pomaga w tym procesie?",
+      "options": [
+        "D3FEND zawiera rankingi i recenzje produktów EDR",
+        "D3FEND definiuje konkretne techniki defensywne (D3-PA, D3-FIM, D3-PE) które EDR powinien implementować — można wymagać od dostawcy potwierdzenia implementacji i zmapowania na konkretne techniki ATT&CK",
+        "D3FEND jest framework tylko dla open-source narzędzi",
+        "D3FEND zastępuje testowanie produktu (PoC)"
+      ],
+      "correct": 1,
+      "explanation": "D3FEND jako język RFP: zamiast pytać 'czy macie ochronę przed ransomware?' (każdy powie tak), pytasz: 'które techniki D3FEND implementuje Wasz produkt? D3-PA Process Analysis? D3-FIM File Integrity Monitoring? D3-PE Process Eviction? Dla jakich technik ATT&CK?' Vendor musi konkretnie odpowiedzieć. To eliminuje marketing i daje obiektywne kryterium porównania produktów."
+    },
+    {
+      "id": 7,
+      "question": "Jaka jest różnica między Low-interaction a High-interaction honeypot?",
+      "options": [
+        "Low-interaction jest droższy, High-interaction tańszy",
+        "Low-interaction emuluje usługi (fałszywy SSH) bez pełnego OS — prosty, mniej informacji; High-interaction to prawdziwy system OS — zbiera więcej danych ale ryzykowniejszy (może być użyty jako pivot przez atakującego)",
+        "Low-interaction działa tylko dla ataków webowych, High-interaction dla sieciowych",
+        "High-interaction wymaga specjalistycznego sprzętu hardware"
+      ],
+      "correct": 1,
+      "explanation": "Kluczowe różnice: Low-interaction (np. Honeyd) emuluje usługi (port 22 odpowiada jak SSH ale to imitacja) — prosty w wdrożeniu, bezpieczny, daje podstawowe informacje o skanowaniu. High-interaction (prawdziwy Linux/Windows w VM) — atakujący rzeczywiście się loguje i działa, honeypot rejestruje wszystko — dużo wartościowych danych o technikach APT, ale ryzyko że atakujący użyje honeypota do ataku na inne systemy. Dlatego high-interaction wymaga izolacji sieciowej."
+    },
+    {
+      "id": 8,
+      "question": "DNS Sinkhole to technika D3FEND z kategorii Isolate. Jak działa i co wykrywa?",
+      "options": [
+        "Blokuje ruch DNS z zewnątrz do wewnątrz sieci (incoming DNS)",
+        "Przechwytuje zapytania DNS do znanych złośliwych domen i zwraca fałszywą odpowiedź — wykrywa które hosty w sieci próbują połączyć się z C2 serwerami malware",
+        "Szyfruje ruch DNS przez HTTPS (DNS over HTTPS)",
+        "Wykrywa DNS poisoning przez weryfikację podpisów DNSSEC"
+      ],
+      "correct": 1,
+      "explanation": "DNS Sinkhole: gdy zainfekowany host próbuje połączyć się z C2 (Command & Control) przez nazwę domeny, resolver DNS przechwytuje to zapytanie i zwraca IP sinkholu zamiast prawdziwego C2. Efekty: (1) Połączenie z C2 zablokowane — malware traci sterowanie; (2) Alert w SIEM — który host próbował połączyć się ze złośliwą domeną. Implementacja: Pi-hole (open-source, bezpłatny), Cisco Umbrella (enterprise). Skuteczne dla malware który używa stałych domen C2."
+    },
+    {
+      "id": 9,
+      "question": "Firma wdraża Canary Token w pliku Word na serwerze plików. Atakujący otwiera plik w nocy. Co powinno się stać i jak to mapuje na D3FEND?",
+      "options": [
+        "Canary Token automatycznie izoluje serwer plików (D3FEND: Isolate)",
+        "Canary Token wysyła alert (e-mail/SMS) do administratora — D3FEND: Deceive (pułapka) + Detect (wykrycie przez alert) — dwa efekty jednej techniki",
+        "Canary Token szyfruje złośliwe pliki atakującego (D3FEND: Evict)",
+        "Canary Token loguje aktywność ale nie wysyła alertu — alert wymaga osobnego SIEM"
+      ],
+      "correct": 1,
+      "explanation": "Canary Token łączy Deceive i Detect. Deceive: plik wygląda jak wartościowy dokument — atakujący go otwiera (zwodzony). Detect: otwarcie pliku wysyła HTTP request z IP, timestampem, geolokalizacją do canarytokens.org → alert na e-mail/webhook do SIEM administratora. Dwie taktyki D3FEND w jednym, bezpłatnym tokenie. Kluczowe: alert jest natychmiastowy — zanim atakujący zdąży eksfiltrować dane."
+    },
+    {
+      "id": 10,
+      "question": "Jaki jest kompletny workflow threat-informed defense łączący ATT&CK i D3FEND?",
+      "options": [
+        "Kup EDR → Kup SIEM → Zatrudnij pentestera raz w roku → Gotowe",
+        "Threat Intel → ATT&CK profiling (TTP przeciwnika) → Gap Analysis → D3FEND lookup (jakie techniki defensywne?) → dobór technologii → wdrożenie → walidacja (Purple Team) → dokumentacja → powrót do początku (cykl ciągłego doskonalenia)",
+        "ISO 27001 certyfikacja → PCI DSS certyfikacja → GDPR compliance → koniec",
+        "D3FEND Gap Analysis → ATT&CK lookup → Red Team → raport"
+      ],
+      "correct": 1,
+      "explanation": "Kompletny cykl: (1) Threat Intel: kto atakuje twoją branżę? (2) ATT&CK: jakie TTP stosują? (3) Gap Analysis: które TTP nie są pokryte przez obecne kontrole? (4) D3FEND: jakie techniki defensywne adresują te luki? (5) Technologia: które produkty implementują te D3FEND techniki? (6) Wdrożenie i konfiguracja; (7) Walidacja: Purple Team/Atomic Red Team sprawdza czy kontrola działa; (8) Dokumentacja w Navigator. Powtarzaj kwartalnie lub przy zmianie threat landscape. To jest threat-informed defense w praktyce."
+    }
+  ]
+}

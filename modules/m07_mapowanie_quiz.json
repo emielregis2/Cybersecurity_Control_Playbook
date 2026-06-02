@@ -1,0 +1,126 @@
+{
+  "module": 7,
+  "title": "Mapowanie zagrożeń do kontroli",
+  "questions": [
+    {
+      "id": 1,
+      "question": "CISO chce wiedzieć jakie kontrole bezpieczeństwa są potrzebne dla firmy e-commerce. Jaki jest właściwy punkt startowy procesu mapowania?",
+      "options": [
+        "Zakup najdroższego dostępnego SIEM i EDR",
+        "Identyfikacja realnych aktorów zagrożeń atakujących e-commerce, pobranie ich TTP z ATT&CK, gap analysis obecnych kontroli względem tych TTP",
+        "Wdrożenie wszystkich 93 kontroli ISO 27001",
+        "Zatrudnienie pentestera raz w roku"
+      ],
+      "correct": 1,
+      "explanation": "Threat-informed defense zaczyna się od profilu przeciwnika: kto atakuje e-commerce (Magecart, FIN7, ransomware grupy)? Jakie TTP stosują? Następnie gap analysis: które z tych TTP są pokryte przez obecne kontrole? Gdzie są luki? Dopiero wtedy decyzja co kupić lub wdrożyć. Bez tego kroku inwestycje w bezpieczeństwo są często źle ukierunkowane."
+    },
+    {
+      "id": 2,
+      "question": "Firma używa ATT&CK Navigator i zaznacza na zielono techniki pokryte przez EDR, na czerwono — bez żadnej kontroli. Do czego służy ta wizualizacja?",
+      "options": [
+        "Do certyfikacji ISO 27001 — regulator wymaga takiej mapy",
+        "Gap Analysis — wizualna mapa luk w ochronie, podstawa do priorytetyzacji inwestycji w bezpieczeństwo",
+        "Do oceny pracy analityków SOC",
+        "Do generowania raportów dla klientów"
+      ],
+      "correct": 1,
+      "explanation": "ATT&CK Navigator Gap Analysis wizualizuje pokrycie kontroli. Czerwone komórki = techniki atakującego bez odpowiednich kontroli = luki. To obiektywna, wizualna podstawa do decyzji: w co inwestować w następnym kwartale. Zamiast abstrakcyjnych dyskusji o 'potrzebujemy więcej bezpieczeństwa', masz konkretną mapę z 18 czerwonymi komórkami wymagającymi uwagi."
+    },
+    {
+      "id": 3,
+      "question": "Czym różni się Purple Team od tradycyjnego Red Team?",
+      "options": [
+        "Purple Team jest tańszy bo używa junior konsultantów",
+        "Purple Team łączy Red i Blue Team w czasie rzeczywistym — Red emuluje technikę, Blue od razu sprawdza detekcję i naprawia luki. Red Team robi to sekretnie i dostarcza raport po fakcie",
+        "Purple Team atakuje tylko zewnętrzne systemy, Red Team wewnętrzne",
+        "Purple Team to ćwiczenie tabletop (bez prawdziwych ataków), Red Team to prawdziwe testy"
+      ],
+      "correct": 1,
+      "explanation": "Kluczowa różnica to współpraca i pętla informacji zwrotnej. Red Team (tradycyjny): atakuje sekretnie przez 2 tygodnie, Blue Team nic nie wie, raport po fakcie. Purple Team: Red ogłasza technikę → Blue obserwuje → czy widzi w SIEM/EDR? Jeśli nie → Red pomaga wyjaśnić co było widoczne → Blue tworzy regułę → Red powtarza test. Natychmiastowa poprawa zamiast raportu w szufladzie."
+    },
+    {
+      "id": 4,
+      "question": "Czym jest Atomic Red Team (Red Canary) i jak organizacja może go używać?",
+      "options": [
+        "Komercyjny produkt do pentestingu kosztujący kilkadziesiąt tysięcy dolarów",
+        "Open-source biblioteka małych, atomowych testów dla każdej techniki ATT&CK — pozwala regularnie testować czy SIEM/EDR wykrywa konkretne techniki, bez pełnego ćwiczenia Red Team",
+        "Framework do pisania reguł SIEM w formacie YAML",
+        "Narzędzie do skanowania podatności sieciowych"
+      ],
+      "correct": 1,
+      "explanation": "Atomic Red Team: bezpłatna, open-source biblioteka na GitHubie. Dla każdej techniki ATT&CK — jeden lub kilka małych testów (PowerShell, bash, narzędzia). Workflow: uruchamiasz test T1003.001 → sprawdzasz czy EDR/SIEM wygenerował alert → jeśli nie, tworzysz regułę → następny tydzień powtarzasz. Zastępuje lub uzupełnia drogie, rzadkie Red Team exercises regularnymi, niskokosztowymi testami."
+    },
+    {
+      "id": 5,
+      "question": "STRIDE to framework threat modelingu. Co oznacza litera 'R' w STRIDE?",
+      "options": [
+        "Ransomware — kategoria ataków szyfrujących",
+        "Repudiation — możliwość zaprzeczenia wykonaniu akcji przez brak logów audytowych",
+        "Remote Access — zagrożenia przez zdalne połączenia",
+        "Reconnaissance — rekonesans jako faza ataku"
+      ],
+      "correct": 1,
+      "explanation": "STRIDE: Spoofing (podszywanie), Tampering (manipulacja), Repudiation (zaprzeczenie — brak dowodów kto co zrobił), Information Disclosure (ujawnienie danych), Denial of Service, Elevation of Privilege. Repudiation jest często pomijana — ale niewystarczające logowanie to realne ryzyko: bez logów nie możesz udowodnić że dany użytkownik wykonał konkretną akcję ani zrekonstruować incydentu."
+    },
+    {
+      "id": 6,
+      "question": "Firma przeszła audyt PCI DSS bez zastrzeżeń, ale Purple Team odkrył brak detekcji dla T1550.002 (Pass-the-Hash). Co to oznacza?",
+      "options": [
+        "Audyt PCI DSS był przeprowadzony nierzetelnie — należy złożyć skargę",
+        "Compliance sprawdza istnienie kontroli na papierze, nie ich skuteczność w praktyce. Purple Team weryfikuje czy kontrole faktycznie wykrywają rzeczywiste techniki atakujących",
+        "T1550.002 nie jest objęty zakresem PCI DSS więc to nie jest problem",
+        "Brak detekcji PtH to false positive — nie jest to realne zagrożenie"
+      ],
+      "correct": 1,
+      "explanation": "Compliance gap vs security gap: audyt PCI DSS sprawdza czy masz wymagane polityki, procedury i technologie. Nie sprawdza czy te technologie faktycznie wykrywają konkretne techniki atakujących. Purple Team odkrywa security gaps które compliance audit pomija. 'PCI compliant' nie oznacza 'bezpieczny' — oznacza 'spełniamy minimalne wymagania standardu'."
+    },
+    {
+      "id": 7,
+      "question": "Organizacja wdraża threat modeling dla nowej aplikacji bankowej. Jaka jest kolejność kroków?",
+      "options": [
+        "1. Kup narzędzia → 2. Zatrudnij pentestera → 3. Przetestuj aplikację → 4. Napraw błędy",
+        "1. Zdefiniuj co chronisz (aktywa) → 2. Zidentyfikuj aktorów zagrożeń i ich TTP → 3. Zidentyfikuj możliwe wektory ataku → 4. Oceń wpływ → 5. Zdefiniuj kontrole",
+        "1. Uruchom aplikację → 2. Czekaj na incydent → 3. Analizuj co poszło nie tak",
+        "1. Wdróż wszystkie kontrole ISO 27001 → 2. Przetestuj → 3. Certyfikuj"
+      ],
+      "correct": 1,
+      "explanation": "Właściwa kolejność threat modelingu: (1) Asset identification — co chronimy, jaka wartość; (2) Threat actors — kto może atakować, z jaką motywacją i możliwościami; (3) Attack vectors — jak mogą to zrobić (techniki ATT&CK); (4) Impact analysis — co się stanie jeśli się uda; (5) Controls — jakie zabezpieczenia adresują te zagrożenia. Threat modeling powinien być przeprowadzony przed wdrożeniem systemu, nie po."
+    },
+    {
+      "id": 8,
+      "question": "Analityk SOC chce stworzyć regułę SIEM wykrywającą Pass-the-Hash (T1550.002). Jakich danych potrzebuje?",
+      "options": [
+        "Sygnatury antywirusowe dla Mimikatz",
+        "Korelacji zdarzeń Windows: Event ID 4624 (Logon Type 3) bez poprzedzającego Event ID 4648 (Explicit Credentials) dla tego samego konta — wskazuje na użycie hasha zamiast hasła",
+        "Logów firewall dla połączeń na port 445",
+        "Wyników skanowania Nmap"
+      ],
+      "correct": 1,
+      "explanation": "Pass-the-Hash w Windows generuje charakterystyczny wzorzec w logach: logowanie sieciowe (Type 3) bez wyraźnego podania hasła (brak Event 4648). Reguła SIEM: Event 4624, Logon Type=3, brak poprzedzającego Event 4648 dla tego konta, konto != ANONYMOUS LOGON. To jest podejście behavior-based — działa niezależnie od narzędzia użytego do PtH (Mimikatz, Impacket, CobaltStrike). ATT&CK dla T1550.002 opisuje dokładnie te Data Sources i detection guidance."
+    },
+    {
+      "id": 9,
+      "question": "NIS2 wymaga 'odpowiednich i proporcjonalnych środków'. Jak ATT&CK gap analysis pomaga spełnić to wymaganie?",
+      "options": [
+        "ATT&CK jest wymagany przez NIS2 — brak gap analysis to naruszenie dyrektywy",
+        "Gap analysis dokumentuje że organizacja rozumie realne zagrożenia i wdrożyła kontrole proporcjonalne do tych zagrożeń — 'odpowiednie i proporcjonalne' to właśnie threat-informed approach",
+        "NIS2 nie ma związku z ATT&CK — to regulacja prawna, nie techniczna",
+        "ATT&CK zastępuje wymagania NIS2"
+      ],
+      "correct": 1,
+      "explanation": "NIS2 nie narzuca konkretnych technologii — wymaga 'odpowiednich środków adekwatnych do ryzyka'. ATT&CK gap analysis to dowód na threat-informed approach: 'zidentyfikowaliśmy aktorów zagrożeń dla naszej branży, zmapowaliśmy ich TTP, wdrożyliśmy kontrole dla technik wysokiego ryzyka, monitorujemy luki'. To właśnie 'proporcjonalne do ryzyka' — możesz wykazać regulatorowi że Twoje decyzje są oparte na analizie realnych zagrożeń."
+    },
+    {
+      "id": 10,
+      "question": "Firma testuje T1486 (ransomware) i Sophos zatrzymuje szyfrowanie po 847 plikach. Jakie dodatkowe kontrole (poza tunowaniem EDR) ograniczą 'blast radius'?",
+      "options": [
+        "Zakup droższego EDR od innego dostawcy",
+        "Honeyfiles (pliki-pułapki) które triggernują alert przy pierwszym dotknięciu + segmentacja udziałów sieciowych VLAN (ograniczenie zasięgu szyfrowania) + offsite backup (odzyskanie bez płacenia okupu)",
+        "Szyfrowanie dysków twardych (BitLocker)",
+        "Antywirus na serwerach plików"
+      ],
+      "correct": 1,
+      "explanation": "Trójka kontroli ograniczających zasięg ransomware: (1) Honeyfiles — plik 'Wynagrodzenia_tajne.xlsx' który nikt nie powinien dotknąć. Gdy ransomware go zaszyfruje → natychmiastowy alert, zanim zaszyfruje 847 plików. (2) Segmentacja — ogranicza zasięg szyfrowania do jednego segmentu sieci, nie całej organizacji. (3) Backup offline — jeśli szyfrowanie się powiedzie, odtwarzasz z backupu bez płacenia okupu. Trzy kontrole razem redukują 'blast radius' z katastrofy do incydentu."
+    }
+  ]
+}
