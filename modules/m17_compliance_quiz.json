@@ -1,0 +1,76 @@
+{
+  "module": 17,
+  "title": "Zgodność i audyt",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Firma odkrywa naruszenie danych osobowych w piątek o 22:00. Kiedy musi złożyć zgłoszenie do UODO?",
+      "options": ["W poniedziałek rano — pierwsze dni robocze", "Najpóźniej poniedziałek 22:00 — 72 godziny od odkrycia, niezależnie od weekendów (art. 33 RODO)", "W ciągu 7 dni roboczych", "Tylko jeśli naruszenie dotyczy ponad 1000 osób"],
+      "correct": 1,
+      "explanation": "Art. 33 RODO: 72 godziny od 'stwierdzenia' naruszenia. Piątek 22:00 + 72h = poniedziałek 22:00. Brak rozróżnienia dni roboczych. Jeśli niemożliwe — zgłoś co możesz z wyjaśnieniem opóźnienia. Kluczowe: dokumentuj kiedy dokładnie stwierdziłeś naruszenie (ticking clock start)."
+    },
+    {
+      "id": 2,
+      "question": "Sklep e-commerce przetwarza 300 000 transakcji kartą rocznie. Który poziom PCI DSS i jaki obowiązek?",
+      "options": ["Level 1 — roczny audyt przez QSA", "Level 3 — roczny Self-Assessment Questionnaire (SAQ) + kwartalny skan zewnętrzny sieci przez ASV", "Level 2 — roczny SAQ bez skanów", "PCI DSS nie dotyczy sklepów poniżej 1 mln transakcji"],
+      "correct": 1,
+      "explanation": "PCI DSS Level 3: 20 000–1 000 000 transakcji e-commerce rocznie. Obowiązki: (1) Roczny SAQ (typ zależy od metody przyjmowania płatności — SAQ A dla tokenizacji, SAQ D dla własnego przetwarzania); (2) Kwartalny skan zewnętrzny przez ASV (Approved Scanning Vendor); (3) Roczny test penetracyjny (zalecany). Level 1 (>6 mln) wymaga QSA."
+    },
+    {
+      "id": 3,
+      "question": "Czym jest tokenizacja kart i jak wpływa na zakres PCI DSS?",
+      "options": ["Szyfrowanie numeru karty w bazie danych sklepu", "Zastąpienie numeru karty tokenem przez zewnętrznego procesora (Stripe/PayU) — sklep nigdy nie widzi rzeczywistego numeru, radykalnie redukując CDE i upraszczając compliance do SAQ A", "Hashowanie numeru karty SHA-256", "Proces autoryzacji karty przez bank"],
+      "correct": 1,
+      "explanation": "Tokenizacja: Stripe/PayU obsługuje całe przetwarzanie i zwraca token (np. tok_visa_4242). Sklep przechowuje token, nie numer karty. Efekt PCI DSS: sklep może użyć SAQ A (22 pytania) zamiast SAQ D (329 pytań). Zakres CDE praktycznie znika po stronie sklepu — najlepszy sposób na redukcję kosztów compliance."
+    },
+    {
+      "id": 4,
+      "question": "Co to jest Privacy by Design (art. 25 RODO) i co oznacza dla team deweloperski?",
+      "options": ["Projektowanie interfejsów z myślą o wygodzie użytkownika", "Bezpieczeństwo i prywatność wbudowane w systemy od fazy projektowania — nie dodawane po fakcie. Dla devów: threat modeling przed kodowaniem, minimalizacja zbieranych danych, domyślne ustawienia = najbardziej prywatne", "Osobny moduł prywatności dodawany do gotowego systemu", "Certyfikat potwierdzający zgodność z RODO"],
+      "correct": 1,
+      "explanation": "Privacy by Design (art. 25): (1) Data minimization — zbieraj tylko co niezbędne; (2) Purpose limitation — tylko do zadeklarowanego celu; (3) Default privacy — domyślne ustawienia = najbardziej prywatne (opt-in, nie opt-out); (4) Wbudowane od projektu. Dla developerów: security/privacy requirements w user stories, threat modeling, data mapping."
+    },
+    {
+      "id": 5,
+      "question": "Audytor PCI DSS pyta o evidence dla wymagania 10.2.1 (logowanie dostępu do danych kart). Co jest dowodem?",
+      "options": ["Oświadczenie że logi są włączone", "Screenshot konfiguracji logowania + przykładowe logi z wymaganymi polami + polityka retencji (12 mies.) + dowód centralnego zbierania i ochrony przed modyfikacją", "Wydruk z syslog z jednego dnia", "Certyfikat SOC 2 Type II"],
+      "correct": 1,
+      "explanation": "Evidence dla PCI DSS req. 10: (1) Screenshot konfiguracji; (2) Przykładowe logi z polami: timestamp, user, event type, resource; (3) Polityka retencji (12 mies., 3 mies. hot); (4) Dowód centralnego zbierania (SIEM) + ochrony (write-only, MFA Delete). Audytor testuje design effectiveness i operating effectiveness — screen + sample logs to minimum."
+    },
+    {
+      "id": 6,
+      "question": "HIPAA Security Rule — czy dotyczy polskiej firmy SaaS sprzedającej oprogramowanie szpitalom w USA?",
+      "options": ["Nie — HIPAA obowiązuje tylko firmy z siedzibą w USA", "Tak — HIPAA obowiązuje każdego Business Associate (BA) przetwarzającego PHI w imieniu covered entity niezależnie od lokalizacji. Polska firma musi podpisać Business Associate Agreement (BAA)", "Tylko jeśli firma ma pracowników w USA", "HIPAA nie dotyczy oprogramowania SaaS"],
+      "correct": 1,
+      "explanation": "HIPAA extraterritoriality: Business Associates — firmy przetwarzające PHI w imieniu covered entities (szpitale, ubezpieczalnie). Polska firma SaaS dla szpitali USA = Business Associate. Obowiązki: BAA + HIPAA Security Rule (szyfrowanie, access control, audit logs, breach notification 60 dni). Brak zgodności = kary do 1.9 mln USD per kategorię naruszenia."
+    },
+    {
+      "id": 7,
+      "question": "Czym różni się compliance audit od penetration testing?",
+      "options": ["Pentest jest droższy — to jedyna różnica", "Compliance audit: sprawdza czy procesy i dokumentacja spełniają wymagania standardu. Pentest: czy system można zhakować. Można mieć certyfikat i nadal być podatnym — i odwrotnie", "Pentest jest podkategorią compliance audit", "Compliance audit tylko zewnętrzni audytorzy, pentest wewnętrzni"],
+      "correct": 1,
+      "explanation": "Kluczowa różnica: compliance audit = 'czy masz kontrole?', pentest = 'czy kontrole działają przeciwko atakującemu?'. Firma może mieć SOC 2 Type II (compliance) i być zhakowana przez zero-day. Może też mieć świetne bezpieczeństwo techniczne ale brakować dokumentacji. Oba są potrzebne: compliance dla regulatorów/klientów, pentest dla rzeczywistego bezpieczeństwa."
+    },
+    {
+      "id": 8,
+      "question": "ISO 27001 — audytor pyta o Statement of Applicability dla kontroli A.9.4.1. Czego szuka?",
+      "options": ["Listy wszystkich użytkowników z dostępem", "Dokumentu SoA określającego: czy kontrola jest wdrożona, jak jest implementowana, uzasadnienie jeśli wyłączona — plus dowody (polityka dostępu, RBAC konfiguracja, wyniki access review)", "Wyniku ostatniego pentesting", "Certyfikatu szkoleniowego"],
+      "correct": 1,
+      "explanation": "SoA (Statement of Applicability): dla każdej z 93 kontroli ISO 27001 dokument mówi: in-scope? jak wdrożona? Potem evidence: polityka → implementacja techniczna → regularne przeglądy → dowody działania. Brak któregokolwiek ogniwa = finding. Pełny łańcuch: polityka (dokument) + konfiguracja (screenshot) + przegląd (raport quarterly) = komplet."
+    },
+    {
+      "id": 9,
+      "question": "Organizacja ma 3 Major Non-Conformities po audycie ISO 27001. Co to oznacza?",
+      "options": ["Minor i Major to tylko priorytety — brak formalnych konsekwencji", "Major Non-Conformity: brak wymaganego procesu lub całkowita nieskuteczność. Wymaga zamknięcia w 90 dniach + follow-up audit. Brak zamknięcia = możliwe zawieszenie certyfikatu", "Major oznacza tylko że znaleziono więcej niż 3 powiązane minor", "Wszystkie findings wymagają zamknięcia w tym samym terminie"],
+      "correct": 1,
+      "explanation": "ISO 27001 finding klasyfikacja: Observation (sugestia), Minor NC (częściowe niespełnienie), Major NC (brak procesu lub pełna nieskuteczność — certyfikat zagrożony). 3 Major NC: plan naprawczy w 15 dni, implementacja w 90 dni, follow-up audit. Brak = zawieszenie lub cofnięcie certyfikatu. Typowe Major NC: brak risk assessment, brak zarządzania incydentami, brak business continuity plan."
+    },
+    {
+      "id": 10,
+      "question": "RODO art. 34 — kiedy notyfikacja indywidulana osób jest wymagana po naruszeniu?",
+      "options": ["Zawsze gdy jest naruszenie danych osobowych", "Gdy naruszenie 'może powodować wysokie ryzyko' dla praw i wolności — np. wyciek haseł, danych finansowych, zdrowotnych, danych wrażliwych. Niskie ryzyko (zaszyfrowane dane bez klucza) = notyfikacja niekonieczna", "Tylko gdy naruszenie dotyczy ponad 100 osób", "Tylko dla danych zdrowotnych"],
+      "correct": 1,
+      "explanation": "Art. 34 RODO: notyfikacja indywidualna gdy naruszenie 'może powodować wysokie ryzyko dla praw i wolności'. Czynniki: typ danych (wrażliwe/finansowe/hasła = wysokie), liczba osób, potencjalne szkody. Wyciek haseł plaintext = notyfikacja. Zaszyfrowane dane bez klucza = brak notyfikacji (ale UODO nadal tak). UODO może nakazać notyfikację nawet przy niskiej ocenie ryzyka."
+    }
+  ]
+}

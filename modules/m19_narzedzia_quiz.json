@@ -1,0 +1,76 @@
+{
+  "module": 19,
+  "title": "Narzędziownik praktyka — szablony, rejestry, narzędzia",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Co powinien zawierać minimalny Risk Register dla firmy 50 pracowników?",
+      "options": ["Tylko ryzyka techniczne (CVE, ataki)", "ID, opis ryzyka, kategoria, prawdopodobieństwo (1-5), wpływ (1-5), score, właściciel, risk treatment (mitigate/accept/transfer/avoid), status, deadline", "Lista wszystkich możliwych zagrożeń cyber", "Tylko ryzyka z oceną Critical (score 20-25)"],
+      "correct": 1,
+      "explanation": "Minimalny skuteczny Risk Register: każde ryzyko ma ID (do śledzenia), właściciela (kto odpowiada), sposób adresowania i deadline. Score = Prawdopodob. × Wpływ daje priorytetyzację. Bez właściciela i deadlinu — rejestr to lista problemów bez rozwiązania. Risk Treatment: Mitigate (kontrola), Accept (świadoma decyzja zarządu), Transfer (ubezpieczenie), Avoid (zaprzestanie działalności)."
+    },
+    {
+      "id": 2,
+      "question": "Pracownik odchodzi w piątek. Kiedy dezaktywować konto AD?",
+      "options": ["W poniedziałek gdy IT ma czas", "Tego samego dnia co ostatni dzień pracy — najlepiej o ustalonej godzinie po zakończeniu zmiany", "Po tygodniu żeby mieć czas na przekazanie dostępów", "Gdy nowy pracownik przejmie zadania"],
+      "correct": 1,
+      "explanation": "Konto aktywnego byłego pracownika = najczęstsze finding audytowe. IBM: średni czas między odejściem a dezaktywacją = 5.3 dni. W tym czasie były pracownik ma pełny dostęp. Integracja HRIS→AD umożliwia automatyczną dezaktywację w dniu zakończenia umowy. Checklist offboardingu: konto AD + revoke sesji + VPN + SaaS + laptop + klucze — wszystko tego samego dnia."
+    },
+    {
+      "id": 3,
+      "question": "Firma ma 47 dostawców SaaS. Jak priorytetyzować TPRM przy ograniczonych zasobach?",
+      "options": ["Oceniaj wszystkich jednakowo", "Risk-based: Critical (dostęp do danych produkcyjnych) → pełny due diligence + SOC 2/ISO 27001 + DPA. High → kwestionariusz + DPA. Low → tylko DPA", "Oceniaj tylko dostawców z Europy", "Koncentruj się tylko na dostawcach z certyfikatem ISO 27001"],
+      "correct": 1,
+      "explanation": "Risk-based TPRM: nie możesz tak samo głęboko oceniać 47 dostawców. Critical (dostęp do danych produkcyjnych klientów) → SOC 2 Type II lub ISO 27001 + SIG Lite + DPA + prawo do audytu + roczna re-ocena. High → SIG Lite + DPA. Medium → DPA + podstawowe pytania. Low → tylko DPA. Zasoby tam gdzie ryzyko najwyższe."
+    },
+    {
+      "id": 4,
+      "question": "Jakie ryzyko niesie użycie szablonu SANS bez adaptacji?",
+      "options": ["Żadne — szablony SANS są gotowe do użycia", "Szablon może nie pasować: inne systemy (polityka wspomina Okta, firma używa lokalnego AD), inne przepisy (szablony USA vs RODO), polityka bez implementacji technicznej (GPO)", "Szablony SANS wymagają płatnej licencji", "Szablony są zbyt szczegółowe dla MŚP"],
+      "correct": 1,
+      "explanation": "Pułapki szablonów bez adaptacji: (1) Odniesienia do nieistniejących systemów; (2) Wymagania niezgodne z prawem polskim (NIST 800-63B vs lokalne regulacje); (3) Brak implementacji technicznej (polityka haseł mówi 15 znaków, GPO wymusza 8); (4) Właściciele nieprzypisani. Adaptacja = dostosowanie do rzeczywistości + implementacja techniczna + właściciele."
+    },
+    {
+      "id": 5,
+      "question": "Czym różni się IRP od playbooka IR?",
+      "options": ["IRP i playbook to to samo", "IRP to nadrzędny plan: role, procesy, eskalacja, zasady. Playbook to krok-po-kroku instrukcje dla konkretnego scenariusza (ransomware, phishing). IRP = strategia, Playbook = taktyka", "IRP dla zarządu, Playbook dla SOC", "Playbook zastępuje IRP"],
+      "correct": 1,
+      "explanation": "Hierarchia: IRP (strategiczny) → Playbooks (taktyczne). IRP: definicje severity, role (IC, Technical Lead, Communication Lead), eskalacja, kontakty zewnętrzne, zasady komunikacji. Playbook: sekwencja kroków dla scenariusza — Ransomware → 1. Izoluj przez EDR; 2. Aktywuj retainer; 3. RAM dump. Analityk o 3:00 w nocy nie czyta 40-stronicowego IRP — otwiera playbook i idzie krok po kroku."
+    },
+    {
+      "id": 6,
+      "question": "Wazuh vs Splunk — kiedy wybrać który?",
+      "options": ["Splunk zawsze lepszy", "Wazuh: open-source, koszt = infrastruktura (~500 PLN/mies.), do ~1000 agentów, HIDS+FIM+SIEM. Splunk: enterprise, droży (licencja per GB), bogaty ekosystem, dla dużych org z budżetem", "Wazuh dla Linux, Splunk dla Windows", "Splunk dla chmury, Wazuh on-premise"],
+      "correct": 1,
+      "explanation": "Wazuh: gdy ograniczony budżet, do 1000 endpointów, potrzeby SIEM+HIDS, self-host. Splunk: gdy 1000+ endpoints, potrzebujesz zaawansowanych korelacji, masz budżet (50k–500k PLN/rok), bogaty ekosystem integracji. Wazuh to właściwy wybór dla większości polskich MŚP i średnich firm. Koszt: Wazuh ~500 PLN/mies. (VPS) vs Splunk ~50 000 PLN/rok."
+    },
+    {
+      "id": 7,
+      "question": "Jak utrzymać Asset Register aktualny automatycznie?",
+      "options": ["Raz w roku przegląd przez IT", "Integracja z DHCP (nowe urządzenie → auto-dodanie), skanery aktywów (Nessus/Lansweeper cotygodniowo), MDM (Intune/JAMF auto-inventory), change management (nowy serwer = wpis do CMDB)", "Prosić pracowników o zgłaszanie urządzeń", "Wystarczy inwentaryzacja przy wdrożeniu"],
+      "correct": 1,
+      "explanation": "Manual = zawsze nieaktualne. Automatyzacja: Nessus/OpenVAS cotygodniowe skanowanie sieci; DHCP logging → alert przy nieznanym MAC; Intune/JAMF → automatyczny import laptopów; AWS/Azure → import zasobów przez API; Change Management → nowy serwer musi trafić do CMDB jako warunek zatwierdzenia change request. Aktualny Asset Register = mniej surprises podczas audytu i incydentu."
+    },
+    {
+      "id": 8,
+      "question": "GoPhish — jakie ryzyko prawne przy symulacjach phishingowych w Polsce?",
+      "options": ["Żadne — wewnętrzne testy phishingowe zawsze legalne", "Konieczne pisemne upoważnienie zarządu + informacja w regulaminie pracy że firma prowadzi testy bezpieczeństwa. Bez podstawy prawnej może naruszać prywatność pracowników (art. 6(1)(f) RODO)", "GoPhish jest nielegalny w Polsce", "Ryzyko tylko gdy pracownicy dowiedzą się o teście"],
+      "correct": 1,
+      "explanation": "Symulacje phishingowe w Polsce: (1) Podstawa prawna: uzasadniony interes pracodawcy (bezpieczeństwo IT) — art. 6(1)(f) RODO; (2) Informacja: pracownicy powinni wiedzieć że firma prowadzi testy (nie kiedy i jakie); (3) Dane (kto kliknął) przez RODO — retencja, dostęp. Praktyka: dorzuć do regulaminu pracy klauzulę 'Firma prowadzi periodyczne testy bezpieczeństwa, w tym symulacje phishingowe' — to wystarczy."
+    },
+    {
+      "id": 9,
+      "question": "Firma chce wdrożyć SSO z ograniczonym budżetem. Dobra open-source opcja?",
+      "options": ["SSO tylko z Okta lub Azure AD", "Keycloak lub Authentik — pełnofunkcjonalne open-source Identity Providers z SAML 2.0, OIDC, MFA. Koszt: infrastruktura ~100-200 PLN/miesiąc", "WordPress z wtyczką SSO", "SSO za trudne dla firm poniżej 500 pracowników"],
+      "correct": 1,
+      "explanation": "Open-source SSO: Keycloak (Red Hat sponsored, enterprise-grade, SAML 2.0 + OIDC + MFA + AD sync) lub Authentik (nowszy, prostszy UI). Docker/Kubernetes, konfiguracja 2-3 dni. Koszt VPS: 100-200 PLN/miesiąc. Alternatywa: Microsoft Entra ID External Identities — 50 000 MAU bezpłatnie, potem płatny. Keycloak integruje się z Active Directory przez LDAP sync."
+    },
+    {
+      "id": 10,
+      "question": "Kiedy DPIA (Data Protection Impact Assessment) jest obowiązkowe?",
+      "options": ["Dla każdego nowego projektu webowego", "Gdy przetwarzanie 'może powodować wysokie ryzyko dla praw i wolności' — systematyczne profilowanie, dane wrażliwe na dużą skalę, systematyczny monitoring, innowacyjne technologie (AI, biometria)", "Tylko dla systemów medycznych", "Tylko gdy system przetwarza >10 000 rekordów"],
+      "correct": 1,
+      "explanation": "DPIA (art. 35 RODO): obowiązkowe przy wysokim ryzyku. Kryteria UODO: (1) Systematyczna i szeroka ocena aspektów osobowych (profilowanie, scoring); (2) Dane wrażliwe na dużą skalę; (3) Systematyczne monitorowanie miejsc publicznych (CCTV); (4) Innowacyjne technologie (biometria, AI, IoT). Dla zwykłych aplikacji biznesowych DPIA zazwyczaj niekonieczne — przeprowadź wstępny screening (które kryterium spełnione?)."
+    }
+  ]
+}

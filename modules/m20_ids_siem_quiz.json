@@ -1,0 +1,76 @@
+{
+  "module": 20,
+  "title": "Systemy IDS i SIEM",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Czym różni się Snort działający jako IDS od IPS?",
+      "options": ["IDS szybszy, IPS wolniejszy", "IDS (pasywny): obserwuje kopię ruchu, generuje alerty ale nie blokuje. IPS (inline): ruch przechodzi PRZEZ IPS, może odrzucać pakiety — kosztem latency i ryzyka false positive = blokowanie legalnego ruchu", "IPS działa na warstwie 7, IDS na warstwie 3", "IDS open-source, IPS tylko komercyjny"],
+      "correct": 1,
+      "explanation": "Tryby Snort/Suricata: IDS/pasywny: sensor na SPAN/tap porcie — widzi kopię ruchu, zero latency, nie blokuje. IPS/inline: ruch przechodzi przez sensor — może drop/reject. Wady IPS: dodaje latency, false positive = legalny ruch zablokowany = outage. Dlatego IPS wymaga staranniejszego tuningu i stopniowego rollout (najpierw 'monitor' mode, potem 'block' mode dla pewnych reguł)."
+    },
+    {
+      "id": 2,
+      "question": "Analityk widzi 1000 alertów dziennie w Wazuh, 85% to false positives. Właściwy plan?",
+      "options": ["Wyłączyć SIEM", "Measure (jakie reguły generują FP) → Baseline (co normalne) → Whitelist (legitne działania) → Tune (modyfikuj próg reguł) → Measure again. Cel: FPR <20% per reguła", "Zatrudnić więcej analityków", "Zignorować FP i skupić się na 15% prawdziwych"],
+      "correct": 1,
+      "explanation": "Alert fatigue = śmierć SIEM. Proces tuningu: (1) Measure: które reguły ile FP generują (sample 100 alertów per reguła); (2) Root cause: co powoduje FP? Legalny skaner, backup agent?; (3) Fix: suppress dla znanych źródeł; (4) Adjust threshold: brute force przy 3 próbach za czuły — zmień na 10+; (5) Measure: FPR <20%? Iteruj. Cel: 50 alertów dziennie, każdy wymaga uwagi."
+    },
+    {
+      "id": 3,
+      "question": "Zeek generuje conn.log z tysiącami wierszy. Co zawiera i do czego służy?",
+      "options": ["Logi błędów systemu operacyjnego", "Każde połączenie TCP/UDP: timestamp, src_ip, src_port, dst_ip, dst_port, protokół, czas trwania, bajty. Do: NetFlow analizy, C2 beaconing detection, anomalii ruchu", "Logi konfiguracji urządzeń sieciowych", "Logi autentykacji użytkowników"],
+      "correct": 1,
+      "explanation": "Zeek conn.log: metadata każdego połączenia. Use cases: (1) C2 detection: ten sam dst_ip co 30 sekund (beaconing pattern) z aggregation; (2) Data exfiltration: unusually large bytes_out do zewnętrznego IP; (3) Port scanning: dużo conn z krótkim czasem trwania; (4) DNS tunneling: duże DNS transactions. Zeek logi są idealne dla SIEM — strukturalne, bogate w kontekst."
+    },
+    {
+      "id": 4,
+      "question": "SIEM ma regułę: 'Alert gdy EventID 4648 (explicit credential logon) + process=powershell.exe'. Co wykrywa?",
+      "options": ["Normalny logon przez PowerShell", "Potencjalne użycie techniki credential abuse — atakujący uruchamia PowerShell jawnie z innymi poświadczeniami (RunAs), anomalia dla legalnych procesów automatyzacji", "Błąd konfiguracji PowerShell", "Aktualizację systemu przez WSUS"],
+      "correct": 1,
+      "explanation": "EventID 4648: Logon with explicit credentials — użytkownik lub proces używa jawnie podanych poświadczeń. Kombinacja 4648 + PowerShell: może być legitna (skrypty z service account) lub złośliwa (atakujący ze skradzionym hasłem). Context matters: czy to znany service account? Unusual hour? Unusual source IP? Dobry trigger: 4648 + powershell + unusual hour lub unknown source IP."
+    },
+    {
+      "id": 5,
+      "question": "Wazuh Active Response automatycznie blokuje IP atakującego. Główne ryzyko?",
+      "options": ["Blokowanie zawsze bezpieczne", "False positive: legalny użytkownik z shared IP (TOR exit node, NAT) zostaje zablokowany = outage. Mitygacja: tylko dla reguł o wysokiej pewności, auto-unblock po 1h, notyfikacja analityka, exclusion list dla krytycznych IP", "Automatyczne blokowanie narusza RODO", "Wazuh Active Response nie działa na Windows"],
+      "correct": 1,
+      "explanation": "Automatic blocking tradeoff: szybkość (sekundy, nie minuty) vs ryzyko FP. Scenariusz: TOR exit node 185.220.1.1 blokowany. Ale inny pracownik też używa TOR — zablokowany. Lub shared NAT — blokowanie jednego 'atakującego' blokuje wszystkich klientów z jednego IP. Mitygacja: (1) Tylko reguły z >99% confidence; (2) Auto-unblock po godzinie; (3) Notyfikacja przy każdym auto-block; (4) Exclusion list."
+    },
+    {
+      "id": 6,
+      "question": "Firma przechowuje logi 30 dni. PCI DSS wymaga 12 miesięcy (3 mies. accessible). Najtańsze rozwiązanie?",
+      "options": ["Kupić więcej SSD", "Hot storage (SIEM): 90 dni. Cold storage (AWS S3 Glacier): 9 dodatkowych miesięcy po ~0.004 USD/GB/mies. — 25x taniej niż hot storage", "PCI DSS wymaga tylko 3 miesiące", "Skompresować i NAS lokalny"],
+      "correct": 1,
+      "explanation": "Tiered log storage: Hot (SIEM/Elasticsearch) — szybki dostęp, drogi ~0.10-0.30 USD/GB/mies. Cold (S3 Glacier) — ~0.004 USD/GB/mies., dostęp w 3-5h. Lifecycle policy: po 90 dniach automatycznie archiwizuj do Glacier. Koszt przykład: 500 GB/dzień × 30 dni hot = 15 TB × 0.30 USD = 4 500 USD/mies. + 73 TB cold × 0.004 = 290 USD/mies. Archiwum dużo tańsze od ciągłego hot storage."
+    },
+    {
+      "id": 7,
+      "question": "Co to są Emerging Threats (ET) Rules i jak je stosować?",
+      "options": ["Wewnętrzne reguły organizacji", "Bezpłatna (ET Open) lub komercyjna (ET Pro) baza reguł dla Snort/Suricata aktualizowana codziennie: malware C2, web exploits, brute force. ET Open: darmowe z 30-dniowym opóźnieniem. ET Pro: ~600 USD/rok, bieżące", "Reguły generowane przez AI", "Reguły tylko dla ruchu HTTP"],
+      "correct": 1,
+      "explanation": "ET (Proofpoint): ET Open (bezpłatne, 30 dni opóźnienie vs Pro) + ET Pro (komercyjne, ~600 USD/rok, bieżące). Przykłady reguł: ET MALWARE Win32/Emotet CnC Beacon, ET EXPLOIT Apache Log4j RCE, ET SCAN Nmap Scripting Engine. Aktualizacja przez suricata-update lub pulledpork. Ważne: po każdej aktualizacji test na staging — nowe reguły mogą generować masowe FP."
+    },
+    {
+      "id": 8,
+      "question": "Alert: 'DNS query to aabbccddeeff1122.evil.com from 192.168.10.50'. Co sugeruje?",
+      "options": ["Normalny DNS lookup", "DNS tunneling (T1071.004) lub DGA C2 — długa losowa subdomena to typowy wzorzec malware komunikującego się przez DNS lub eksfiltrującego dane zakodowane w subdomenach", "Błąd konfiguracji DNS resolwera", "Testowanie przez administratora"],
+      "correct": 1,
+      "explanation": "DNS tunneling/DGA: (1) Długa subdomena (>20 losowych znaków) — dane zakodowane w nazwie (base64 w subdomenie); (2) DGA: malware generuje codziennie nową domenę C2 algorytmicznie — bardzo losowe nazwy. Normalni użytkownicy nie generują takich zapytań. Wykrywanie: Zeek dns.log + reguła dla: query_len > 50 lub entropy(query) > 3.5. ATT&CK T1071.004."
+    },
+    {
+      "id": 9,
+      "question": "Dlaczego normalizacja logów w SIEM jest kluczowa dla korelacji?",
+      "options": ["Kompresja logów żeby zajmowały mniej miejsca", "Ustandaryzowanie logów z różnych źródeł do wspólnego schematu — np. 'src_ip' zamiast różnych nazw (Cisco: SrcAddr, Windows: IpAddress). Bez normalizacji korelacja między źródłami niemożliwa", "Usuwanie duplikatów", "Sortowanie chronologiczne"],
+      "correct": 1,
+      "explanation": "Problem: Cisco loguje 'SrcAddr=192.168.1.1', Windows EventLog 'IpAddress=192.168.1.1', Palo Alto 'src=192.168.1.1'. SIEM bez normalizacji nie wie że to to samo pole. Normalizacja: mapowanie na Common Schema (ECS, CEF). Efekt: reguła korelacji może łączyć loginy z Windows AD (user.name) z firewall events (source.ip) i DNS lookups (dns.question.name) bo wszystkie mają spójne nazwy."
+    },
+    {
+      "id": 10,
+      "question": "Firma wdraża SIEM — pierwsze 5 reguł korelacji do wdrożenia?",
+      "options": ["5 najbardziej złożonych reguł ATT&CK", "Brute force + success login, Impossible travel, Konto byłego pracownika aktywne (po offboarding date), Masowy download >1GB, Nowe konto admina poza godzinami pracy — high-value, low-FP, broad coverage", "5 reguł dla konkretnych narzędzi (Mimikatz, Cobalt Strike)", "Reguły dla konkretnych CVE"],
+      "correct": 1,
+      "explanation": "Pierwsze 5 reguł: high-value, low-FP, broad coverage: (1) Brute force + success: najczęstszy wektor; (2) Impossible travel: konto skompromitowane; (3) Konto byłego pracownika: offboarding failure — zero FP jeśli zsynchronizowane z HR; (4) Masowy download: exfiltration lub insider; (5) Admin created off-hours: lateral movement. Dlaczego nie ATT&CK od razu? Wymagają dostrojenia — zacznij prosto i rozszerzaj."
+    }
+  ]
+}

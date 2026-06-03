@@ -1,0 +1,76 @@
+{
+  "module": 16,
+  "title": "Awarie i odpowiedź na incydenty",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Jakie są fazy PICERL i w jakiej kolejności powinny być realizowane?",
+      "options": ["Recovery → Identification → Containment → Eradication → Preparation → Lessons Learned", "Preparation → Identification → Containment → Eradication → Recovery → Lessons Learned — każda faza ma swój cel i kolejność jest kluczowa", "Eradication → Containment → Recovery → Identification → Preparation → Lessons Learned", "Wszystkie fazy realizowane jednocześnie"],
+      "correct": 1,
+      "explanation": "PICERL to cykl IR: Preparation (zanim cokolwiek się stanie — plan, narzędzia, szkolenia) → Identification (wykrycie i potwierdzenie incydentu) → Containment (zatrzymanie rozprzestrzeniania) → Eradication (usunięcie zagrożenia) → Recovery (przywrócenie normalnego działania) → Lessons Learned (wyciąganie wniosków). Kolejność jest kluczowa: nie możesz eradykować zanim nie zawierasz, nie możesz odtwarzać zanim nie usuniesz zagrożenia."
+    },
+    {
+      "id": 2,
+      "question": "Zainfekowany serwer produkcyjny jest aktywnie szyfrowany przez ransomware. Jaka jest właściwa kolejność działań?",
+      "options": ["Wyłącz serwer natychmiast żeby zatrzymać szyfrowanie", "Zbierz RAM dump (artefakty forensics) → izoluj sieciowo przez EDR → następnie wyłącz jeśli konieczne. Wyłączenie bez RAM dump = utrata dowodów w pamięci", "Zapłać okup żeby jak najszybciej odzyskać dane", "Poczekaj aż szyfrowanie się skończy, potem przywróć z backupu"],
+      "correct": 1,
+      "explanation": "Order of volatility: RAM zawiera najbardziej ulotne dowody — procesy, połączenia sieciowe, klucze szyfrowania malware, skradzione hasła w pamięci. Wyłączenie serwera → bezpowrotna utrata tych danych. Właściwa sekwencja: (1) Izoluj sieciowo (EDR network contain) — zatrzymuje szyfrowanie przez odcięcie od C2 i lateral movement; (2) Zbierz RAM dump (winpmem, Magnet RAM Capture) — 5-15 minut; (3) Zbierz logi; (4) Dopiero wtedy wyłącz jeśli potrzeba. Forensics firma zawsze wykonuje RAM dump jako pierwszy krok."
+    },
+    {
+      "id": 3,
+      "question": "Naruszenie danych osobowych wykryto w piątek o 19:00. Kiedy najpóźniej musi być złożone zgłoszenie do UODO?",
+      "options": ["W poniedziałek rano — pierwsze dni robocze po wykryciu", "Najpóźniej poniedziałek 19:00 — 72 godziny od wykrycia naruszenia (art. 33 RODO), niezależnie od dni roboczych", "W ciągu 7 dni — tyle daje RODO na dochodzenie", "UODO zgłoszenie tylko jeśli dane zostały publicznie ujawnione"],
+      "correct": 1,
+      "explanation": "Art. 33 RODO: administrator musi zgłosić naruszenie danych osobowych do organu nadzorczego (UODO) w ciągu 72 godzin od stwierdzenia naruszenia — nie od wystąpienia, ale od stwierdzenia. 72h = 3 doby, niezależnie od weekendów. Piątek 19:00 + 72h = poniedziałek 19:00. Jeśli 72h niemożliwe — zgłoś co możesz z wyjaśnieniem opóźnienia. Przy wysokim ryzyku dla osób — dodatkowo notyfikacja indywidualna (art. 34). Kluczowe: dokumentuj KIEDY stwierdziłeś naruszenie (ticking clock start)."
+    },
+    {
+      "id": 4,
+      "question": "Firma nie ma retainera z firmą IR. Ransomware uderza w piątek wieczorem. Jaki jest główny problem?",
+      "options": ["Firmy IR nie pracują w weekendy", "Bez retainera: szukanie wolnej firmy IR w kryzysie (wszystkie zajęte), brak pre-negocjowanych stawek (10x wyższe), brak znajomości środowiska (czas na briefing), czas reakcji 24-48h vs 2-4h z retainerem", "Retainer jest opcjonalny — każda firma IR przyjmie nowego klienta natychmiast", "Problem tylko jeśli firma nie ma backupów"],
+      "correct": 1,
+      "explanation": "Retainer IR vs ad hoc: (1) Dostępność: z retainerem — 2-4h response SLA; bez — możesz szukać godzinami (inne firmy też mają incydenty w piątek wieczór); (2) Stawki: retainer pre-negocjowany 150-300 USD/h; ad hoc 'fire sale' 500-800 USD/h; (3) Znajomość środowiska: kickoff meeting przed incydentem = forensics firma zna Twoją architekturę; (4) Priorytet: klienci z retainerem obsługiwani przed ad hoc. Koszt retainera 15 000-50 000 PLN/rok vs koszt opóźnienia podczas incydentu: szybko kilkaset tysięcy PLN."
+    },
+    {
+      "id": 5,
+      "question": "Czym różni się BCP od DRP?",
+      "options": ["BCP i DRP to różne nazwy tego samego dokumentu", "BCP (Business Continuity Plan) to szerszy plan utrzymania działalności biznesowej (procesy, ludzie, lokalizacje, komunikacja) podczas kryzysu. DRP (Disaster Recovery Plan) to techniczny plan odtwarzania infrastruktury IT — podzbiór BCP", "BCP dotyczy awarii sprzętu, DRP cyberataków", "DRP jest dla dużych firm, BCP dla małych"],
+      "correct": 1,
+      "explanation": "Hierarchia: BCP jest szerszy, DRP jest jego podzbiorem. BCP pyta: 'Jak firma funkcjonuje gdy coś pójdzie nie tak?' — obejmuje alternatywne lokalizacje biura, procesy manualne gdy systemy padły, komunikację z klientami, decyzje kadrowe. DRP pyta: 'Jak IT odtwarza systemy?' — backup procedures, failover, RTO/RPO dla każdego systemu. Przykład: pożar w data center. BCP: pracownicy przechodzą do oddziału, procesy manualne. DRP: odtworzenie systemów w DR site."
+    },
+    {
+      "id": 6,
+      "question": "Biznes zdefiniował RTO = 4h dla systemu ERP i RPO = 1h. Co to technicznie oznacza dla IT?",
+      "options": ["ERP musi być dostępny przez 4 godziny dziennie z 1 godziną przerwy", "RTO 4h: IT musi odtworzyć ERP w ciągu 4 godzin od awarii. RPO 1h: maksymalna utrata danych = 1 godzina — backup lub replikacja co maksymalnie 1 godzinę", "System działa 4 godziny, potem 1 godzina backup", "RTO i RPO to tylko metryki raportowe, nie wymagania techniczne"],
+      "correct": 1,
+      "explanation": "RTO = Recovery Time Objective: max czas od awarii do przywrócenia systemu. RTO 4h = system musi działać 4h po awarii. Implikacje techniczne: warm standby lub aktywna replikacja (zimne backupy mogą nie wystarczyć). RPO = Recovery Point Objective: max akceptowalna utrata danych. RPO 1h = backup/replikacja co maksymalnie 1 godzinę. Implikacje: continuous backup lub synchroniczna replikacja. RTO i RPO definiuje biznes na podstawie kosztów przestoju — IT dostarcza rozwiązanie techniczne w ramach tego wymagania."
+    },
+    {
+      "id": 7,
+      "question": "Co to jest tabletop exercise i dlaczego jest wartościowy przed prawdziwym incydentem?",
+      "options": ["Test penetracyjny przeprowadzany w laboratorium", "Symulacja incydentu w sali konferencyjnej — moderator prezentuje scenariusz, zespół IR dyskutuje co by zrobili. Wartość: ujawnia luki w planie IR, ćwiczy role i komunikację, buduje 'pamięć mięśniową' bez presji prawdziwego incydentu", "Ćwiczenie fizyczne dla pracowników IT", "Backup test przeprowadzany przy stoliku"],
+      "correct": 1,
+      "explanation": "Tabletop exercise: no-tech, high-value. Moderator mówi 'Wtorek 14:30, analityk widzi alert...' → zespół dyskutuje: kto dzwoni do kogo? co sprawdzamy? kiedy eskalujemy? jakie decyzje? Moderator dodaje twisty ('okazuje się że attakujący jest insiderem'). Po: omówienie gaps. Wartości: (1) Ujawnia niejasności w planie (kto jest IC? jakie są uprawnienia?); (2) Ćwiczy role bez presji; (3) Testuje komunikację między departamentami; (4) Identyfikuje brakujące narzędzia/kontakty. Koszt: 3-4h + zewnętrzny facilitator. Edwards: minimum raz w roku, lepiej dwa razy."
+    },
+    {
+      "id": 8,
+      "question": "Analityk SOC wykrywa alert w piątek o 23:00 — nieautoryzowane logowanie na konto administratora z Rosji. Jak przeprowadzić właściwy triage?",
+      "options": ["Poczekaj do poniedziałku rano z pełną analizą", "Validate (prawdziwy incydent czy FP?), Scope (ile kont/systemów?), Severity (P1 — konto admin), Escalate (IC + CISO, nie czekaj do rana). P1 wymaga natychmiastowej eskalacji niezależnie od godziny", "Wyślij e-mail do CISO i czekaj na odpowiedź", "Zablokuj konto i zapisz notatkę do rana"],
+      "correct": 1,
+      "explanation": "Triage sekwencja: (1) Validate: sprawdź CloudTrail/logon events — czy logowanie naprawdę nastąpiło? konto admina to P1 candidate; (2) Scope: czy konto wykonało jakieś akcje? inne konta dotknięte?; (3) Severity: skompromitowane konto admina = P1 Critical, nie P3; (4) Escalate: P1 = budzisz IC i CISO o 23:00. Reguła: błąd eskalacji (fałszywy alarm P1) jest wybaczalny. Nieseskalowanie prawdziwego P1 = katastrofa. 'When in doubt, escalate up'."
+    },
+    {
+      "id": 9,
+      "question": "Co to jest blameless postmortem i dlaczego jest ważniejszy od tradycyjnego 'kto zawinił'?",
+      "options": ["Postmortem bez uczestnictwa sprawcy incydentu", "Analiza incydentu skupiona na poprawie systemu i procesów, nie na wskazywaniu winnych. Kultura blame powoduje ukrywanie błędów — blameless tworzy środowisko gdzie ludzie otwarcie mówią co poszło nie tak", "Postmortem przeprowadzany przez zewnętrzną firmę żeby był obiektywny", "Raport dla zarządu bez szczegółów technicznych"],
+      "correct": 1,
+      "explanation": "Blameless postmortem (Google SRE, Etsy kultura): incydenty wynikają z systemowych problemów, nie z celowej złośliwości. Gdy kultura blame: ludzie ukrywają błędy, nie raportują problemów wcześnie, boją się zgłaszać podejrzane zdarzenia. Wynik: gorsze bezpieczeństwo. Blameless: 'Dlaczego system pozwolił na ten błąd?' zamiast 'Kto popełnił błąd?'. Przykład: pracownik który otworzył phishing dostaje pomoc (szkolenie), nie karę — bo system nie miał wystarczającej ochrony e-mail. Wnioski: lepsze filtry, lepsze szkolenia."
+    },
+    {
+      "id": 10,
+      "question": "Strategia DR 'Warm Standby' vs 'Pilot Light' — jaka jest różnica i kiedy wybrać którą?",
+      "options": ["Pilot Light jest tańszy i zawsze lepszy", "Pilot Light: minimalna infrastruktura stale działająca (np. replikowana DB), reszta uruchamiana w razie potrzeby — RTO: godziny, tańsze. Warm Standby: zredukowana wersja produkcji stale działająca — RTO: minuty, droższe. Wybór zależy od RTO wymaganego przez biznes", "Warm Standby to to samo co Active/Active", "Pilot Light wymaga fizycznego zapalenia przez operatora"],
+      "correct": 1,
+      "explanation": "Spektrum DR strategii (koszt vs RTO): Backup/Restore (najtańsze, RTO dni) → Pilot Light (minimalne środowisko działające, RTO godziny) → Warm Standby (zredukowane środowisko, RTO minuty-godziny) → Active/Active (pełne środowisko w dwóch lokalizacjach, RTO sekundy, najdroższe). Pilot Light: tylko baza danych replikowana + AMI gotowe do uruchomienia — przy awarii uruchamiasz EC2 w kilka godzin. Warm Standby: 20% produkcyjnej pojemności zawsze działa — przy awarii skalujesz do 100% w minuty."
+    }
+  ]
+}

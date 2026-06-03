@@ -1,0 +1,76 @@
+{
+  "module": 18,
+  "title": "Metryki i raportowanie bezpieczeństwa",
+  "questions": [
+    {
+      "id": 1,
+      "question": "CISO przygotowuje miesięczny raport dla zarządu. Która prezentacja jest właściwsza?",
+      "options": ["42-stronicowy raport techniczny ze wszystkimi logami", "Jednosłajdowy dashboard: 5 KPI z RAG, trend vs poprzedni miesiąc, Top 3 ryzyka w PLN, co zrobiono, co planowane", "Lista wszystkich alertów SIEM z ostatniego miesiąca", "Prezentacja nowych narzędzi security do zakupu"],
+      "correct": 1,
+      "explanation": "Zarząd potrzebuje: stan bezpieczeństwa w 2 minuty, trendy (poprawa/pogorszenie), ryzyko w PLN. 42-stronicowy raport techniczny nie zostanie przeczytany. Dashboard z 5 KPI + RAG + ALE jest actionable. Zasada: jeden slajd per audytorium, język biznesowy."
+    },
+    {
+      "id": 2,
+      "question": "MTTD = 4.5 godziny. Co to oznacza i czy to dobry wynik?",
+      "options": ["Mean Time To Deploy — czas deploymentu, dobry wynik", "Mean Time To Detect — średni czas od wystąpienia do wykrycia. 4.5h przekracza benchmark branżowy (<1h). Podczas 4.5h atakujący wykonuje lateral movement i kradnie dane", "Mean Time To Disconnect — czas izolacji hosta", "Mean Time To Document"],
+      "correct": 1,
+      "explanation": "MTTD: im niższy, tym lepiej. Benchmark: dojrzałe SOC <1h, większość organizacji 4-8h, bez SIEM: dni. Każda godzina nieodkrytego ataku = więcej lateral movement, więcej danych skradzionych, wyższe koszty IR. MTTD 4.5h vs 1h = 4.5x więcej czasu dla atakującego."
+    },
+    {
+      "id": 3,
+      "question": "Co to jest ALE i jak go obliczyć?",
+      "options": ["Annual License Expenses — roczne koszty licencji", "ALE = ARO × SLE: roczna oczekiwana strata = prawdopodobieństwo roczne × strata z jednego incydentu. ALE 300k PLN = 15% szansa × 2 mln PLN koszt wycieku", "Average Loss Estimate na podstawie historii firmy", "Automated Loss Engine — narzędzie do obliczeń"],
+      "correct": 1,
+      "explanation": "FAIR model: ALE = ARO (Annual Rate of Occurrence) × SLE (Single Loss Expectancy). ARO 0.15 = raz na 6-7 lat. SLE 2 000 000 PLN = koszt jednego wycieku. ALE = 300 000 PLN/rok. To 'składka ubezpieczeniowa' którą warto płacić. Jeśli kontrola kosztuje 100k PLN i zmniejsza ALE z 300k do 50k = ROI 150%."
+    },
+    {
+      "id": 4,
+      "question": "Phishing click rate 22% bez zmian przez 3 miesiące szkoleń. Co sugeruje?",
+      "options": ["22% to dobry wynik — większość (78%) nie klika", "Program szkoleń jest nieskuteczny. Potrzeba: częstsze symulacje, micro-learning bezpośrednio po kliknięciu, segmentacja grup ryzyka, spersonalizowane treści", "Metryka jest błędna", "Wymagana zmiana dostawcy narzędzia"],
+      "correct": 1,
+      "explanation": "22% bez trendu poprawy = problem z programem. Diagnoza: symulacje za rzadkie (miesięczne lepsze niż kwartalne), brak 'teachable moment' (pracownik który kliknął dostaje natychmiastowe 2-min szkolenie), brak segmentacji (grupy ryzyka intensywniejsza uwaga), zbyt generyczne treści. Cel: <5% po 6 miesiącach dobrego programu."
+    },
+    {
+      "id": 5,
+      "question": "Security Debt = 47 open High findings × average age 45 days. Co to mówi?",
+      "options": ["2115 finding-days to normalna metryka bez znaczenia", "Duże zaległości bezpieczeństwa — 47 poważnych podatności otwartych średnio 45 dni sugeruje brak priorytetyzacji. High CVE powinny być naprawiane w 7–30 dni", "Metryka dobra jeśli brak Critical", "Security Debt dotyczy tylko długu finansowego"],
+      "correct": 1,
+      "explanation": "Security Debt = liczba × czas = miara zaległości. High CVE SLA: zwykle 7–30 dni. Średnia 45 dni = SLA przekroczony. Trend ważniejszy od wartości absolutnej: rośnie (coraz gorzej) czy maleje? Jak raportować: '47 poważnych luk otwartych 3x dłużej niż cel — odpowiada ryzyku X mln PLN.'"
+    },
+    {
+      "id": 6,
+      "question": "Metryka 'liczba zamkniętych alertów per analityk' jako KPI SOC — jakie zachowanie promuje?",
+      "options": ["Szybkość i efektywność — dobra metryka", "Zamykanie alertów bez analizy (false close) żeby osiągnąć target. Lepsza metryka: % alertów prawidłowo eskalowanych, MTTD, false negative rate — mierzą jakość, nie ilość", "Dobra jeśli liczba >100 dziennie", "Problematyczna tylko dla junior analityków"],
+      "correct": 1,
+      "explanation": "Goodhart's Law: 'When a measure becomes a target, it ceases to be a good measure.' Liczba zamkniętych → analitycy zamykają bez analizy. Lepsze metryki jakości: MTTD (szybkość wykrywania realnych incydentów), false negative rate (ile przeoczono), time per investigation (czy mają czas na pełną analizę), % prawidłowo sklasyfikowanych alertów."
+    },
+    {
+      "id": 7,
+      "question": "Firma Level 1 (CMMI Security Maturity) chce przejść do Level 3 w roku. Kluczowe kroki?",
+      "options": ["Kupić droższe narzędzia", "Zdefiniować i udokumentować podstawowe procesy (polityki, procedury, role), wdrożyć regularne metryki i przeglądy, zbudować program obejmujący całą organizację", "Certyfikować się ISO 27001 jako pierwszy krok", "Zatrudnić więcej analityków SOC"],
+      "correct": 1,
+      "explanation": "Level 1→3: (1) Level 2: zdefiniuj podstawowe procesy — patch management, IR, access review — zakomunikuj i zmierz; (2) Level 3: standaryzuj w całej organizacji, formalne polityki, regularne metryki, program ciągłego doskonalenia. Kluczowe: procesy przed narzędziami. Drogi SIEM bez procesów = Level 1 z drogim narzędziem."
+    },
+    {
+      "id": 8,
+      "question": "Czym jest Leading Indicator vs Lagging Indicator?",
+      "options": ["Leading dla zarządu, Lagging dla SOC", "Lagging: mierzy przeszłość (liczba incydentów, koszty breachów). Leading: przewiduje przyszłe ryzyko (% bez MFA, niezałatane CVE) — daje czas na działanie zanim incydent", "Leading bardziej precyzyjny", "Lagging techniczny, Leading biznesowy"],
+      "correct": 1,
+      "explanation": "Lagging = 'co się stało' (retrospektywny): incydenty Q3, koszt IR. Leading = 'co może się wydarzyć' (predykcyjny): % bez MFA, liczba Critical CVE >15 dni, click rate phishing. Najlepsze programy mierzą oba: lagging pokazuje efekty, leading daje czas na działanie. Samo lagging = reaktywność; samo leading = brak potwierdzenia skuteczności."
+    },
+    {
+      "id": 9,
+      "question": "CISO uzasadnia zakup EDR za 200 000 PLN. Jak zbudować business case?",
+      "options": ["Pokazać że konkurencja ma EDR", "ALE bez EDR (np. 800k PLN) vs z EDR (200k PLN) = redukcja 600k PLN/rok. Koszt EDR 200k PLN. ROI = 3:1 w pierwszym roku. Plus: MTTD 4.5h → 0.5h", "Lista technicznych możliwości EDR", "Raport Gartner wskazujący EDR jako must-have"],
+      "correct": 1,
+      "explanation": "Business case = ryzyko w PLN: (1) Baseline ALE bez EDR (dane branżowe Verizon DBIR × własna historia); (2) Improved ALE z EDR (MTTD 4.5h → 0.5h redukuje koszty incydentu ~60%); (3) ROI = (ALE_stare - ALE_nowe) / Koszt_EDR. Jeśli ROI > 1 w roku 1 → oczywista decyzja. Bonus: compliance benefits, cyber insurance premium reduction."
+    },
+    {
+      "id": 10,
+      "question": "Dashboard: MFA 100% ✅, CVE SLA 98% ✅, Phishing 4% ✅, Backup 100% ✅. Wszystko zielone. Czy organizacja jest bezpieczna?",
+      "options": ["Tak — wszystkie wskaźniki zielone", "Niekoniecznie — metryki mierzą procesy, nie bezpieczeństwo. Brakuje: ATT&CK gap analysis, threat hunting, testów DRP, jakości reguł SIEM", "Tak, jeśli ma ISO 27001", "Zależy od zewnętrznego audytora"],
+      "correct": 1,
+      "explanation": "Goodhart's Law: gdy metryki są celami, optymalizujesz metryki nie bezpieczeństwo. Czego dashboardy nie mierzą: jakość reguł SIEM (fałszywe poczucie bezpieczeństwa przez brak detekcji kluczowych ATT&CK technik), skuteczność MFA (SMS da się obejść inaczej niż passkey), insider threats, supply chain. Zielony dashboard = dobry sygnał, nie gwarancja. Uzupełnij: pentesty, threat hunting, tabletop exercises."
+    }
+  ]
+}
