@@ -1205,6 +1205,8 @@ async function loadTab(tab) {
 }
 
 /* ── QUIZ ─────────────────────────────────────────────────── */
+let quizState = {};   // {moduleId: {answers:{qIdx:answerIdx}, idx:currentQIdx}}
+
 async function renderQuiz() {
   const panel = document.getElementById('contentPanel');
   const m = MODULES[current];
@@ -1213,39 +1215,109 @@ async function renderQuiz() {
   try {
     const resp = await fetch(`http://localhost:8080/modules/${m.slug}_quiz.json`);
     if (!resp.ok) throw new Error('brak pliku');
-    const quiz = await resp.json();
+    const raw = await resp.json();
 
-    const letters = ['A','B','C','D','E'];
-    const answered = quizDone.hasOwnProperty(m.id);
-    const selected = quizDone[m.id];
-    if (answered) _recordQuizResult(m.id, selected, quiz.correct);
+    // Obsługa dwóch formatów: nowy {questions:[...]} i stary {question,options,...}
+    let questions;
+    if (Array.isArray(raw.questions) && raw.questions.length > 0) {
+      questions = raw.questions;
+    } else if (raw.question) {
+      questions = [raw];
+    } else {
+      throw new Error('nieznany format');
+    }
 
-    const optsHTML = quiz.options.map((opt, i) => {
+    if (!quizState[m.id]) quizState[m.id] = { answers: {}, idx: 0 };
+    const qs = quizState[m.id];
+    const idx = Math.min(qs.idx, questions.length - 1);
+    qs.idx = idx;
+    const q = questions[idx];
+    const total = questions.length;
+    const answered = qs.answers.hasOwnProperty(idx);
+    const selected = qs.answers[idx];
+
+    // Synchronizuj quizDone po ukończeniu wszystkich pytań
+    const doneCount = Object.keys(qs.answers).length;
+    if (doneCount === total && !quizDone.hasOwnProperty(m.id)) {
+      const correctCount = Object.keys(qs.answers).filter(i => qs.answers[i] === questions[i].correct).length;
+      const pass = correctCount >= Math.ceil(total * 0.6);
+      quizDone[m.id] = pass ? 1 : 0;
+      _recordQuizResult(m.id, pass ? 1 : 0, 1);
+      saveProgress();
+    }
+
+    const letters = ['A','B','C','D'];
+
+    const optsHTML = q.options.map((opt, i) => {
       let cls = 'quiz-opt';
       if (answered) {
-        if (i === quiz.correct)  cls += ' correct';
+        if (i === q.correct)     cls += ' correct';
         else if (i === selected) cls += ' wrong';
         cls += ' disabled';
       }
-      return `<button class="${cls}" onclick="answerQuiz(${i})" ${answered?'disabled':''}>
+      return `<button class="${cls}" onclick="answerQuiz(${i})" ${answered ? 'disabled' : ''}>
         <span class="opt-letter">${letters[i]}</span>
         <span>${opt}</span>
       </button>`;
     }).join('');
 
-    const feedbackHTML = answered ? `
-      <div class="quiz-feedback show ${selected === quiz.correct ? 'ok' : 'fail'}">
-        ${selected === quiz.correct
-          ? `✓ Poprawna odpowiedź! ${quiz.explanation || ''}`
-          : `✗ Niepoprawnie. Prawidłowa odpowiedź: <strong>${quiz.options[quiz.correct]}</strong>. ${quiz.explanation || ''}`}
+    // Feedback: zawsze pokazuje poprawną odpowiedź + wyjaśnienie dlaczego inne są złe
+    let feedbackHTML = '';
+    if (answered) {
+      const isOk = selected === q.correct;
+      const wrongLine = !isOk
+        ? `<p style="margin:0 0 6px"><strong style="color:var(--danger)">✗ Twoja odpowiedź (${letters[selected]})</strong> — niepoprawna.</p>`
+        : '';
+      feedbackHTML = `
+        <div class="quiz-feedback show ${isOk ? 'ok' : 'fail'}">
+          ${wrongLine}
+          <p style="margin:0 0 8px"><strong style="color:var(--accent)">✓ Prawidłowa odpowiedź: ${letters[q.correct]}. ${q.options[q.correct]}</strong></p>
+          <p style="margin:0;padding-top:8px;border-top:1px solid rgba(255,255,255,.12)"><strong>Wyjaśnienie:</strong> ${q.explanation || ''}</p>
+        </div>`;
+    }
+
+    // Pasek postępu (kropki) — tylko dla quizów wielopytaniowych
+    const progressBar = total > 1 ? `
+      <div style="display:flex;justify-content:center;gap:6px;margin:16px 0 4px">
+        ${questions.map((_,i) => {
+          let bg = 'rgba(255,255,255,.18)';
+          if (qs.answers.hasOwnProperty(i)) bg = qs.answers[i] === questions[i].correct ? 'var(--accent)' : 'var(--danger)';
+          const ring = i === idx ? 'outline:2px solid white;outline-offset:2px' : '';
+          return `<span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:${bg};${ring}"></span>`;
+        }).join('')}
+      </div>
+      <div style="text-align:center;color:var(--muted);font-size:12px;margin-bottom:12px">Pytanie ${idx+1} z ${total}</div>` : '';
+
+    // Nawigacja między pytaniami
+    const navHTML = total > 1 ? `
+      <div style="display:flex;justify-content:space-between;margin-top:18px">
+        <button onclick="quizNav(-1)" ${idx===0?'disabled':''} style="padding:8px 20px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);color:var(--text);cursor:pointer;opacity:${idx===0?'.35':'1'}">&larr; Poprzednie</button>
+        <button onclick="quizNav(1)" ${idx===total-1?'disabled':''} style="padding:8px 20px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);color:var(--text);cursor:pointer;opacity:${idx===total-1?'.35':'1'}">Następne &rarr;</button>
       </div>` : '';
+
+    // Wynik końcowy
+    let scoreHTML = '';
+    if (doneCount === total && total > 1) {
+      const c = Object.keys(qs.answers).filter(i => qs.answers[i] === questions[i].correct).length;
+      const pct = Math.round(c / total * 100);
+      const col = pct >= 70 ? 'var(--accent)' : pct >= 50 ? '#ffd700' : 'var(--danger)';
+      scoreHTML = `
+        <div style="text-align:center;padding:14px;border-radius:10px;background:rgba(255,255,255,.05);margin-top:16px;border:1px solid rgba(255,255,255,.1)">
+          <span style="font-size:30px;font-weight:700;color:${col}">${pct}%</span>
+          <span style="color:var(--muted);margin-left:10px;font-size:15px">${c} / ${total} poprawnych</span>
+          ${pct >= 60 ? '<div style="color:var(--accent);margin-top:4px;font-size:13px">✓ Moduł zaliczony</div>' : '<div style="color:var(--danger);margin-top:4px;font-size:13px">Powtórz materiał i spróbuj ponownie</div>'}
+        </div>`;
+    }
 
     panel.innerHTML = `
       <div id="quizPanel">
         <div class="quiz-wrap">
-          <div class="quiz-q">${quiz.question}</div>
+          ${progressBar}
+          <div class="quiz-q">${q.question}</div>
           <div class="quiz-opts" id="quizOpts">${optsHTML}</div>
           ${feedbackHTML}
+          ${navHTML}
+          ${scoreHTML}
         </div>
       </div>`;
   } catch(err) {
@@ -1259,10 +1331,19 @@ async function renderQuiz() {
 
 function answerQuiz(idx) {
   const m = MODULES[current];
-  if (quizDone.hasOwnProperty(m.id)) return;
-  quizDone[m.id] = idx;
+  if (!quizState[m.id]) quizState[m.id] = { answers: {}, idx: 0 };
+  const qs = quizState[m.id];
+  if (qs.answers.hasOwnProperty(qs.idx)) return;
+  qs.answers[qs.idx] = idx;
   saveProgress();
-  renderQuiz();   // quiz wywola _recordQuizResult   // quiz sam wywola _recordQuizResult
+  renderQuiz();
+}
+
+function quizNav(dir) {
+  const m = MODULES[current];
+  if (!quizState[m.id]) return;
+  quizState[m.id].idx = Math.max(0, quizState[m.id].idx + dir);
+  renderQuiz();
 }
 
 /* ── COMPLETE ─────────────────────────────────────────────── */

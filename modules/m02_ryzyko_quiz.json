@@ -1,11 +1,126 @@
 {
-  "question": "Firma LogiPL przeprowadza risk assessment systemu WMS. Backup online jest w tej samej sieci co serwery produkcyjne. Rejestr ryzyk pokazuje: Ransomware (P=4, W=5, ocena=20). Jaka jest PIERWSZA i NAJWAŻNIEJSZA kontrola którą powinna wdrożyć LogiPL, biorąc pod uwagę wynik BIA (koszt przestoju: 78 000 PLN/dzień) i zasadę risk-based approach?",
-  "options": [
-    "Zakup dodatkowego antywirusa sygnaturowego z roczną subskrypcją, bo to najtańsze i najszybsze rozwiązanie dostępne od ręki",
-    "Wdrożenie immutable backup offline (air-gapped) — bo bez możliwości odtworzenia danych bez płacenia okupu, żadna inna kontrola nie chroni przed katastrofalnym wpływem ransomware na ciągłość biznesu",
-    "Przeprowadzenie szkolenia security awareness dla wszystkich pracowników, bo phishing jest wektorem nr 1 i eliminacja źródła eliminuje całe ryzyko",
-    "Zlecenie zewnętrznego audytu ISO 27001, bo certyfikacja wymusi wdrożenie wszystkich potrzebnych kontroli jednocześnie"
-  ],
-  "correct": 1,
-  "explanation": "Odpowiedź B jest poprawna z perspektywy risk-based approach. Ocena ryzyka 20/25 (krytyczne) i koszt przestoju 78 000 PLN/dzień wskazują, że WPŁYW (W=5) jest dominującym czynnikiem. Immutable backup offline bezpośrednio adresuje wpływ — nawet jeśli ransomware się powiedzie, organizacja odtwarza dane bez płacenia okupu (RTO < 1 dzień zamiast 9 dni). Odpowiedź A (antywirus sygnaturowy) nie chroni przed nowymi odmianami ransomware — Qakbot w case study był wykryty dopiero po 21 dniach. Odpowiedź C (szkolenia) redukuje prawdopodobieństwo (P), ale nie wpływ — jeśli jeden pracownik na 280 popełni błąd, ryzyko się zmaterializuje. Szkolenia to ważna kontrola, ale nie wystarczająca jako jedyna przy ocenie 20/25. Odpowiedź D (ISO 27001) to projekt długoterminowy (12-18 miesięcy) i compliance-driven, nie risk-driven — nie redukuje natychmiastowego ryzyka krytycznego. Risk-based approach nakazuje: adresuj najwyższy komponent ryzyka (W=5 → wpływ) najszybszą i najbardziej efektywną kosztowo kontrolą — a to właśnie backup offline."
+  "module": 2,
+  "title": "Zarządzanie ryzykiem cyberbezpieczeństwa",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Organizacja analizuje ryzyko wycieku danych klientów przez phishing. Prawdopodobieństwo oszacowano na 3/5, wpływ finansowy na 4/5. Jaki jest Risk Score i jak go interpretować?",
+      "options": [
+        "Score = 7 (3+4) — ryzyko wysokie, wymaga natychmiastowego działania",
+        "Score = 12 (3×4) — ryzyko wysokie (w skali 1-25), wymaga priorytetowego adresowania",
+        "Score = 1.3 (4/3) — ryzyko umiarkowane, można zaakceptować",
+        "Score = 34% (3/4×100%) — ryzyko poniżej progu akceptacji"
+      ],
+      "correct": 1,
+      "explanation": "Risk Score = Prawdopodobieństwo × Wpływ = 3 × 4 = 12. Skala 1–25: 1–5 Low, 6–10 Medium, 11–19 High, 20–25 Critical. Score 12 = High — wymaga priorytetowego działania (mitigation plan z deadlinem). Sumowanie (A) nie daje właściwej proporcji ryzyka — ryzyko 1×4=4 (Low-High) ≠ ryzyko 4×1=4 ale ich naturę trzeba różnicować właśnie przez iloczyn. Iloraz i procent (C,D) są nonsensowne jako miara ryzyka."
+    },
+    {
+      "id": 2,
+      "question": "Firma identyfikuje ryzyko: 'Utrata kluczowego pracownika IT który jako jedyny zna konfigurację systemów krytycznych'. Jak sklasyfikować to ryzyko według matrycy i jak je adresować?",
+      "options": [
+        "Ryzyko techniczne — naprawić przez backup konfiguracji systemów",
+        "Ryzyko operacyjne (People/Process gap) — adresować przez dokumentację, cross-training drugiego pracownika i procedury knowledge transfer",
+        "Ryzyko finansowe — zabezpieczyć ubezpieczeniem key person insurance",
+        "Ryzyko compliance — nie wymaga działania bo RODO nie obejmuje wiedzy pracowników"
+      ],
+      "correct": 1,
+      "explanation": "To ryzyko operacyjne z kategorii People: single point of failure w ludzkim komponencie. Właściwe adresowanie: dokumentacja konfiguracji (usuwa single point of knowledge), cross-training (drugi pracownik zna systemy), procedury onboarding/offboarding. Backup konfiguracji (A) adresuje tylko część — techniczną, nie wiedzę o procesach i decyzjach. Ubezpieczenie (C) to Transfer ryzyka finansowego, nie mitigation samego ryzyka operacyjnego. Compliance (D) nie ma związku z tym ryzykiem."
+    },
+    {
+      "id": 3,
+      "question": "Risk Treatment — organizacja analizuje ryzyko ataku DDoS na sklep online. Decyduje się kupić usługę ochrony DDoS od Cloudflare za 500 USD/miesiąc. Która strategia Risk Treatment to opisuje?",
+      "options": [
+        "Risk Avoidance — firma unika ryzyka przez wyłączenie sklepu online",
+        "Risk Transfer — firma przenosi ryzyko finansowe na Cloudflare przez płatną umowę SLA",
+        "Risk Mitigation — firma redukuje prawdopodobieństwo i wpływ ataku DDoS przez dodanie kontroli",
+        "Risk Acceptance — firma akceptuje ryzyko bo 500 USD/miesiąc jest kosztem zaakceptowanym"
+      ],
+      "correct": 2,
+      "explanation": "Risk Mitigation: firma REDUKUJE ryzyko DDoS przez dodanie kontroli (usługa Cloudflare). Nie eliminuje ryzyka całkowicie (DDoS nadal możliwy), ale zmniejsza prawdopodobieństwo skutecznego ataku i wpływ (Cloudflare absorbuje ruch). Risk Transfer (B) oznacza przeniesienie konsekwencji finansowych na inną stronę (np. ubezpieczenie wypłaca odszkodowanie gdy DDoS powoduje straty) — usługa ochrony nie wypłaca odszkodowania, tylko chroni. Risk Avoidance (A) = zaprzestanie działalności."
+    },
+    {
+      "id": 4,
+      "question": "W procesie zarządzania ryzykiem — na czym polega różnica między 'inherent risk' (ryzyko wrodzone) a 'residual risk' (ryzyko rezydualne)?",
+      "options": [
+        "Inherent risk dotyczy ryzyk wewnętrznych, residual risk — zewnętrznych",
+        "Inherent risk to ryzyko przed wdrożeniem kontroli, residual risk to ryzyko które pozostaje po wdrożeniu kontroli",
+        "Inherent risk to ryzyko finansowe, residual risk to ryzyko operacyjne",
+        "Są synonimami — oba opisują to samo ryzyko w różnych kontekstach"
+      ],
+      "correct": 1,
+      "explanation": "Inherent risk = ryzyko 'surowe' zanim zastosujemy jakiekolwiek kontrole. Residual risk = ryzyko które POZOSTAJE po zastosowaniu kontroli. Przykład: Phishing (inherent risk: Prawdopodob 4, Wpływ 5 = Score 20/Critical). Po wdrożeniu MFA + szkoleń + filtrowania e-mail: residual risk: Prawdopodob 2, Wpływ 3 = Score 6/Medium. Różnica (20→6) to 'Risk Reduction' osiągnięty przez kontrole. Zarząd akceptuje residual risk, nie inherent risk."
+    },
+    {
+      "id": 5,
+      "question": "CISO prezentuje Rejestr Ryzyka zarządowi. Ryzyko R-007 (cyberatak na systemy SCADA) ma Score 20/Critical ale zarząd decyduje: 'Akceptujemy to ryzyko — koszt mitygacji jest zbyt wysoki'. Co CISO powinien teraz zrobić?",
+      "options": [
+        "Usunąć R-007 z rejestru — skoro zaakceptowane, nie ma potrzeby śledzenia",
+        "Udokumentować decyzję Risk Acceptance z podpisem zarządu, zachować R-007 w rejestrze z etykietą 'Accepted' i datą przeglądu",
+        "Wdrożyć własne kontrole bez zgody zarządu, bo ryzyko jest zbyt wysokie",
+        "Eskalować do regulatora bo zarząd nie może akceptować ryzyku Critical"
+      ],
+      "correct": 1,
+      "explanation": "Risk Acceptance musi być świadoma i udokumentowana. CISO dokumentuje: opis ryzyka, score (20/Critical), uzasadnienie akceptacji (koszt vs benefit), kto zaakceptował (zarząd), data i data kolejnego przeglądu. R-007 POZOSTAJE w rejestrze — zaakceptowane ryzyko wciąż istnieje i musi być monitorowane. Usunięcie (A) stworzyłoby blind spot. Samowolne działanie (C) niszczy governance. Eskalacja do regulatora (D) jest nieproporcjonalna i nieprawidłowa — zarząd ma prawo akceptować ryzyka biznesowe."
+    },
+    {
+      "id": 6,
+      "question": "Firma ocenia ryzyko związane z korzystaniem z oprogramowania EOL (End of Life) — Windows Server 2012 na serwerze produkcyjnym. Jakie dwa ryzyka są najpoważniejsze w tym kontekście?",
+      "options": [
+        "Ryzyko prawne (naruszenie licencji) i ryzyko wizerunkowe (klienci mogą się dowiedzieć)",
+        "Ryzyko eksploitacji podatności bez możliwości patchy (brak wsparcia producenta) oraz ryzyko compliance (wiele regulacji wymaga wspieranego oprogramowania)",
+        "Ryzyko wydajnościowe (stary system działa wolniej) i ryzyko kompatybilności (nowe aplikacje mogą nie działać)",
+        "Ryzyko dostępności (system może się zawiesić) i ryzyko kosztowe (upgrade jest drogi)"
+      ],
+      "correct": 1,
+      "explanation": "EOL = koniec wsparcia bezpieczeństwa. Dwa kluczowe ryzyka: (1) Podatności bez patchy: gdy CVE zostanie odkryte dla WS2012, Microsoft nie wyda łatki — serwer pozostaje podatny na zawsze (np. EternalBlue dla WS2008 był exploitowany latami po EOL); (2) Compliance: PCI DSS wymąga 'supported software' (Req. 6.3), ISO 27001 i większość regulacji healthcare/finance też. EOL software to 'automatic finding' w każdym audycie."
+    },
+    {
+      "id": 7,
+      "question": "Threat Modeling (modelowanie zagrożeń) jest kluczowym elementem zarządzania ryzykiem dla nowych projektów IT. Kiedy NAJLEPIEJ przeprowadzić Threat Modeling?",
+      "options": [
+        "Po wdrożeniu systemu na produkcję — wtedy znamy wszystkie rzeczywiste zagrożenia",
+        "W fazie projektowania, zanim napisano kod — zmiany są najtańsze na tym etapie (Shift Left)",
+        "Wyłącznie po wykryciu incydentu bezpieczeństwa — jako analiza post-mortem",
+        "Raz w roku podczas corocznego przeglądu bezpieczeństwa"
+      ],
+      "correct": 1,
+      "explanation": "Threat Modeling powinien być w fazie projektowania (Shift Left). Koszt naprawy błędu bezpieczeństwa: Design = 1x, Code = 10x, QA = 30x, Produkcja = 100x+. Threat Modeling w design pozwala przebudować architekturę zanim napisano kod. Po wdrożeniu (A) — refaktoryzacja bezpieczeństwa jest ogromnie kosztowna. Post-mortem (C) — za późno, szkoda już się stała. Raz w roku (D) — za rzadko dla nowych projektów i zmian."
+    },
+    {
+      "id": 8,
+      "question": "Risk Appetite (apetyt na ryzyko) a Risk Tolerance (tolerancja ryzyka) — jaka jest różnica i kto je ustala w organizacji?",
+      "options": [
+        "Są synonimami — oba określają maksymalny poziom ryzyka który organizacja może ponieść",
+        "Risk Appetite to strategiczna deklaracja zarządu (ile ryzyka chcemy podjąć), Risk Tolerance to operacyjne limity (ile odchylenia od Appetite akceptujemy). Oba ustala zarząd/Rada Nadzorcza",
+        "Risk Appetite ustala CISO, Risk Tolerance ustala CEO — dotyczą różnych typów ryzyka",
+        "Risk Appetite to miara dla ryzyk finansowych, Risk Tolerance dla ryzyk operacyjnych"
+      ],
+      "correct": 1,
+      "explanation": "Risk Appetite = deklaracja strategiczna: 'Nasza organizacja akceptuje umiarkowane ryzyko cyberbezpieczeństwa dla wsparcia innowacji, ale zero tolerancji dla naruszeń danych klientów'. Risk Tolerance = operacyjne granice: 'Akceptujemy MTTD do 4h (Appetite), ale nie więcej niż 8h (Tolerance)'. Analogia: apetyt = dieta którą wybieramy, tolerancja = ile od diety możemy odejść zanim działamy. Oba ustala zarząd (governance) — CISO rekomenduje, zarząd zatwierdza."
+    },
+    {
+      "id": 9,
+      "question": "Firma stosuje Qualitative Risk Assessment (jakościowa ocena ryzyka). Jakie jest główne ograniczenie tej metody w porównaniu z Quantitative (FAIR)?",
+      "options": [
+        "Qualitative jest trudniejsza do przeprowadzenia i wymaga specjalistycznych narzędzi",
+        "Qualitative daje subiektywne oceny (High/Medium/Low) trudne do porównania i niemożliwe do bezpośredniego uzasadnienia budżetu — np. nie można powiedzieć 'ryzyko High = X PLN strat'",
+        "Qualitative nie może być używana dla ryzyk technicznych — tylko dla operacyjnych",
+        "Qualitative wymaga dostępu do danych historycznych incydentów z ostatnich 5 lat"
+      ],
+      "correct": 1,
+      "explanation": "Qualitative: prosta, szybka, nie wymaga danych — ale subiektywna. 'High' dla jednej osoby = 'Medium' dla innej. Nie daje kwoty w PLN — trudno uzasadnić inwestycję bezpieczeństwa zarządowi. Quantitative (FAIR): ALE = ARO × SLE daje konkretną liczbę (np. 300 000 PLN/rok) którą można wprost porównać z kosztem kontroli (100 000 PLN). Wyraźny ROI uzasadnia budżet. Qualitative nie wymaga danych historycznych (A, D) — FAIR ich wymaga. Qualitative jest prostsze (C)."
+    },
+    {
+      "id": 10,
+      "question": "Risk Register ma kolumnę 'Risk Owner' (właściciel ryzyka). Dla ryzyka 'Brak aktualizacji serwerów produkcyjnych — podatność na exploitację CVE', kto powinien być właścicielem?",
+      "options": [
+        "CISO — bo to ryzyko cyberbezpieczeństwa, zawsze należy do CISO",
+        "Osoba odpowiedzialna za systemy IT (IT Manager/CTO) — bo ma zasoby i uprawnienia do przeprowadzenia patch management",
+        "CEO — bo to ryzyko biznesowe dla całej organizacji",
+        "Właściciel ryzyka powinien być zawsze z zewnątrz (audytor) żeby był obiektywny"
+      ],
+      "correct": 1,
+      "explanation": "Właściciel ryzyka = osoba z UPRAWNIENIAMI i ZASOBAMI do adresowania ryzyka. Patch management serwerów = IT Manager/CTO który zarządza infrastrukturą, ma budżet na narzędzia i personel. CISO (A) zwykle identyfikuje i monitoruje ryzyko, ale nie ma operacyjnej odpowiedzialności za patching — to conflict of roles. CEO (C) = zbyt wysoki poziom dla operational risk. Audytor (D) = obiektywność jest ważna ale właściciel musi być wewnętrzny, z kontrolą nad zasobami. CISO może być Risk Manager, IT Manager jest Risk Owner."
+    }
+  ]
 }

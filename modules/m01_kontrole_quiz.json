@@ -1,11 +1,126 @@
 {
-  "question": "Firma posiada backup na serwerze NAS podpiętym do sieci korporacyjnej, politykę haseł, firewall i antywirus. Dochodzi do ataku ransomware — wszystkie dane zostają zaszyfrowane, łącznie z backupem. Która komórka matrycy 3×3 zawiodła jako pierwsza i spowodowała kaskadę pozostałych błędów?",
-  "options": [
-    "Prewencyjna-Techniczna — firewall i antywirus były niewystarczające jako pierwsza linia obrony",
-    "Detekcyjna-Techniczna — brak EDR/UEBA nie wykrył lateralnego przemieszczania atakującego przez tygodnie",
-    "Korekcyjna-Techniczna — backup online dostępny z sieci umożliwił jego zaszyfrowanie, eliminując możliwość szybkiego odtworzenia",
-    "Prewencyjna-Administracyjna — brak szkoleń i MFA umożliwił initial access przez phishing, który był punktem wejścia całego ataku"
-  ],
-  "correct": 3,
-  "explanation": "Choć wszystkie cztery komórki zawiodły, fundamentalną przyczyną było Prewencyjna-Administracyjna: brak MFA i szkoleń umożliwił phishing jako punkt wejścia (initial access). Bez tego pierwszego kroku żaden z pozostałych błędów nie miałby znaczenia. Edwards podkreśla, że w łańcuchu ataku najważniejsze jest zatrzymanie initial access — bo lateral movement, eskalacja uprawnień i deployment ransomware to konsekwencje, nie przyczyny. Opcja C (backup online) jest poważnym błędem, ale on nie umożliwił ataku — on tylko uniemożliwił szybkie odtworzenie. Opcja B (brak EDR) to drugi kluczowy błąd — dobre EDR wykryłoby anomalie przez atak. Ale bez D (phishing jako wejście) nic z tego by się nie wydarzyło."
+  "module": 1,
+  "title": "Podstawy kontroli bezpieczeństwa — matryca 3x3",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Firma ma backup na NAS podpiętym do sieci, politykę haseł, firewall i antywirus. Dochodzi do ataku ransomware — dane i backup zaszyfrowane. Która komórka matrycy 3×3 zawiodła jako pierwsza i spowodowała kaskadę?",
+      "options": [
+        "Prewencyjna-Techniczna — firewall i antywirus były niewystarczające",
+        "Detekcyjna-Techniczna — brak EDR nie wykrył lateral movement przez tygodnie",
+        "Korekcyjna-Techniczna — backup online umożliwił jego zaszyfrowanie",
+        "Prewencyjna-Administracyjna — brak MFA i szkoleń umożliwił phishing jako initial access"
+      ],
+      "correct": 3,
+      "explanation": "Choć wszystkie cztery komórki zawiodły, fundamentalną przyczyną była Prewencyjna-Administracyjna: brak MFA i szkoleń umożliwił phishing jako punkt wejścia. Bez initial access żaden z pozostałych błędów nie miałby znaczenia. Backup online (C) to poważny błąd Korekcyjny — ale nie umożliwił ataku, tylko uniemożliwił odtworzenie. Brak EDR (B) to drugi kluczowy błąd Detekcyjny. W łańcuchu ataku najważniejsze jest zatrzymanie initial access."
+    },
+    {
+      "id": 2,
+      "question": "Matryca kontroli bezpieczeństwa ma wymiary 3×3: trzy typy działania i trzy kategorie. Które z poniższych poprawnie opisuje obie osie tej matrycy?",
+      "options": [
+        "Oś pionowa: Techniczne/Proceduralne/Fizyczne; Oś pozioma: Prewencja/Detekcja/Korekcja",
+        "Oś pionowa: Wysoki/Średni/Niski (ryzyko); Oś pozioma: Ludzie/Procesy/Technologia",
+        "Oś pionowa: Wewnętrzne/Zewnętrzne/Hybrydowe; Oś pozioma: Planowanie/Wykonanie/Przegląd",
+        "Oś pionowa: Strategiczne/Taktyczne/Operacyjne; Oś pozioma: Zapobieganie/Wykrywanie/Reagowanie"
+      ],
+      "correct": 0,
+      "explanation": "Matryca 3×3 Edwardsa: oś pionowa (kategoria) = Techniczne/Proceduralne(Administracyjne)/Fizyczne; oś pozioma (typ działania) = Prewencja/Detekcja/Korekcja. Daje 9 komórek: np. Prewencyjna-Techniczna (firewall, MFA), Detekcyjna-Techniczna (EDR, SIEM), Korekcyjna-Techniczna (backup, patch management). Odpowiedź A jest prawidłowa — inne odpowiedzi mieszają różne frameworki (People/Process/Technology, PDCA)."
+    },
+    {
+      "id": 3,
+      "question": "Kontrola Detekcyjna-Administracyjna to kontrola która wykrywa incydenty przez procesy organizacyjne. Który przykład NAJLEPIEJ pasuje do tej komórki matrycy?",
+      "options": [
+        "System EDR wykrywający złośliwy proces na endpointach w czasie rzeczywistym",
+        "Audyt logów Active Directory przeprowadzany przez zespół bezpieczeństwa co miesiąc",
+        "Szkolenie pracowników jak rozpoznawać phishing",
+        "Firewall blokujący nieautoryzowany ruch sieciowy"
+      ],
+      "correct": 1,
+      "explanation": "Detekcyjna-Administracyjna = wykrywanie przez procesy i procedury organizacyjne. Audyt logów AD co miesiąc przez zespół = Detekcja (wykrywa) + Administracyjna (proces/procedura). EDR (A) = Detekcyjna-Techniczna (system techniczny). Szkolenie (C) = Prewencyjna-Administracyjna (zapobiega, nie wykrywa). Firewall (D) = Prewencyjna-Techniczna."
+    },
+    {
+      "id": 4,
+      "question": "Która para kontroli najlepiej ilustruje różnicę między Prewencją a Detekcją w kontekście zagrożenia phishingiem?",
+      "options": [
+        "Prewencja: resetowanie haseł po incydencie | Detekcja: szkolenie pracowników",
+        "Prewencja: filtr antyspam + szkolenia | Detekcja: monitorowanie alertów o logowaniach z nowych lokalizacji",
+        "Prewencja: SIEM korelujący zdarzenia | Detekcja: polityka silnych haseł",
+        "Prewencja: backup offline | Detekcja: firewall sieciowy"
+      ],
+      "correct": 1,
+      "explanation": "Prewencja ZATRZYMUJE atak zanim nastąpi: filtr antyspam (blokuje phishing zanim dotrze do użytkownika) + szkolenia (uczą jak rozpoznawać phishing). Detekcja WYKRYWA gdy atak już nastąpił: alert o logowaniu z nowej lokalizacji sygnalizuje że konto mogło zostać przejęte po kliknięciu linku phishingowego. Backup (D) to Korekcja, SIEM (C) to Detekcja, polityka haseł (C) to Prewencja."
+    },
+    {
+      "id": 5,
+      "question": "Firma wdraża MFA dla wszystkich kont, szkolenia co kwartał i filtrowanie e-maili. Które komórki matrycy 3×3 są zaadresowane przez te trzy kontrole?",
+      "options": [
+        "Wyłącznie Prewencyjna-Techniczna, bo MFA jest rozwiązaniem technicznym",
+        "MFA: Prewencyjna-Techniczna | Szkolenia: Prewencyjna-Administracyjna | Filtrowanie e-mail: Prewencyjna-Techniczna",
+        "Wszystkie trzy to Detekcyjne, bo ostrzegają użytkownika o zagrożeniu",
+        "MFA: Korekcyjna-Techniczna | Szkolenia: Detekcyjna-Administracyjna | Filtrowanie: Korekcyjna-Techniczna"
+      ],
+      "correct": 1,
+      "explanation": "MFA = Prewencyjna-Techniczna (techniczne zabezpieczenie ZAPOBIEGAJĄCE przejęciu konta). Szkolenia = Prewencyjna-Administracyjna (program organizacyjny ZAPOBIEGAJĄCY kliknięciu w phishing). Filtrowanie e-mail = Prewencyjna-Techniczna (system techniczny BLOKUJĄCY dostarczenie phishingu). Wszystkie trzy są Prewencyjne — zaadresowana jest tylko jedna kolumna matrycy (Prewencja). Firma powinna uzupełnić Detekcję i Korekcję."
+    },
+    {
+      "id": 6,
+      "question": "Kontrola Korekcyjna-Fizyczna dotyczy przywracania sprawności przez działania fizyczne po incydencie. Który przykład najlepiej opisuje tę kategorię?",
+      "options": [
+        "Przywrócenie danych z backupu po ataku ransomware",
+        "Zastąpienie uszkodzonego serwera nowym urządzeniem po awarii sprzętu",
+        "Izolacja zainfekowanej stacji roboczej od sieci przez wyciągnięcie kabla",
+        "Zmiana hasła administratora po wykryciu nieautoryzowanego dostępu"
+      ],
+      "correct": 1,
+      "explanation": "Korekcyjna-Fizyczna = naprawienie FIZYCZNEGO komponentu po incydencie. Zastąpienie serwera (B) = Korekcja (przywraca sprawność) + Fizyczna (fizyczne urządzenie). Backup/restore (A) = Korekcyjna-Techniczna (przywraca dane cyfrowe). Izolacja przez wyciągnięcie kabla (C) = Detekcyjna/Korekcyjna-Fizyczna (ale głównie to Containment, nie Korekcja). Zmiana hasła (D) = Korekcyjna-Administracyjna."
+    },
+    {
+      "id": 7,
+      "question": "Edwards podkreśla że 'defence in depth' (obrona wielowarstwowa) jest kluczowym uzasadnieniem matrycy 3×3. Co to pojęcie oznacza w praktyce dla organizacji?",
+      "options": [
+        "Kupowanie jak najdroższych narzędzi bezpieczeństwa żeby mieć najlepszą ochronę",
+        "Wdrożenie wielu nakładających się warstw kontroli tak, że przełamanie jednej nie powoduje całkowitego kompromisu",
+        "Skupienie wszystkich zasobów na prewencji, bo zapobieganie jest tańsze niż naprawa",
+        "Zatrudnienie jak największego zespołu SOC do monitorowania zagrożeń 24/7"
+      ],
+      "correct": 1,
+      "explanation": "Defence in depth = wielowarstwowość: nawet jeśli atakujący pokona jedną warstwę (np. przejdzie przez filtr e-mail), kolejna (EDR) go wykryje, a następna (backup) umożliwi odtworzenie. Jedna komórka matrycy to jedna warstwa. Firma z samą Prewencją bez Detekcji i Korekcji nie ma głębokiej obrony. Drogi sprzęt (A) nie daje głębokości jeśli jest w jednej kategorii. Skupienie tylko na prewencji (C) tworzy 'single point of failure'."
+    },
+    {
+      "id": 8,
+      "question": "SIEM to system który koreluje zdarzenia z wielu źródeł i generuje alerty. Do której komórki matrycy 3×3 należy SIEM jako kontrola?",
+      "options": [
+        "Prewencyjna-Techniczna — SIEM blokuje ataki zanim nastąpią",
+        "Detekcyjna-Techniczna — SIEM wykrywa incydenty przez analizę logów z systemów technicznych",
+        "Korekcyjna-Administracyjna — SIEM pomaga w odtwarzaniu po incydentach",
+        "Detekcyjna-Fizyczna — SIEM monitoruje fizyczny dostęp do serwerowni"
+      ],
+      "correct": 1,
+      "explanation": "SIEM = Detekcyjna-Techniczna. Detekcyjna: SIEM WYKRYWA (nie blokuje) — generuje alerty na podstawie korelacji zdarzeń. Techniczna: SIEM jest systemem IT działającym automatycznie. SIEM nie zapobiega atakom (to nie firewall), nie przywraca sprawności (to nie backup) i nie jest Fizyczny (nie monitoruje kamer ani kart dostępu — chyba że te logi są do niego przesyłane)."
+    },
+    {
+      "id": 9,
+      "question": "Firma przeprowadziła audyt i stwierdziła, że ma rozbudowaną Prewencję i Detekcję, ale słabą Korekcję. Które działania najszybciej wypełnią tę lukę?",
+      "options": [
+        "Wdrożenie dodatkowego firewalla nowej generacji i aktualizacja polityk bezpieczeństwa",
+        "Przetestowany backup offline (Korekcyjna-Techniczna), plan IR z wyznaczonymi rolami (Korekcyjna-Administracyjna) i procedura przywracania systemów (Korekcyjna-Proceduralna)",
+        "Uruchomienie dodatkowego SIEM-a i zwiększenie częstotliwości skanowania podatności",
+        "Przeprowadzenie dodatkowych szkoleń phishingowych dla pracowników"
+      ],
+      "correct": 1,
+      "explanation": "Korekcja (Recovery) = co robimy PO incydencie: backup (Korekcyjna-Techniczna), Incident Response Plan z rolami (Korekcyjna-Administracyjna), procedury przywracania (Korekcyjna-Proceduralna). Firewall (A) = Prewencyjna-Techniczna (więcej prewencji, nie korekcji). Dodatkowy SIEM (C) = Detekcyjna-Techniczna (więcej detekcji). Szkolenia phishingowe (D) = Prewencyjna-Administracyjna. Firma musi inwestować w prawy kolumny matrycy."
+    },
+    {
+      "id": 10,
+      "question": "Control Objective to cel który kontrola ma osiągnąć, a nie sama kontrola. Jaki jest Control Objective dla MFA?",
+      "options": [
+        "Wdrożenie aplikacji Microsoft Authenticator na wszystkich urządzeniach firmowych",
+        "Uniemożliwienie nieautoryzowanego dostępu do systemów nawet gdy hasło zostało skradzione lub wyciekło",
+        "Zmniejszenie liczby ticketów helpdesk dotyczących resetowania haseł",
+        "Spełnienie wymagania 6.3 z CIS Controls dotyczącego zewnętrznych aplikacji"
+      ],
+      "correct": 1,
+      "explanation": "Control Objective = CEL BIZNESOWY kontroli, nie jej implementacja. Cel MFA: zapobiec nieautoryzowanemu dostępowi gdy hasło jest skompromitowane. Microsoft Authenticator (A) = implementacja (jak osiągamy cel), nie cel. Redukcja ticketów helpdesk (C) = efekt uboczny, nie cel bezpieczeństwa. Wymaganie CIS (D) = compliance, nie cel. Edwards podkreśla: zawsze definiuj 'po co?' zanim wybierzesz 'co?' — Control Objective odpowiada na 'po co?'."
+    }
+  ]
 }

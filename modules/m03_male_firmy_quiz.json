@@ -1,11 +1,126 @@
 {
-  "question": "Tomasz jest jedynym administratorem IT w ButikPL (28 pracowników, sklep WooCommerce). Ma budżet 15 000 PLN i może wdrożyć kontrole w ciągu 30 dni. Audyt ujawnił: brak MFA (28 kont), WooCommerce z 14 krytycznymi CVE (nieaktualizowany 23 miesiące), backup w niesynchronizowanym Dropboxie, sieć WiFi bez segmentacji. Które TWO działania powinien wdrożyć NAJPIERW, korzystając z zasady cost-effective risk-based approach dla małej firmy?",
-  "options": [
-    "Kupić platformę SIEM (Wazuh self-hosted) i zatrudnić zewnętrzną firmę do konfiguracji — monitoring 24/7 wykryje każdy atak zanim wyrządzi szkodę",
-    "Włączyć MFA w Google Workspace (koszt: 0 PLN, czas: 1 dzień) ORAZ zaktualizować WooCommerce (koszt: 0 PLN, czas: 3 godziny) — eliminuje dwa krytyczne ryzyka przy zerowym koszcie finansowym",
-    "Wdrożyć pełne EDR CrowdStrike na wszystkich urządzeniach i przeprowadzić zewnętrzny penetration test — zanim zrobimy cokolwiek innego musimy wiedzieć pełny obraz zagrożeń",
-    "Natychmiast zbudować formalny rejestr ryzyk z pełną taksonomią i przeprowadzić Business Impact Analysis — bez dokumentacji risk-based approach nie można podejmować żadnych decyzji"
-  ],
-  "correct": 1,
-  "explanation": "Odpowiedź B jest poprawna zgodnie z zasadą cost-effective, risk-based approach dla małej firmy (Edwards, rozdział 3). Dwa działania — MFA i aktualizacja WooCommerce — mają najwyższy stosunek wpływu do kosztu: oba kosztują 0 PLN i eliminują największe ryzyka (phishing/credential theft i exploitation znanych CVE). MFA blokuje >99,9% ataków na przejęte hasła (dane Microsoft). WooCommerce z 14 krytycznymi CVE to tykająca bomba — publicznie dostępne exploity oznaczają że każdy skrypt-kiddie może zaatakować. Odpowiedź A (SIEM) jest błędna — SIEM wymaga kompetencji do operowania i jest najlepszą kontrolą detekcyjną, ale bezużyteczny bez prewencji. Przy jednym administratorze bez czasu SIEM generuje alert fatigue. Odpowiedź C (EDR + pentest) — pentest jest wartościowy, ale NAJPIERW należy zamknąć znane, krytyczne luki. Pentest przeprowadzony przed aktualizacją WooCommerce to marnowanie budżetu — atakujący użyje znanych CVE, nie będzie szukał zero-days. Odpowiedź D (rejestr ryzyk) — dokumentacja jest ważna, ale Edwards wyraźnie mówi że dla małej firmy 20-minutowa nieformalna ocena ryzyk wystarczy jako punkt startowy. Formalny rejestr ryzyk przed zamknięciem krytycznych podatności to odwrócenie priorytetów."
+  "module": 3,
+  "title": "Cyberbezpieczeństwo małych i średnich firm",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Mała firma (15 pracowników, brak działu IT) pyta od czego zacząć z cyberbezpieczeństwem przy budżecie 5 000 PLN. Które trzy działania przyniosą największy ROI bezpieczeństwa?",
+      "options": [
+        "Zakup drogiego NGFW, wdrożenie SIEM i zatrudnienie analityka SOC",
+        "MFA dla wszystkich kont (koszt: 0 PLN z Microsoft 365), backup offline co tydzień (tani NAS + dysk zewnętrzny), i szkolenie phishingowe (GoPhish — bezpłatny)",
+        "Certyfikacja ISO 27001 jako pierwszy krok — daje strukturę całemu programowi",
+        "Zakup oprogramowania antywirusowego dla wszystkich stacji i serwera firewall"
+      ],
+      "correct": 1,
+      "explanation": "Dla firmy 15-osobowej bez IT: MFA (wbudowane w Microsoft 365/Google Workspace = 0 PLN) blokuje 99.9% ataków credential — najwyższy ROI. Backup offline (NAS + dysk USB bez połączenia z siecią, ~1500 PLN) chroni przed ransomware — możliwość odtworzenia bez płacenia okupu. GoPhish (bezpłatny) + własne szkolenie eliminuje najczęstszy wektor initial access. ISO 27001 (C) i SIEM (A) to inwestycje na poziom 50+ pracowników z zespołem IT."
+    },
+    {
+      "id": 2,
+      "question": "Zasada 'Security by Default' mówi że systemy powinny być domyślnie skonfigurowane bezpiecznie. Który przykład ŁAMIE tę zasadę?",
+      "options": [
+        "Router dostarczony przez ISP z hasłem 'admin/admin' jako domyślnym — administrator musi je zmienić przy pierwszym logowaniu",
+        "Microsoft 365 wymagający włączenia MFA jako obowiązkowego przy konfiguracji nowego tenanta",
+        "Nowo zainstalowany system Linux z wyłączonymi niepotrzebnymi usługami domyślnie",
+        "Firewall z regułą 'deny all' jako domyślną i dodawaniem dozwolonych połączeń ręcznie"
+      ],
+      "correct": 0,
+      "explanation": "Router z domyślnym hasłem 'admin/admin' ŁAMIE Security by Default — wymaga aktywnego działania admina żeby było bezpieczne. Security by Default: system STARTUJE w bezpiecznym stanie. Hasło domyślne admin/admin = niemal każdy może się zalogować z całego internetu. M365 wymagający MFA (B) = właściwy Security by Default. Linux bez niepotrzebnych usług (C) = Security by Default. Deny-all firewall (D) = Security by Default."
+    },
+    {
+      "id": 3,
+      "question": "Firma 45-osobowa korzysta z zewnętrznej obsługi IT (MSP). Incydent: pracownik otworzył phishing, ransomware szyfruje dane. MSP twierdzi że 'to problem klienta'. Dlaczego ta sytuacja wskazuje na brak właściwego TPRM?",
+      "options": [
+        "MSP zawsze ponosi pełną odpowiedzialność za bezpieczeństwo klientów — brak odpowiedzialności MSP to naruszenie prawa",
+        "Umowa z MSP powinna zawierać SLA bezpieczeństwa, zakres usług (monitoring, patch management, backup), oraz procedury IR — ich brak to luka w TPRM firmy",
+        "Firma powinna zrezygnować z MSP i zatrudnić własny dział IT — outsourcing IT zawsze jest ryzykowny",
+        "TPRM dotyczy tylko dostawców SaaS, nie firm IT"
+      ],
+      "correct": 1,
+      "explanation": "TPRM (Third-Party Risk Management) obejmuje wszystkich dostawców z dostępem do systemów — w tym MSP. Właściwa umowa z MSP powinna precyzować: co MSP monitoruje (logi, alerty), co MSP aktualizuje (patch management), czy MSP zarządza backupami i jak je testuje, czas reakcji na incydent (SLA). Bez tych klauzul umownych MSP może powiedzieć 'nie nasze' — i mieć rację kontraktowo. TPRM chroni firmę: definiuje oczekiwania przed podpisaniem umowy, nie po incydencie."
+    },
+    {
+      "id": 4,
+      "question": "Reguła 3-2-1 dla backupów. Firma ma serwer plików z danymi klientów, backup na NAS w tej samej serwerowni i kopię na chmurze Azure. Czy spełnia regułę 3-2-1?",
+      "options": [
+        "Tak — dane są w 3 miejscach (serwer + NAS + Azure), na 2 mediach (dysk + chmura), z 1 kopią offsite (Azure)",
+        "Nie — reguła 3-2-1 wymaga że jedna kopia musi być fizycznie offline (air-gapped), a NAS podłączony do sieci nie jest offline",
+        "Tak, ale tylko jeśli backup Azure jest szyfrowany",
+        "Nie — reguła 3-2-1 wymaga 3 kopii na 3 różnych mediach, a firma ma tylko 2 media"
+      ],
+      "correct": 0,
+      "explanation": "Firma SPEŁNIA klasyczną regułę 3-2-1: 3 kopie (oryginał na serwerze + NAS + Azure), 2 różne media (dysk lokalny + chmura), 1 kopia offsite (Azure = poza serwerownią). Odpowiedź B opisuje rozszerzoną regułę 3-2-1-1-0 (dodatkowy wymóg offline/air-gapped) — jest lepsza ale nie jest klasyczną 3-2-1. Firma spełnia 3-2-1 ale powinna rozważyć dodatkową kopię offline dla ochrony przed ransomware który może dosięgnąć NAS przez sieć."
+    },
+    {
+      "id": 5,
+      "question": "Phishing email jest głównym wektorem initial access dla ponad 80% incydentów. Które z poniższych działań NAJSKUTECZNIEJ zmniejsza ryzyko phishingu w małej firmie?",
+      "options": [
+        "Instalacja antywirusa na każdym komputerze — wykryje złośliwe załączniki",
+        "Kombinacja: filtr antyspam (Google Workspace/M365 wbudowany), DMARC policy=reject dla domeny firmy, szkolenia quarterly i MFA — warstwy prewencji i detekcji",
+        "Zakaz używania poczty e-mail — przejście wyłącznie na komunikatory wewnętrzne",
+        "Wymaganie że każdy e-mail od zewnętrznego nadawcy musi być zatwierdzony przez IT przed dostarczeniem"
+      ],
+      "correct": 1,
+      "explanation": "Wielowarstwowa ochrona przed phishingiem: (1) Filtr antyspam M365/Google = blokuje ~90% phishingu zanim dotrze do skrzynki; (2) DMARC p=reject = chroni markę firmy przed spoofingiem (klienci nie dostają phishingu 'od firmy'); (3) Szkolenia quarterly + symulacje GoPhish = wykrywa kto kliknie; (4) MFA = nawet jeśli pracownik kliknie i poda hasło, atakujący nie zaloguje się bez drugiego składnika. Antywirus (A) jest jedną warstwą — nie wystarczy. Zakaz e-maila (C) = nierealny biznesowo."
+    },
+    {
+      "id": 6,
+      "question": "Firma chce wdrożyć politykę BYOD (Bring Your Own Device). Jakie MINIMUM wymagań bezpieczeństwa powinna zawierać taka polityka?",
+      "options": [
+        "Wymaganie zainstalowania firmowego antywirusa na prywatnym urządzeniu — wystarczy",
+        "MDM enrollment (Mobile Device Management) z możliwością zdalnego wymazania danych firmowych, szyfrowanie urządzenia, aktualne OS, PIN/biometria, dostęp tylko przez VPN do zasobów firmowych",
+        "Zakaz BYOD dla stanowisk mających dostęp do danych klientów — jedyna bezpieczna opcja",
+        "Podpisanie deklaracji przez pracownika że rozumie zasady — to wystarczy jako polityka BYOD"
+      ],
+      "correct": 1,
+      "explanation": "Minimum BYOD: (1) MDM z możliwością remote wipe danych firmowych (nie całego urządzenia) — gdy pracownik odchodzi lub urządzenie zaginie; (2) Szyfrowanie — dane firmowe szyfrowane lokalnie; (3) Aktualne OS — brak EOL; (4) PIN/biometria — nie leży odblokowany; (5) VPN/Conditional Access — dostęp do zasobów firmowych tylko przez kontrolowany tunel. Sama deklaracja (D) to paper security. Zakaz BYOD (C) jest opcją ale nie jedyną bezpieczną. Sam antywirus (A) nie chroni danych na urządzeniu prywatnym."
+    },
+    {
+      "id": 7,
+      "question": "Mała firma otrzymuje fakturę z żądaniem pilnej płatności 85 000 PLN na 'nowe konto bankowe' — e-mail wygląda jakby pochodził od dyrektora finansowego. To typowy atak BEC (Business Email Compromise). Jakie kontrole PREWENCYJNE mogłyby zapobiec temu atakowi?",
+      "options": [
+        "Lepszy antywirus który wykryje złośliwy e-mail",
+        "Polityka weryfikacji telefonicznej dla przelewów powyżej ustalonego progu (np. 10 000 PLN) na nowy rachunek, DMARC p=reject dla domeny firmy, szkolenie pracowników finansowych z rozpoznawania BEC",
+        "Firma powinna przestać używać przelewów bankowych — przejść na gotówkę",
+        "Ubezpieczenie cyber pokryje straty z BEC więc nie trzeba innych kontroli"
+      ],
+      "correct": 1,
+      "explanation": "BEC (Business Email Compromise) jest trudny do wykrycia technicznie — e-mail może być perfekcyjny, bez złośliwego kodu. Kontrole prewencyjne: (1) Polityka weryfikacji telefonicznej = pracownik dzwoni pod znany numer dyrektora finansowego (nie z e-maila!) przed realizacją przelewu — eliminuje ryzyko bez względu na jakość phishingu; (2) DMARC p=reject = atakujący nie może podszywać się pod domenę firmy; (3) Szkolenie = rozpoznanie czerwonych flag ('pilne', 'nowe konto'). Antywirus (A) nie pomaga bo nie ma złośliwego kodu."
+    },
+    {
+      "id": 8,
+      "question": "Firma 30-osobowa planuje wdrożyć menedżer haseł dla pracowników. Jakie są KLUCZOWE wymagania bezpieczeństwa dla takiego narzędzia?",
+      "options": [
+        "Wystarczy że narzędzie jest darmowe i popularne — np. przeglądarkowy menedżer haseł Chrome",
+        "Szyfrowanie end-to-end (klucze tylko u użytkownika), możliwość zarządzania przez admina (onboarding/offboarding), wspierany przez producenta, możliwość wymuszenia długich unikalnych haseł dla każdego serwisu",
+        "Menedżer haseł jest zbędny jeśli firma używa SSO — jedno hasło do wszystkiego wystarczy",
+        "Wystarczy zapisywanie haseł w zaszyfrowanym arkuszu Excel przechowywanie na udziale sieciowym"
+      ],
+      "correct": 1,
+      "explanation": "Menedżer haseł dla firm: (1) E2E szyfrowanie = serwer producenta nie widzi haseł; (2) Admin panel = możliwość offboardingu pracownika (usunięcie dostępu), przeglądu shared credentials; (3) Aktywne wsparcie = aktualizacje bezpieczeństwa; (4) Generowanie unikalnych długich haseł = eliminuje password reuse. Chrome password manager (A) = dobre dla osobistego użytku, brak kontroli admina. SSO (C) rozwiązuje uwierzytelnianie do systemów firmowych, nie do zewnętrznych serwisów. Excel (D) = szyfrowanie jest słabe, brak audytu dostępu."
+    },
+    {
+      "id": 9,
+      "question": "Firma 25-osobowa zakończyła rok z jednym incydentem bezpieczeństwa (błąd ludzki, ograniczony wpływ). Zarząd mówi: 'Zero poważnych incydentów — nie musimy inwestować w bezpieczeństwo'. Jaki błąd myślenia to ilustruje i jak CISO powinien odpowiedzieć?",
+      "options": [
+        "Zarząd ma rację — brak incydentów to dowód że obecny poziom bezpieczeństwa jest wystarczający",
+        "To błąd base rate neglect i survivorship bias — brak incydentów to nie dowód bezpieczeństwa, lecz brak wykrytych incydentów. Trzeba pokazać ryzyko przez metryki (otwarte CVE, brak MFA) i ALE (roczna oczekiwana strata)",
+        "Brak incydentów oznacza że firma ma dobre szczęście — należy szybko inwestować zanim szczęście się skończy",
+        "CISO powinien sfabublikować raport o potencjalnych incydentach żeby uzasadnić budżet"
+      ],
+      "correct": 1,
+      "explanation": "Błąd myślenia: 'brak wykrytych incydentów = brak incydentów = jesteśmy bezpieczni'. Paradoks bezpieczeństwa: sukces wygląda jak 'nic się nie stało'. Odpowiedź CISO: (1) Leading indicators: ile systemów bez MFA? ile Critical CVE otwartych >30 dni? — te liczby istnieją niezależnie od incydentów; (2) ALE: 'Nasze ryzyko to szacowane 800 000 PLN/rok strat — kontrole za 95 000 PLN redukują je o 70%'; (3) Analogia: brak pożaru nie oznacza że nie potrzeba gaśnic. Metryki pokazują ryzyko przyszłe (leading), nie tylko przeszłe (lagging)."
+    },
+    {
+      "id": 10,
+      "question": "Firma pyta: 'Kiedy powinniśmy zlecić zewnętrzny test penetracyjny?' Który scenariusz NAJLEPIEJ uzasadnia potrzebę pentesting?",
+      "options": [
+        "Nigdy — pentesting jest zbędny jeśli firma ma aktualny antywirus i firewall",
+        "Przed wdrożeniem nowego systemu e-commerce obsługującego płatności kartą, po znaczącej zmianie architektury sieci, lub jeśli wymagają tego regulacje (PCI DSS)",
+        "Co 10 lat — systemy zmieniają się wolno więc rzadkie testy wystarczą",
+        "Tylko gdy doszło do incydentu bezpieczeństwa — pentesting jako forensics po fakcie"
+      ],
+      "correct": 1,
+      "explanation": "Pentest uzasadniony gdy: (1) Nowy system obsługujący wrażliwe dane/płatności — sprawdź zanim wdrożysz na produkcję; (2) Znacząca zmiana architektury — nowe komponenty mogą wprowadzić podatności; (3) Wymagania regulacyjne — PCI DSS Level 1/2 wymaga rocznego pentesting. Pentest NIE zastępuje skanowania CVE (automatyczne, ciągłe) — uzupełnia je testowaniem rzeczywistych wektorów ataku. Antywirus (A) to inna kontrola. Co 10 lat (C) = za rzadko w dynamicznym środowisku. Forensics post-incident (D) to IR/Forensics, nie pentest."
+    }
+  ]
 }
