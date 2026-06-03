@@ -1,0 +1,76 @@
+{
+  "module": 14,
+  "title": "Bezpieczeństwo łańcucha dostaw",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Co to jest Supply Chain Attack i czym różni się od bezpośredniego ataku?",
+      "options": ["Atak na firmę logistyczną dostarczającą towary", "Zamiast atakować ofiarę bezpośrednio (trudne), atakujący kompromituje zaufanego dostawcę, bibliotekę lub komponent — dostęp przez stronę trzecią którą ofiara ufa. SolarWinds: zamiast atakować 18 000 firm, skompromitowano jeden update serwer SolarWinds", "Atak przez łańcuch e-maili (chain mail)", "Atak na wewnętrzne systemy dostawcy ERP"],
+      "correct": 1,
+      "explanation": "Supply Chain Attack exploituje zaufanie. Logika: jeśli A jest trudna do bezpośredniego ataku ale ufa B, to atak na B = dostęp do A. SolarWinds SUNBURST (2020): złośliwy kod wstrzyknięty w proces buildowania oprogramowania → 18 000 organizacji pobrało zainfekowany update → w tym US Treasury, Microsoft, FireEye. Kaseya VSA (2021): atak na oprogramowanie do zarządzania IT → ransomware wdrożony u 1500 klientów MSP. Trudność: musisz ufać dostawcom — ale ta ufność może być exploitowana."
+    },
+    {
+      "id": 2,
+      "question": "Czym jest SBOM i jaki problem rozwiązuje podczas incydentu Log4Shell?",
+      "options": ["System Backup and Operations Manual — instrukcja odtwarzania systemu", "Software Bill of Materials — maszynowo-czytelny spis komponentów oprogramowania (biblioteki, wersje, zależności). Podczas Log4Shell: organizacje z SBOM znalazły podatne aplikacje w 15 minut; bez SBOM — dni lub tygodnie szukania", "Specyfikacja budżetu oprogramowania", "Security Breach Operations Manual"],
+      "correct": 1,
+      "explanation": "SBOM to 'lista składników' oprogramowania. Log4Shell (CVSS 10.0, grudzień 2021): pytanie brzmiało 'które z naszych 200 aplikacji używa log4j-core <2.15.0?' Organizacje z SBOM: jednolinijkowe query → lista w minuty → priorytetyzacja. Organizacje bez SBOM: ręczne przeszukiwanie pom.xml, requirements.txt, Dockerfiles dla setek aplikacji → chaos przez dni. US Executive Order 14028 (2021) wymaga SBOM dla software sprzedawanego rządowi USA właśnie z tego powodu."
+    },
+    {
+      "id": 3,
+      "question": "Czym jest Dependency Confusion attack i jak mu zapobiec?",
+      "options": ["Mylenie nazw pakietów przez developera — błąd ludzki", "Atakujący publikuje złośliwy pakiet w publicznym registry (npm, PyPI) o tej samej nazwie co wewnętrzny pakiet firmy — menedżer pakietów preferuje publiczny (wyższa wersja). Zapobieganie: scoped packages, private registry mirror, pinning wersji", "Konflikt między dwoma wersjami tej samej zależności", "Atak na serwer DNS który obsługuje pobieranie pakietów"],
+      "correct": 1,
+      "explanation": "Dependency Confusion: firma ma wewnętrzny pakiet `mycompany-utils` w prywatnym registry. Atakujący publikuje `mycompany-utils` w publicznym npm z wyższą wersją (100.0.0 vs wewnętrzna 1.5.0). pip/npm preferuje publiczną — pobiera złośliwy pakiet. Zapobieganie: (1) Namespace/scoped packages (`@mycompany/utils` w npm — trudniejsze do squatowania); (2) Zablokowanie lookup do public registry dla wewnętrznych nazw; (3) Pinning konkretnych wersji z hash verification; (4) Private registry mirror (Artifactory, Nexus) jako jedyne źródło."
+    },
+    {
+      "id": 4,
+      "question": "Co to jest pinning zależności i dlaczego jest ważny dla bezpieczeństwa pipeline?",
+      "options": ["Ustawianie priorytetu wykonania zależności", "Zablokowanie zależności na konkretną wersję lub hash zamiast `>=2.0` — zapobiega nieoczekiwanemu pobraniu nowej, potencjalnie złośliwej wersji biblioteki lub akcji CI/CD", "Technologia przypinania kluczy kryptograficznych", "Metoda optymalizacji ładowania zależności"],
+      "correct": 1,
+      "explanation": "Pinning: zamiast `requests>=2.0` (pobierz cokolwiek >=2.0) użyj `requests==2.28.1` (tylko dokładnie ta wersja). Dlaczego bezpieczniejsze: jeśli maintainer repozytorium zostanie skompromitowany i wyda requests 2.28.2 z backdoorem, twoja aplikacja NIE pobierze automatycznie. Dla GitHub Actions: zamiast `@v3` (tag zmienialny) użyj `@sha256:abc...` (immutable hash). Wyjście poza pinning wymaga świadomej decyzji (update PR), nie dzieje się automatycznie."
+    },
+    {
+      "id": 5,
+      "question": "Firma ocenia nowego dostawcę SaaS który będzie przetwarzał dane klientów. Jakie dokumenty powinna wymagać?",
+      "options": ["Referencje od innych klientów i prezentacja sprzedażowa", "SOC 2 Type II (lub ISO 27001) nie starszy niż 1 rok + DPA (Data Processing Agreement) zgodny z RODO + security questionnaire (SIG lub CAIQ) + informacja o subprocesorach", "Wystarczy że dostawca jest znany na rynku i ma dobre opinie", "Roczne sprawozdanie finansowe potwierdzające stabilność"],
+      "correct": 1,
+      "explanation": "Due diligence dla krytycznego dostawcy SaaS: (1) SOC 2 Type II lub ISO 27001 — niezależna weryfikacja kontroli bezpieczeństwa (nie starszy niż rok!); (2) DPA — wymagany przez RODO art. 28 dla każdego przetwarzającego dane; (3) Security questionnaire — pytania o szyfrowanie, IAM, backup, IR; (4) Subprocesors — kto jeszcze ma dostęp do Twoich danych? (np. AWS, support tools); (5) Prawo do audytu lub pentest raport. Weryfikacja certyfikatów powinna być roczna — certyfikat wygasł = ponowna ocena."
+    },
+    {
+      "id": 6,
+      "question": "Czym jest SLSA Level 3 i jaką gwarancję daje?",
+      "options": ["Certyfikat jakości oprogramowania Level 3", "Hermetic build — build jest izolowany od zewnętrznych wpływów, powtarzalny, z audytem. Gwarancja: kod który wychodzi z buildu jest dokładnie tym co weszło; żaden zewnętrzny czynnik (w tym atakujący z dostępem do sieci) nie mógł zmodyfikować artefaktu", "Trzeci poziom skanowania SAST", "Licencja dla oprogramowania klasy enterprise"],
+      "correct": 1,
+      "explanation": "SLSA (Supply-chain Levels for Software Artifacts) to framework Google/CISA: L1 (build skryptowany) → L2 (kontrolowane CI z audytem) → L3 (hermetic build: izolowany od internetu podczas buildowania, pełny audit log, materiały buildowe podpisane kryptograficznie) → L4 (dwuosobowe zatwierdzenie). SolarWinds był naruszeniem procesu build — SLSA L3 znacznie utrudniłoby taki atak bo build nie miałby dostępu do internetu i każda zmiana byłaby auditowana. GitHub Actions SLSA generator automatycznie produkuje dowody SLSA L1/L2."
+    },
+    {
+      "id": 7,
+      "question": "Kaseya VSA (2021) — atak ransomware przez oprogramowanie do zarządzania IT dotknął 1500 firm. Co to pokazuje o zagrożeniu MSP/MSSP?",
+      "options": ["MSP są bezpiecznym pośrednikiem — atak na MSP nie dotyczy klientów", "MSP/MSSP z dostępem do wielu klientów jednocześnie są 'multiplikatorem' ataku — kompromitacja jednego dostawcy = dostęp do setek klientów. Firmy powinny oceniać bezpieczeństwo swoich MSP tak samo rygorystycznie jak własne", "Tylko duże firmy są celem supply chain ataków", "Kaseya był błędem pracownika, nie atakiem supply chain"],
+      "correct": 1,
+      "explanation": "MSP paradoks: im lepszy MSP (zarządza większą liczbą klientów), tym cenniejszy cel. REvil zaatakował Kaseya VSA (narzędzie zarządzające setkami klientów MSP jednocześnie) → jeden exploit → push złośliwego update do wszystkich klientów → ransomware u 1500 firm. Lekcja dla firm korzystających z MSP: (1) Wymagaj SOC 2 Type II od MSP; (2) Ogranicz uprawnienia MSP do minimum potrzebnego (least privilege); (3) Monitoruj aktywność MSP w swoim środowisku; (4) Separation — MSP nie powinien mieć single-credential dostępu do wszystkiego."
+    },
+    {
+      "id": 8,
+      "question": "Jak CI/CD pipeline powinien weryfikować integralność pobieranych pakietów?",
+      "options": ["Sprawdzać czy pakiet ma dobrą nazwę i jest popularny na GitHub", "Weryfikować kryptograficzny hash (SHA256) każdego pobieranego pakietu przed użyciem + używać lock files (package-lock.json, poetry.lock) które zapisują hashe zweryfikowanych wersji", "Pobierać pakiety tylko przez HTTPS", "Sprawdzać datę ostatniej aktualizacji pakietu"],
+      "correct": 1,
+      "explanation": "Weryfikacja integralności: (1) Lock files (npm: package-lock.json, Python: poetry.lock, requirements.txt z ==version) zawierają SHA hashe — npm/pip weryfikuje podczas instalacji; (2) Dla Docker: `COPY --from=digest sha256:abc...` zamiast tagu; (3) pip --require-hashes: `requests==2.28.1 --hash=sha256:abc123...`; (4) Cosign dla obrazów Docker. Logika: hash kryptograficzny jest niemutowalny — nawet jeśli atakujący podmieni zawartość pakietu, hash się zmieni i instalacja się nie powiedzie."
+    },
+    {
+      "id": 9,
+      "question": "Co to jest SecurityScorecard i jak pomaga w zarządzaniu ryzykiem dostawców?",
+      "options": ["Narzędzie do skanowania kodu dostawców", "Platforma automatycznie oceniająca zewnętrzne bezpieczeństwo dostawców (A–F) na podstawie publicznie dostępnych danych: otwarte porty, wycieki danych, przestarzałe certyfikaty SSL, DNS anomalie. Ciągłe monitorowanie bez angażowania dostawcy", "Kwestionariusz wysyłany ręcznie do dostawców", "System zarządzania umowami z dostawcami"],
+      "correct": 1,
+      "explanation": "SecurityScorecard (i podobne: BitSight, RiskRecon) skanują publicznie dostępne informacje o dostawcy: (1) Przestarzałe certyfikaty SSL; (2) Otwarte porty i usługi; (3) Wykryte malware/botnety; (4) Wycieki danych w dark web; (5) Konfiguracja emaila (DMARC/SPF); (6) Reputacja IP. Ocena A (świetna) do F (krytyczne problemy). Kluczowe: automatyczne, ciągłe monitorowanie — dostajesz alert gdy dostawca który miał A nagle spada do C. Nie zastępuje SOC 2/ISO 27001, ale uzupełnia jako continuous monitoring."
+    },
+    {
+      "id": 10,
+      "question": "Firma odkrywa że jej CI/CD pipeline ma dostęp do kluczy produkcyjnych AWS przez zmienną środowiskową ustawioną 2 lata temu. Co to oznacza i jak naprawić?",
+      "options": ["To normalna konfiguracja — pipeline musi mieć dostęp do deploymentu", "Krytyczne ryzyko: każdy kto ma dostęp do pipeline (w tym historii logów, fork PR actions) może zobaczyć klucz. Naprawić: zastąpić kluczem statycznym przez OIDC/IRSA (tymczasowe credentials przez IAM Role) + rotacja skompromitowanego klucza", "Zmienić zmienną środowiskową na bardziej skomplikowaną nazwę", "Dodać szyfrowanie Base64 dla klucza w pipeline"],
+      "correct": 1,
+      "explanation": "Statyczny klucz AWS w CI/CD to antipattern. Problemy: (1) Nikt nie rotuje (bo trzeba zaktualizować w wielu miejscach); (2) Widoczny w logach jeśli przypadkowo wydrukowany; (3) Dostępny dla każdego z dostępem do repo/pipeline. Rozwiązanie: OIDC federation — GitHub Actions/CircleCI może uzyskać tymczasowe credentials AWS przez IAM Role bez kluczy statycznych: `aws-actions/configure-aws-credentials` z `role-to-assume`. Credentials żyją tylko przez czas trwania job (15 minut), są automatycznie rotowane, i nie ma kluczy do przechowywania."
+    }
+  ]
+}

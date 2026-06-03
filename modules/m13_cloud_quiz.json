@@ -1,0 +1,76 @@
+{
+  "module": 13,
+  "title": "Bezpieczeństwo chmury",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Firma używa AWS EC2 (IaaS). Za co odpowiada AWS, a za co klient w modelu Shared Responsibility?",
+      "options": ["AWS odpowiada za wszystko — w chmurze to ich problem", "AWS: fizyczna infrastruktura, hiperwizor, sieć fizyczna. Klient: OS (patching), aplikacje, dane, konfiguracja sieci wirtualnej (Security Groups), IAM, szyfrowanie", "Klient odpowiada tylko za dane — AWS za wszystko inne", "W IaaS klient nie ma żadnej odpowiedzialności security"],
+      "correct": 1,
+      "explanation": "Shared Responsibility to fundament bezpieczeństwa chmury. Dla IaaS (EC2): AWS = 'security OF the cloud' (fizyczne DC, sprzęt, hiperwizor). Klient = 'security IN the cloud' (OS, middleware, aplikacje, dane, VPC/Security Groups konfiguracja, IAM). Największy błąd: klient myśli że AWS odpowiada za więcej. Publiczny S3 bucket = błąd klienta, nie AWS. Niezaktualizowany OS na EC2 = błąd klienta."
+    },
+    {
+      "id": 2,
+      "question": "Czym jest CSPM i jakie problemy wykrywa?",
+      "options": ["Cloud Security Performance Management — monitoring wydajności aplikacji chmurowych", "Cloud Security Posture Management — automatyczne skanowanie konfiguracji zasobów chmurowych. Wykrywa: publiczne S3 buckety, otwarte Security Groups (0.0.0.0/0), brak szyfrowania RDS, zbyt szerokie polityki IAM, brak CloudTrail", "Certyfikat bezpieczeństwa chmury", "System do zarządzania kosztami chmury"],
+      "correct": 1,
+      "explanation": "CSPM automatycznie skanuje konfiguracje zasobów chmurowych i porównuje z best practices (CIS Benchmarks, własne polityki). Wykrywa: publiczne storage (S3, Azure Blob), otwarte porty (0.0.0.0/0 na SSH/RDP), niezaszyfrowane bazy danych, brak logowania, nadmiernie szerokie IAM. Wbudowane: AWS Security Hub, Microsoft Defender for Cloud, GCP Security Command Center. Multi-cloud: Wiz, Prisma Cloud. Prowler (open-source) dla AWS. CSPM to must-have — bez niego jesteś ślepy na misconfiguracje."
+    },
+    {
+      "id": 3,
+      "question": "Developer przypadkowo dodał `0.0.0.0/0` na port 22 (SSH) w AWS Security Group serwera produkcyjnego. Co to oznacza i jak natychmiast naprawić?",
+      "options": ["Nic złego — port 22 to standardowy SSH, każdy może się łączyć", "Serwer jest dostępny przez SSH z całego internetu — każdy może próbować brute force lub exploitować SSH. Naprawić: zmienić source na konkretny IP (np. IP biura lub bastion host)", "Security Group nie działa dla EC2 production", "0.0.0.0/0 oznacza tylko IPv4, IPv6 jest bezpieczne"],
+      "correct": 1,
+      "explanation": "0.0.0.0/0 na port 22 = SSH dostępny z całego internetu. Atakujący automatycznie skanują internet (Shodan, Masscan) i natychmiast znajdą. Skutki: ataki brute force (setki/minutę), exploitacja podatności SSH, unauthorized access. Naprawić: (1) Zmień source na konkretny CIDR (IP biura, VPN); (2) Lub usuń bezpośredni SSH — użyj AWS Systems Manager Session Manager zamiast bezpośredniego SSH; (3) Lub bastion host z ograniczonym dostępem. AWS Security Hub automatycznie wykrywa i alarmuje o takich konfiguracjach."
+    },
+    {
+      "id": 4,
+      "question": "Firma chce egzekwować że żaden bucket S3 w całej organizacji AWS nigdy nie może być publiczny — nawet przypadkowo. Jak to osiągnąć?",
+      "options": ["Szkolenie developerów — uczmy ich żeby nie robili bucketu publicznym", "AWS Organization-level S3 Block Public Access — włączenie na poziomie całej organizacji blokuje wszystkie publiczne ustawienia S3 we wszystkich kontach, niezależnie od ustawień indywidualnych bucketów", "Monitoring i alert gdy bucket staje się publiczny — wtedy ręcznie naprawiamy", "Polityka IAM blokująca s3:PutBucketAcl"],
+      "correct": 1,
+      "explanation": "Organization-level S3 Block Public Access to preventive control (blokuje zanim błąd wystąpi), nie detective (wykrywa po fakcie). Włączenie w AWS Organizations > Policies > S3 Block Public Access zapewnia że ŻADEN bucket w ŻADNYM koncie organizacji nie może być publiczny — nawet jeśli developer świadomie spróbuje to zmienić. To przykład 'guardrail' — techniczne ograniczenie które uniemożliwia błąd. Lepsze niż alert-po-fakcie."
+    },
+    {
+      "id": 5,
+      "question": "Aplikacja na EC2 potrzebuje dostępu do S3 bucketu. Jak prawidłowo skonfigurować dostęp?",
+      "options": ["Zakodować klucze AWS Access Key/Secret w zmiennych środowiskowych aplikacji", "Przypisać IAM Role do instancji EC2 z minimalną polityką (tylko potrzebne operacje na konkretnym buckecie) — aplikacja automatycznie otrzymuje tymczasowe credentiale przez instance metadata", "Użyć jednego globalnego IAM User z pełnymi prawami S3 dla wszystkich aplikacji", "Przechowywać klucze w pliku .env w repozytorium git (private)"],
+      "correct": 1,
+      "explanation": "IAM Roles for EC2 (Instance Profile) to właściwe podejście. Zamiast kluczy statycznych (Access Key/Secret — nie rotowane, mogą wyciec): (1) Utwórz IAM Role z minimalną polityką (tylko s3:GetObject/PutObject na konkretnym buckecie); (2) Przypisz Role do instancji EC2; (3) Aplikacja automatycznie pobiera tymczasowe credentiale z http://169.254.169.254/latest/meta-data/iam/ — rotowane automatycznie co godzinę. Brak kluczy statycznych = brak ryzyka ich wycieku."
+    },
+    {
+      "id": 6,
+      "question": "Co to jest AWS GuardDuty i czego nie wykryje?",
+      "options": ["GuardDuty to firewall sieciowy dla EC2", "GuardDuty to managed threat detection (ML) który analizuje CloudTrail, VPC Flow Logs, DNS — wykrywa anomalie behawioralne (konto używane z Tor, crypto mining, komunikacja z C2). NIE wykrywa: misconfiguracji (to CSPM), podatności w aplikacjach (to Inspector), wrażliwych danych w S3 (to Macie)", "GuardDuty to backup service dla danych AWS", "GuardDuty zastępuje potrzebę SIEM"],
+      "correct": 1,
+      "explanation": "GuardDuty = threat detection przez ML na logach AWS. Wykrywa: nieoczekiwane wywołania API (np. konto nigdy nie używane nagle tworzy 100 instancji), komunikację z known malicious IP/domain, nieautoryzowany dostęp z Tor, crypto mining, credential compromise przez anomalie. NIE wykrywa: otwartego S3 bucketu (to AWS Security Hub / CSPM), podatności w kodzie (to Inspector), PII w S3 (to Macie). Razem GuardDuty + Security Hub + Macie + Inspector = kompletne bezpieczeństwo AWS."
+    },
+    {
+      "id": 7,
+      "question": "Firma ma aplikacje w AWS, Azure i GCP (multi-cloud). Jakie jest główne wyzwanie bezpieczeństwa i jak je adresować?",
+      "options": ["Multi-cloud jest niemożliwy do zabezpieczenia — należy wybrać jedną chmurę", "Brak centralnej widoczności i spójnych polityk: każda chmura ma inne IAM, inne logi, inne narzędzia. Adresować przez: CNAPP (Wiz, Prisma Cloud) unifikujące CSPM dla wszystkich chmur + centralne SIEM + Policy as Code (Terraform + OPA)", "Każda chmura powinna mieć osobny zespół security", "Wystarczy włączyć security tools każdego dostawcy osobno"],
+      "correct": 1,
+      "explanation": "Multi-cloud security challenges: (1) Brak centralnej widoczności — AWS Security Hub nie widzi Azure, Defender nie widzi AWS; (2) Różne modele IAM (polityki AWS vs RBAC Azure vs IAM GCP); (3) Trudność w spójnym egzekwowaniu polityk. Rozwiązania: CNAPP (Wiz, Prisma Cloud, Orca) agreguje bezpieczeństwo wszystkich chmur; Terraform + OPA (Open Policy Agent) egzekwuje polityki bezpieczeństwa w IaC niezależnie od dostawcy; centralne SIEM zbiera logi z wszystkich chmur."
+    },
+    {
+      "id": 8,
+      "question": "Azure Conditional Access Policy blokuje logowanie użytkownika który próbuje zalogować się z urządzenia bez aktualnego antywirusa. Jaką zasadę bezpieczeństwa to implementuje?",
+      "options": ["Defense in Depth — wielowarstwowa ochrona", "Zero Trust: 'Nigdy nie ufaj, zawsze weryfikuj' — dostęp nie jest przyznawany tylko na podstawie tożsamości, ale też na podstawie stanu urządzenia (device compliance). Urządzenie niezgodne z polityką = brak dostępu, niezależnie od prawidłowego hasła i MFA", "Least Privilege — minimalne uprawnienia", "Separation of Duties — rozdzielenie obowiązków"],
+      "correct": 1,
+      "explanation": "Zero Trust w praktyce: tradycyjnie logowanie = hasło → dostęp. Zero Trust: tożsamość + urządzenie + kontekst. Azure Conditional Access sprawdza: (1) Tożsamość (MFA); (2) Urządzenie (Intune compliance: aktualny AV, szyfrowanie dysku, aktualny OS); (3) Lokalizacja (kraj, IP); (4) Ryzyko (Identity Protection score). Każdy warunek musi być spełniony. Skompromitowane hasło + urządzenie bez AV = blokada. To właśnie Zero Trust 'w akcji'."
+    },
+    {
+      "id": 9,
+      "question": "Developer tworzy politykę IAM z `'Action': '*', 'Resource': '*'`. Co to oznacza i jakie jest ryzyko?",
+      "options": ["Polityka która nie daje żadnych uprawnień — gwiazdka jest symbolem zastępczym", "Pełny dostęp do wszystkich usług AWS i wszystkich zasobów — naruszenie least privilege. Jeśli konto zostanie skompromitowane: atakujący może robić wszystko (tworzyć EC2, pobierać dane z S3, eksfiltrować, usuwać)", "Polityka tylko do odczytu — gwiazdka oznacza 'read'", "Polityka tymczasowa — wygasa po 24 godzinach"],
+      "correct": 1,
+      "explanation": "`Action: '*', Resource: '*'` = AdministratorAccess policy = pełne prawa do całego konta AWS. Jeśli konto z tą polityką zostanie skompromitowane (wyciek klucza, phishing): atakujący może: tworzyć zasoby (mining), pobierać wszystkie dane S3, modyfikować polityki IAM, usuwać backupy. Zasada least privilege: zamiast `s3:*` na `*`, użyj `s3:GetObject, s3:PutObject` na `arn:aws:s3:::specific-bucket/*`. AWS IAM Access Analyzer wykrywa zbyt szerokie polityki."
+    },
+    {
+      "id": 10,
+      "question": "Firma nie miała włączonego CloudTrail gdy doszło do incydentu z publicznym S3 bucketem. Co traci i jakie są konsekwencje?",
+      "options": ["CloudTrail nie ma wpływu na incydenty S3 — to niezależne usługi", "Niemożliwe ustalenie: czy ktoś pobrał dane (które pliki, kiedy, z jakiego IP), czy atakujący modyfikował zasoby, pełna rekonstrukcja timeline incydentu. Konsekwencja RODO: brak możliwości oceny zasięgu naruszenia = konieczność zgłoszenia do UODO jako 'naruszenie z nieustaloną skalą'", "CloudTrail jest potrzebny tylko dla usług obliczeniowych, nie S3", "Brak CloudTrail to tylko problem wydajnościowy"],
+      "correct": 1,
+      "explanation": "CloudTrail loguje każde wywołanie API w AWS — w tym s3:GetObject. Bez CloudTrail podczas incydentu z publicznym S3: (1) Nie wiesz ile plików zostało pobranych; (2) Nie wiesz przez kogo (IP, geolocation); (3) Nie możesz ocenić zasięgu naruszenia danych; (4) RODO wymaga oceny ryzyka dla naruszenia — bez logów 'zakładasz najgorsze' i musisz notyfikować wszystkich klientów. CloudTrail powinien być włączony zawsze, we wszystkich regionach, z logami przechowywanymi w chronionym S3 (MFA Delete, separate account)."
+    }
+  ]
+}

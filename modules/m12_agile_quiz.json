@@ -1,0 +1,76 @@
+{
+  "module": 12,
+  "title": "Zwinne bezpieczeństwo — Agile Security i DevSecOps",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Czym jest 'Shift Left' w DevSecOps i dlaczego redukuje koszty?",
+      "options": ["Przeniesienie serwerów produkcyjnych do lewej strefy data center", "Przeniesienie aktywności bezpieczeństwa jak najwcześniej w cykl wytwarzania — błąd znaleziony w projekcie kosztuje 10x mniej niż w code review, 100x mniej niż w produkcji", "Zmiana kierunku rotacji kluczy kryptograficznych", "Migracja z right-to-left języków programowania"],
+      "correct": 1,
+      "explanation": "Shift Left: im wcześniej znajdziesz błąd bezpieczeństwa, tym taniej go naprawisz. W design: 1x koszt (rozmowa). W code review: 10x (przepisanie kodu). W QA: 30x (full regression). W produkcji: 100x+ (breach response, klientowie, reputacja). DevSecOps automatyzuje security checks w pipeline i wprowadza threat modeling w fazie projektu — łapiąc problemy na najtańszym etapie."
+    },
+    {
+      "id": 2,
+      "question": "Developer commituje kod z hardcoded kluczem AWS w pliku config.py. Która kontrola DevSecOps powinna to wykryć i zatrzymać?",
+      "options": ["DAST — testowanie działającej aplikacji", "Pre-commit hook z narzędziem do wykrywania sekretów (detect-secrets, GitGuardian) — uruchamiany przed commitem, blokuje jeśli wykryje sekret", "WAF — blokuje żądania HTTP z tokenami", "Container image scanning — skanuje obrazy Docker"],
+      "correct": 1,
+      "explanation": "Pre-commit hook to pierwsza linia obrony przed sekretami w kodzie. Działa lokalnie, przed commitem — developer dostaje natychmiastowy feedback. detect-secrets, truffleHog, GitGuardian CLI mogą być skonfigurowane jako pre-commit hooks. Alternatywnie: GitHub Advanced Security lub GitGuardian mogą skanować push do repo. DAST testuje działającą aplikację — nie analizuje kodu. Container scanning sprawdza obrazy Docker."
+    },
+    {
+      "id": 3,
+      "question": "SAST w CI/CD generuje 80% false positives. Developerzy zaczęli ignorować wszystkie alerty. Co robić?",
+      "options": ["Wyłączyć SAST — generuje za dużo szumu", "Dostosować reguły: wyłączyć reguły z wysokim FP rate, dodać suppression dla legitnych wzorców, skupić się na regułach z niskim FP dla krytycznych podatności (injection, auth)", "Wymagać że każdy developer przejrzy wszystkie 340 findings tygodniowo", "Zmienić narzędzie SAST na droższe"],
+      "correct": 1,
+      "explanation": "Alert fatigue zabija każde narzędzie security. Tuning SAST: (1) Zacznij od małego zestawu reguł wysokiej pewności (np. tylko p/sql-injection, p/xss); (2) Dodaj suppression komentarze dla FP (`# nosec` w Bandit, `# semgrep-ignore` w Semgrep); (3) Stopniowo rozszerzaj zakres gdy FP rate spada poniżej 15-20%; (4) Mierz FP rate i raportuj jako metrykę. Wyłączenie SAST nie jest rozwiązaniem — usuwa kontrolę. Zmiana narzędzia bez tuningu da ten sam wynik."
+    },
+    {
+      "id": 4,
+      "question": "Jaka jest rola Security Championa w zespole developerskim?",
+      "options": ["Zewnętrzny pentester wynajmowany co kwartał", "Developer z dodatkowym szkoleniem security który jest łącznikiem między zespołem a security — przeprowadza threat modeling, recenzuje kod pod kątem bezpieczeństwa, propaguje best practices", "Manager odpowiedzialny za budżet security", "Specjalista od zgodności i audytów"],
+      "correct": 1,
+      "explanation": "Security Champion to rozwiązanie problemu skalowalności security. Jeden centralny security engineer nie może obsłużyć 20 zespołów developerskich. Security Champion (developer z dodatkowym szkoleniem) w każdym zespole: (1) Przeprowadza threat modeling dla nowych funkcji; (2) Uczestniczy w code review z perspektywy bezpieczeństwa; (3) Jest pierwszą linią eskalacji dla pytań security; (4) Uczestniczy w Security Champions Network. To 'decentralized security' — skalowalne bez proporcjonalnego wzrostu zespołu security."
+    },
+    {
+      "id": 5,
+      "question": "Czym różni się SAST od SCA i kiedy użyć każdego?",
+      "options": ["SAST jest dla Javy, SCA dla Pythona", "SAST analizuje własny kod (podatności w kodzie który piszesz), SCA analizuje zależności open-source (znane CVE w bibliotekach które importujesz) — oba potrzebne w pipeline", "SCA jest szybszy więc zastępuje SAST", "SAST i SCA to to samo narzędzie z różnymi trybami"],
+      "correct": 1,
+      "explanation": "SAST (Static Analysis): szuka podatności w Twoim własnym kodzie — SQL injection, XSS, hardcoded secrets, insecure functions. SCA (Software Composition Analysis): sprawdza znane CVE w bibliotekach open-source które importujesz (requirements.txt, package.json, pom.xml). Potrzebujesz obu: SAST złapie Twój błąd, SCA złapie podatność w `requests==2.25.0`. Przykłady SAST: Semgrep, SonarQube. Przykłady SCA: Dependabot, Snyk, OWASP Dependency-Check."
+    },
+    {
+      "id": 6,
+      "question": "OWASP Top 10 2021 na #1 stawia 'Broken Access Control'. Co to oznacza praktycznie?",
+      "options": ["Firewall który jest źle skonfigurowany", "Użytkownik może uzyskać dostęp do zasobów do których nie powinien mieć dostępu — np. zmiana /user/123/profile na /user/124/profile daje dostęp do cudzych danych (IDOR)", "Zepsute uwierzytelnianie przez słabe hasła", "Brak kontroli dostępu fizycznego do serwerowni"],
+      "correct": 1,
+      "explanation": "Broken Access Control (BAC) to #1 w OWASP Top 10 2021. Przykłady: (1) IDOR (Insecure Direct Object Reference): zmiana ID w URL daje dostęp do cudzych danych; (2) Privilege escalation: normalny użytkownik może wykonać akcje administratora; (3) Missing function level access control: API endpoint dostępny bez autoryzacji. Test: jako zwykły użytkownik, czy mogę zmienić URL i zobaczyć cudze dane? Często proste do exploitacji i bardzo poważne. Implementacja: server-side authorization dla każdego zasobu, nie tylko na frontendzie."
+    },
+    {
+      "id": 7,
+      "question": "Checkov skanuje Terraform i raportuje: 'CKV_AWS_18: Ensure the S3 bucket has access logging enabled'. Co to oznacza i jak naprawić?",
+      "options": ["S3 bucket ma zbyt restrykcyjne uprawnienia — należy je rozluźnić", "Bucket S3 nie ma włączonego logowania dostępu — każde żądanie GET/PUT powinno być logowane do innego bucketa dla audytu i forensics. Naprawić przez dodanie logging {} bloku w Terraform", "Bucket jest prywatny — należy go upublicznić", "Problem z certyfikatem SSL bucketa"],
+      "correct": 1,
+      "explanation": "S3 Access Logging rejestruje każde żądanie do bucketa — kto co pobrał/wgrał, kiedy, z jakiego IP. Kluczowe dla forensics: gdy wyciek danych z S3, logi powiedzą co i kiedy zostało pobrane. Naprawa w Terraform: ```resource 'aws_s3_bucket_logging' 'example' { bucket = aws_s3_bucket.main.id target_bucket = aws_s3_bucket.logs.id target_prefix = 'access-logs/' }```. Checkov jako Policy as Code zapobiega deploying S3 bez logowania — standard w DevSecOps pipeline."
+    },
+    {
+      "id": 8,
+      "question": "Zespół chce wdrożyć threat modeling dla nowej funkcji płatności. Jaki jest właściwy format i czas tego ćwiczenia?",
+      "options": ["2-tygodniowy formalny dokument zagrożeń pisany przez ekspertów security", "30-60 minutowa sesja warsztatowa zespołu (developer, QA, product owner, security champion): narysuj DFD, pytaj STRIDE dla każdego elementu, dokumentuj zagrożenia i kontrole w Confluence/Jira", "Roczny pentest aplikacji płatniczej", "Automatyczne skanowanie kodu przez SAST"],
+      "correct": 1,
+      "explanation": "Threat modeling w Agile powinien być lekki i praktyczny: (1) Czas: 30-60 minut — więcej to za dużo dla sprintu; (2) Format: Data Flow Diagram (co wchodzi/wychodzi?), STRIDE dla każdego elementu (jak może być zaatakowane?), decyzje o kontrolach; (3) Narzędzia: OWASP Threat Dragon, Microsoft Threat Modeling Tool, lub kartki; (4) Wynik: lista zagrożeń w backlogu jako security stories. Kluczowe: robić przed pisaniem kodu, nie po. 30 minut w design = setki roboczogodzin zaoszczędzone na naprawach."
+    },
+    {
+      "id": 9,
+      "question": "Firma pinuje GitHub Actions na commit SHA zamiast tagu: `uses: actions/checkout@b4ffde65f...` zamiast `@v3`. Dlaczego?",
+      "options": ["SHA jest krótsze i szybsze do wpisania", "Tag (@v3) może być nadpisany przez maintainera repozytorium — złośliwy lub skompromitowany maintainer może zmienić co @v3 wskazuje. Commit SHA jest niemutowalny — zawsze wskazuje na ten sam kod", "SHA jest bardziej wydajne obliczeniowo", "Standardy ISO wymagają używania SHA"],
+      "correct": 1,
+      "explanation": "Supply chain attack przez GitHub Actions: jeśli używasz `uses: someorg/someaction@v3`, a konto someorg zostanie przejęte, atakujący może zmienić co tag v3 wskazuje — na złośliwy kod który uruchomi się w Twoim CI/CD. Commit SHA jest kryptograficznym skrótem konkretnego commitu — niemutowalny, zawsze ten sam kod. To podstawowa zasada bezpieczeństwa pipeline: pinuj zależności na immutable references (SHA), nie na mutable (tagi, branches)."
+    },
+    {
+      "id": 10,
+      "question": "Co to jest SBOM (Software Bill of Materials) i jak pomógł podczas incydentu Log4Shell?",
+      "options": ["Lista bugów w oprogramowaniu", "Maszynowo-czytelny spis wszystkich komponentów oprogramowania (biblioteki, wersje, zależności) — organizacje z SBOM zidentyfikowały wszystkie aplikacje z Log4j w godziny; bez SBOM — tygodnie szukania", "Budżet na zakup oprogramowania", "Lista licencji open-source"],
+      "correct": 1,
+      "explanation": "SBOM to 'lista składników' oprogramowania. Gdy 10 grudnia 2021 wyszedł Log4Shell (CVSS 10.0): organizacje z SBOM: query 'które aplikacje zawierają log4j-core < 2.15.0?' → wynik w minuty → priorytetyzacja i patching w godziny. Organizacje bez SBOM: ręczne przeszukiwanie kodu, package.json, pom.xml dla setek aplikacji → tygodnie. US Executive Order 14028 (2021) wymaga SBOM dla oprogramowania dla rządu USA właśnie z tego powodu. Format: CycloneDX lub SPDX. Generowanie: Syft, anchore, GitHub."
+    }
+  ]
+}
